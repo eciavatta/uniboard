@@ -18,18 +18,11 @@ if (!isProd) {
 
   app.use(require('webpack-hot-middleware')(compiler));
 
-  app.get('*', (req, res, next) => {
-    const filename = path.join(compiler.outputPath, 'index.html');
-    compiler.outputFileSystem.readFile(filename, (err, result) => {
-      if (err) {
-        return next(err);
-      }
-      res.set('content-type', 'text/html');
-      res.send(result);
-      res.end();
-    });
+  app.get('/', (req, res, next) => {
+    res.sendFile(path.join(compiler.outputPath, 'index.html'));
   });
 } else {
+
   app.use('/', indexRouter);
 
   app.use(express.static('dist/public', {

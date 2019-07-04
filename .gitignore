@@ -36,3 +36,6 @@ dist/
 out/
 .idea
 *.iml
+
+# npm
+package-lock.json
