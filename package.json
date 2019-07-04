@@ -1,0 +1,46 @@
+{
+  "name": "uniboard",
+  "version": "0.1.0",
+  "description": "Web application that shows the free classrooms and provides support to the students of the Cesena Campus",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eciavatta/uniboard.git"
+  },
+  "keywords": [
+    "unibo",
+    "cesena",
+    "campus",
+    "lessons"
+  ],
+  "author": "Emiliano Ciavatta, Luca Tremamunno",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eciavatta/uniboard/issues"
+  },
+  "homepage": "https://github.com/eciavatta/uniboard#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.0.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "dependencies": {
+    "and": "0.0.3",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "webpack-dev-middleware": "^3.7.0",
+    "webpack-hot-middleware": "^2.25.0"
+  }
+}
