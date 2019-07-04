@@ -4,7 +4,11 @@
   "description": "Web application that shows the free classrooms and provides support to the students of the Cesena Campus",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "dev": "nodemon -w public src/app.js",
+    "build": "rm -rf dist/* && npm run build:client && npm run build:server",
+    "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.babel.js",
+    "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.babel.js",
+    "start": "cross-env NODE_ENV=production node dist/server-bundle.js"
   },
   "repository": {
     "type": "git",
@@ -23,24 +27,36 @@
   },
   "homepage": "https://github.com/eciavatta/uniboard#readme",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
+    "@babel/cli": "^7.5.0",
     "@babel/core": "^7.4.5",
+    "@babel/node": "^7.5.0",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.7.0",
+    "node-sass": "^4.12.0",
+    "nodemon": "^1.19.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "react-hot-loader": "^4.12.3",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.1.3",
     "webpack": "^4.35.2",
     "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-middleware": "^3.7.0",
+    "webpack-hot-middleware": "^2.25.0",
+    "webpack-merge": "^4.2.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "and": "0.0.3",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "webpack-dev-middleware": "^3.7.0",
-    "webpack-hot-middleware": "^2.25.0"
+    "react-dom": "^16.8.6"
   }
 }
