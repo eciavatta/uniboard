@@ -1,0 +1,30 @@
+Classroom
+	name: String
+	mapCoordinates: String
+
+?+ Room?
+
+Lesson
+	teacher: String[]
+	classroom: Classroom (ref) ! Possono avere più aulee, che fo?
+	course: Course (ref)
+	date: Date
+	from: Int(9-19)
+	to: Int(10-20)
+	
+	Indici:
+		date, classroom
+		date, course
+
+Course
+	name: String
+	year: Year? solo primo dei due
+
+Feedback (x feedback di seguito da persone diverse danno punti e aggiornano)
+	user: User
+	time: Datetime
+	classroom: Classroom
+	state: enum(Occupied, Free)
+
+	Indici:
+		classroom, time
