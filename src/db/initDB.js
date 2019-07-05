@@ -72,22 +72,7 @@ async function doInsert() {
 
   console.log("All Done");
 }
-//const activities = require('./activities.json');
-/*    classroom:
-    course:
-    description:
-    date:
-    from:
-    to: *//*
-savePromises.push(new Activity(
-  {
-    "classroom": mongoose.Types.ObjectId(),
-    "description": "Banana",
-    "date": Date.now(),
-    "from": 2,
-    "to": 4
-  }
-).save());*/
+
 doInsert().then(doClose, function (err) {
   console.log("Error while inserting");
   console.log(err);

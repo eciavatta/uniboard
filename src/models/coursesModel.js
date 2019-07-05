@@ -29,4 +29,6 @@ const CoursesSchema = new Schema({
   }
 });
 
+CoursesSchema.index({name: 1});
+
 module.exports = mongoose.model('Course', CoursesSchema);

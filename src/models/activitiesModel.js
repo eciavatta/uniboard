@@ -56,4 +56,6 @@ const ActivitySchema = new Schema({
   },
 });
 
+ActivitySchema.index({date: -1});
+
 module.exports = mongoose.model('Activity', ActivitySchema);
