@@ -56,6 +56,7 @@ const ActivitySchema = new Schema({
   },
 });
 
-ActivitySchema.index({date: -1});
+ActivitySchema.index({date: -1, classroom: 1});
+ActivitySchema.index({date: -1, course: 1});
 
 module.exports = mongoose.model('Activity', ActivitySchema);
