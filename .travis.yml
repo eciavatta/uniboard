@@ -1,6 +1,7 @@
 language: node_js
+
 node_js:
-  - "10"
+  - '10'
 
 services:
   - docker
@@ -17,3 +18,12 @@ script:
 after_script:
   - docker stop mongodb
   - docker rm mongodb
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: FGwCB1jwU09HMF4OMIbtsIMd022KYSMQK2WlqmPnfuQjwrhLdjzgKNkXEjmG6ehQlGAG+1ansejEn7jwE4eMW3cdM2qvJrlzhuPjx/k0UPnfykD/PYvv970CWxi4rRLR9Ul6Bv+4xJTi0dfaiy0oM8D0bc5jd7xsyztupL+93w1yNtlxd0ngSa1c4H4TJfKh9BJKF9hVlnUKg5SNzk2KHinqFBDxqSuHLInNW1BAXG1eHzXXyC5wumQzkcz28o3zSsuqvmNbhg5utZHimpDydnWHrtWbxXePcHoz2HaFcLZ2xK2Usxg2OBLdYg+DFa95fgM2ktD57Jp4xPS4iMcT1TL/RddENyvaUzyZTRpNj1SKO65ODdhLK+ugIFulSicdOwG5z2f8FmrnmX8iIiNqgU6HezNusS+aub9KyBwSirp0HKoqNaQtFWAUmofrwF/mu9KMoeeY5yZZFzQ8EFARF29Fp99laeZwQwXj4/Wg2WZnLyXdpLmzAxUswUWmKuBe8v3DCQsPgZP+BXl644aLYZYp6SyXQ9UV5IGTzRjmYWTuqozPa+TY6ctOYdUIw0JaJioXJqtBbDjC4QVEmLBBK8jFFzVkjkMjK5ag1Q2ScaVr1Z6Qit7uCD8/ocj4BDldAG8YG3F11k8arlSX+29xcec2+6HYkllYIqk6mzQX1PI=
+  app: uniboard-dev
+  on:
+    branch: develop
+  skip_cleanup: true
