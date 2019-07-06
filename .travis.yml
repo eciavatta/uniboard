@@ -5,10 +5,10 @@ node_js:
 services:
   - docker
 
-before_install:
-  - docker run -d --name mongodb \
-    -e MONGO_INITDB_ROOT_USERNAME=uniboard \
-    -e MONGO_INITDB_ROOT_PASSWORD=draobiun \
+before_install: >
+  - docker run -d --name mongodb
+    -e MONGO_INITDB_ROOT_USERNAME=uniboard
+    -e MONGO_INITDB_ROOT_PASSWORD=draobiun
     mongo:4
 
 before_script:
