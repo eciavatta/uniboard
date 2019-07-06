@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Applicazioni e Servizi Web",
+    "teachers": ["Silvia Mirri", "Catia Prandi"],
+    "tutors": ["Giovanni Delnevo", "Lorenzo Monti"],
+    "degree": "Laurea magistrale in ingegneria e scienze informatiche",
+    "year": 2018
+  },
+  {
+    "name": "Paradigmi di Programmazione e Sviluppo",
+    "teachers": ["Mirko Viroli"],
+    "tutors": ["Roberto Casadei"],
+    "degree": "Laurea magistrale in ingegneria e scienze informatiche",
+    "year": 2018
+  },
+  {
+    "name": "Sicurezza delle reti",
+    "teachers": ["Gabriele d'angelo"],
+    "degree": "Laurea magistrale in ingegneria e scienze informatiche",
+    "year": 2018
+  },
+  {
+    "name": "Sistemi Embedded e Internet-Of-Things",
+    "teachers": ["Alessandro Ricci", "Angelo Croatti"],
+    "degree": "Laurea in ingegneria e scienze informatiche",
+    "year": 2018
+  }
+]

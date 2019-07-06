@@ -1,0 +1,65 @@
+[
+  {
+    "classroom":"2003 - Aula 2.6",
+    "course":"Applicazioni e Servizi Web",
+    "date":1,
+    "from":18,
+    "to":26
+  },
+  {
+    "classroom":"2007 - Laboratorio Informatico VeLa 2.2",
+    "course":"Applicazioni e Servizi Web",
+    "date":3,
+    "from":18,
+    "to":24
+  },
+  {
+    "classroom":"2003 - Aula 2.6",
+    "course":"Paradigmi di Programmazione e Sviluppo",
+    "date":1,
+    "from":26,
+    "to":32
+  },
+  {
+    "classroom":"2002 - Aula 2.7",
+    "course":"Paradigmi di Programmazione e Sviluppo",
+    "date":2,
+    "from":18,
+    "to":22
+  },
+  {
+    "classroom":"2002 - Aula 2.7",
+    "course":"Sicurezza delle reti",
+    "date":2,
+    "from":26,
+    "to":30
+  },
+  {
+    "classroom":"2002 - Aula 2.7",
+    "course":"Sicurezza delle reti",
+    "date":3,
+    "from":26,
+    "to":32
+  },
+  {
+    "classroom":"2007 - Laboratorio Informatico VeLa 2.2",
+    "course":"Sistemi Embedded e Internet-Of-Things",
+    "date":3,
+    "from":26,
+    "to":32
+  },
+  {
+    "classroom":"2003 - Aula 2.6",
+    "course":"Sistemi Embedded e Internet-Of-Things",
+    "date":4,
+    "from":26,
+    "to":32
+  },
+  {
+    "classroom":"2002 - Aula 2.7",
+    "description":"Un seminario a caso, non collegato ad alcuna materia",
+    "date":5,
+    "from":32,
+    "to":34
+  }
+]

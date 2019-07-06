@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const ClassroomSchema = new Schema({
   name: {
     type: String,
-    required: "Classroom name is required"
+    required: "Classroom name is required",
+    unique: true
   },
   mapCoordinates: {
     type: [Number],
@@ -40,5 +41,7 @@ const ClassroomSchema = new Schema({
     type: String
   }
 });
+
+ClassroomSchema.index({name: 1});
 
 module.exports = mongoose.model('Classroom', ClassroomSchema);
