@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+
+  mongo:
+    image: mongo:4
+    networks:
+      - internal
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: uniboard
+      MONGO_INITDB_ROOT_PASSWORD: braobiun
+
+  uniboard:
+    image: node:10
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "3000:3000"
+    command: "npx npm-run-all --serial migrate dev"
+    depends_on:
+      - mongo
+    networks:
+      - internal
+
+networks:
+  internal:

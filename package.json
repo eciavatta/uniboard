@@ -8,7 +8,9 @@
     "build": "rm -rf dist/* && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.babel.js",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.babel.js",
-    "start": "cross-env NODE_ENV=production node dist/server-bundle.js"
+    "start": "cross-env NODE_ENV=production node dist/server-bundle.js",
+    "migrate": "node src/migrate.js",
+    "test": "echo OK"
   },
   "repository": {
     "type": "git",
@@ -40,7 +42,10 @@
     "mini-css-extract-plugin": "^0.7.0",
     "node-sass": "^4.12.0",
     "nodemon": "^1.19.1",
+    "npm-run-all": "^4.1.5",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-hot-loader": "^4.12.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
@@ -50,9 +55,7 @@
     "webpack-dev-middleware": "^3.7.0",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^4.2.1",
-    "webpack-node-externals": "^1.7.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "and": "0.0.3",

@@ -1,0 +1,8 @@
+services:
+  - docker
+
+script:
+  - docker-compose -f docker-compose.testing.yml up
+
+after_script:
+  - docker-compose -f docker-compose.testing.yml down
