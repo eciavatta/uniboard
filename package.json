@@ -4,7 +4,7 @@
   "description": "Web application that shows the free classrooms and provides support to the students of the Cesena Campus",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/app.js --exec babel-node --watch public --watch src --watch build ",
+    "dev": "nodemon server.js --exec babel-node --watch public --watch src --watch build ",
     "build": "rm -rf dist/* && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.prod.babel.js",
     "build:server": "cross-env NODE_ENV=production webpack --config build/webpack.server.babel.js",

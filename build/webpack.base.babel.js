@@ -2,13 +2,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 
-const isProd = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, '../dist/public'),
-    publicPath: '/'
+    path: path.resolve('dist/static'),
+    publicPath: isProduction ? '/static' : '/'
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -24,16 +24,16 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
-        use: [isProd ? MiniCssExtractPlugin.loader : 'style-loader', {
+        use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', {
           loader: 'css-loader',
-          options: isProd ? {} : {
-            sourceMap: true
+          options: isProduction ? {} : {
+            sourceMap: false
           }
         },
         {
           loader: 'sass-loader',
-          options: isProd ? {} : {
-            sourceMap: true
+          options: isProduction ? {} : {
+            sourceMap: false
           }
         }]
       }
@@ -41,13 +41,14 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'public/index.html'
+      filename: isProduction ? '../index.html' : 'index.html',
+      template: 'public/index.html',
+
     }),
 
     new MiniCssExtractPlugin({
-      filename: isProd ? '[name].[hash].css' : '[name].css',
-      chunkFilename: isProd ? '[id].[hash].css' : '[id].css',
+      filename: isProduction ? '[name].[hash].css' : '[name].css',
+      chunkFilename: isProduction ? '[id].[hash].css' : '[id].css',
     })
   ]
 };

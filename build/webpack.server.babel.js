@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   target: 'node',
-  entry: './src/app.js',
+  entry: './server.js',
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'server-bundle.js',
