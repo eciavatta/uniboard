@@ -1,13 +1,9 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var webpack = require('webpack');
-const configDev = require('../build/webpack.dev.babel');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const app = express();
 
 const isProduction = process.env.NODE_ENV === 'production';
-
-const app = express();
-const compiler = webpack(configDev);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -17,6 +13,10 @@ if (isProduction) {
 
   app.use('/static', express.static(path.resolve('dist/static/')));
 } else {
+  let configDev = require('../build/webpack.dev.babel');
+  let webpack = require('webpack');
+  let compiler = webpack(configDev);
+
   app.use(require('webpack-dev-middleware')(compiler, {
     publicPath: configDev.output.publicPath,
   }));
