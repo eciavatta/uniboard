@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import '../static/reset.css'
 
 const render = (Component) => {
   ReactDOM.render(<Component />, document.getElementById('root'));
