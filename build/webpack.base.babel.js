@@ -1,7 +1,7 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const path = require('path');
 const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
@@ -24,18 +24,28 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
-        use: [isProduction ? MiniCssExtractPlugin.loader : 'style-loader', {
-          loader: 'css-loader',
-          options: isProduction ? {} : {
-            sourceMap: false
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              hmr: !isProduction,
+              reloadAll: true,
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: isProduction ? {} : {
+              sourceMap: true,
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: isProduction ? {} : {
+              sourceMap: true
+            }
           }
-        },
-        {
-          loader: 'sass-loader',
-          options: isProduction ? {} : {
-            sourceMap: false
-          }
-        }]
+        ]
       }
     ]
   },
