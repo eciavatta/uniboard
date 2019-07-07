@@ -1,10 +1,19 @@
 import React from 'react';
+import {NavLink} from "react-router-dom";
+
 import './Header.scss';
 
-const Header = () => (
-  <header className="Header">
-    Header
-  </header>
-);
+export default class Header extends React.Component {
 
-export default Header;
+  render() {
+    return (
+      <header className="page-header">
+        Page header
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/classrooms">Aule</NavLink>
+        <NavLink to="/notfound">Non trovato</NavLink>
+      </header>
+    );
+  }
+
+}

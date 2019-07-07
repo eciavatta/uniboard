@@ -62,6 +62,7 @@
     "cross-env": "^5.2.0",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
-    "mongoose": "^5.6.3"
+    "mongoose": "^5.6.3",
+    "react-router-dom": "^5.0.1"
   }
 }
