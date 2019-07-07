@@ -2,6 +2,7 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import Header from './layouts/Header';
 import ClassroomList from './components/classroom/ClassroomList'
+import MapMain from './components/map/MapMain'
 
 let classroomTestData = [
   {
@@ -22,6 +23,7 @@ const App = () => (
   <div>
     <Header />
     <ClassroomList items={classroomTestData} />
+    <MapMain initialFloor={1}/>
   </div>
 );
 
