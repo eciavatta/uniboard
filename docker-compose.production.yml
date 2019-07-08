@@ -9,6 +9,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: uniboard
       MONGO_INITDB_ROOT_PASSWORD: braobiun
+      MONGO_INITDB_DATABASE: uniboard
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
   uniboard:
     build: .
@@ -20,6 +23,12 @@ services:
     networks:
       - internal
     command: "npx npm-run-all --serial migrate start"
+    environment:
+      MONGODB_HOST: mongo
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: uniboard
+      MONGODB_PASSWORD: braobiun
+      MONGODB_DATABASE: uniboard
 
 networks:
   internal:
