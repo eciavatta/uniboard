@@ -3,39 +3,30 @@ var Classroom = mongoose.model('Classroom');
 var Activity = mongoose.model('Activity');
 
 exports.list_classrooms = function(req, res) {
-  const includeCoordinates = req.query.withCoordinates !== undefined;
-  const includeName = req.query.withClassroomName !== undefined;
-  const includeType = req.query.withClassroomType !== undefined;
-  const includeFloor = req.query.withClassroomFloor !== undefined;
-  const includeCourse = req.query.withCourseInSchedule !== undefined;
+  let onDate = new Date(parseInt(req.query.onDate));
+  if (isNaN(onDate.getTime())) {
+    onDate = new Date();
+  }
+  const today = new Date(onDate.getFullYear(), onDate.getMonth(), onDate.getDate());
 
-  //req.query.withCoordinates
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-  const toIncludeInClass = {};
-  if (includeName) toIncludeInClass.name = 1;
-  if (includeType) toIncludeInClass.type = 1;
-  if (includeFloor) toIncludeInClass.floor = 1;
-  if (includeCoordinates) toIncludeInClass.mapCoordinates = 1;
-  const toIncludeInActivity = {classroom: 1, from:1, to: 1};
-  if (includeCourse) {toIncludeInActivity.course = 1; toIncludeInActivity.description = 1;}
-
-  Promise.all(
-    [
-      Classroom.find({}).select(toIncludeInClass),
-      Activity.find({date: today}).select(toIncludeInActivity)
-    ]).then(
-    function (values) {
+  const classroomQueryResult = Classroom.find({});
+  const activityQueryResult = Activity.find({date: today}).select({_id: 0}).populate('course','name -_id');
+  Promise.all([classroomQueryResult, activityQueryResult]).then(
+    function (queryResults) {
       const classActivities = {};
-      values[1].forEach(function(activity) {
+      queryResults[1].forEach(function(activity) {
         if (!classActivities[activity.classroom]) {
           classActivities[activity.classroom] = [];
         }
-        classActivities[activity.classroom].push(activity);
+        const activityObj = activity.toObject();
+        delete activityObj.classroom;
+        if (activityObj.course) {
+          activityObj.course = activity.course.name;
+        }
+        classActivities[activity.classroom].push(activityObj);
       });
 
-      res.json(values[0].map(function(classroom) {
+      res.json(queryResults[0].map(function(classroom) {
         const res = classroom.toObject();
         res.activities = classActivities[classroom._id] ? classActivities[classroom._id] : [];
         return res
