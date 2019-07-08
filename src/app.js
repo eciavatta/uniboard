@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-mongoose.connect('mongodb://localhost/dbmovies', { useNewUrlParser: true, useFindAndModify: false });
+mongoose.connect('mongodb://localhost/uniboardDB', { useNewUrlParser: true});
 require('./models/classroomsModel');
 require('./models/activitiesModel');
 require('./models/coursesModel');
