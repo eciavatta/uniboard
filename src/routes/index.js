@@ -1,10 +1,6 @@
-var express = require('express');
-var router = express.Router();
+module.exports = function(app) {
+  const indexController = require('../controllers/index.js');
 
-var path = require('path');
-
-router.get('/', function(req, res, next) {
-  res.sendFile(path.resolve('dist/index.html'));
-});
-
-module.exports = router;
+  app.route('/')
+    .get(indexController.show_index);
+};

@@ -1,8 +1,3 @@
-svg {
-  width: 1920px;
-  height: 1080px;
-}
-
 symbol {
   overflow: visible;
 }
@@ -35,6 +30,10 @@ symbol {
 .map-space {
   fill: #bdbdbd;
   fill-opacity: 0.6;
+}
+
+.map-exit-symbol {
+  fill: #269463;
 }
 
 .map-bathroom-symbol, .map-elevator-symbol {

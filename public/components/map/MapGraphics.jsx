@@ -3,19 +3,28 @@ import React from "react";
 import "./MapGraphics.scss";
 
 export default class MapMain extends React.Component {
+  static doTouchEvent(type, e) {
+    console.log(type);
+    console.log(e.touches);
+  }
+  static touchS (e) {MapMain.doTouchEvent("start", e)}
+  static touchE (e) {MapMain.doTouchEvent("end", e)}
+  static touchC (e) {MapMain.doTouchEvent("cancel", e)}
+  static touchM (e) {MapMain.doTouchEvent("move", e)}
+
   render() {
     return (
-      <svg>
+      <svg width="605px" height="800px">
         <defs>
           <symbol id="symbol-exit">
-            <g transform="scale(0.7 0.7)">
-              <path fill="#269463" d="M471.9,510.8l-3.2-8.5c-1.4-3.5-4.6-5.9-8.6-5.9h-1.4v-73.2h-69.5v40.5h9.1l10.4-13 c2.1-2.4,5.3-4,8.8-4h22.2c3.5,0,6.6,1.9,8.2,5l6.6,12.5c0.3,0.5,0.5,1.1,0.5,1.9c0,2.2-1.9,4.2-4.2,4.2c-1.8,0-3-0.8-3.8-2.2 l-5.9-11.4h-9.6l7.4,18.4l2.2,23.5h19c3,0,5.4,1.9,6.6,4.5l2.1,5.4H436c-2.4,0-4.5-1.8-4.6-4.2l-2.2-20.6l-17.6,36.5
+            <g className="map-exit-symbol" transform="scale(0.7 0.7)">
+              <path d="M471.9,510.8l-3.2-8.5c-1.4-3.5-4.6-5.9-8.6-5.9h-1.4v-73.2h-69.5v40.5h9.1l10.4-13 c2.1-2.4,5.3-4,8.8-4h22.2c3.5,0,6.6,1.9,8.2,5l6.6,12.5c0.3,0.5,0.5,1.1,0.5,1.9c0,2.2-1.9,4.2-4.2,4.2c-1.8,0-3-0.8-3.8-2.2 l-5.9-11.4h-9.6l7.4,18.4l2.2,23.5h19c3,0,5.4,1.9,6.6,4.5l2.1,5.4H436c-2.4,0-4.5-1.8-4.6-4.2l-2.2-20.6l-17.6,36.5
 			                    c-1,2.1-3.2,3.5-5.8,3.5h-8.5l21.6-44.7l-6.7-16.8l-6.4,7.8c-1.6,2.1-4.3,3.5-7.2,3.5h-9.4v52.8l15,14.9h-44.3V413.3h128.1v128.1
 			                    h-14.4l-14.9-14.9v-15.7H471.9"></path>
-              <path fill="#269463" d="M412,428l0.5,0l0.5,0l0.5,0.1l0.4,0.1l0.4,0.1l0.4,0.1l0.4,0.2l0.4,0.2l0.4,0.2l0.4,0.2
+              <path d="M412,428l0.5,0l0.5,0l0.5,0.1l0.4,0.1l0.4,0.1l0.4,0.1l0.4,0.2l0.4,0.2l0.4,0.2l0.4,0.2
 			                    l0.4,0.2l0.4,0.2l0.3,0.3l0.3,0.3l0.3,0.3l0.3,0.3l0.3,0.3l0.3,0.3l0.3,0.3l0.3,0.4l0.2,0.4l0.2,0.4l0.2,0.4l0.2,0.4l0.2,0.4
 			                    l0.1,0.4l0.1,0.4l0.1,0.4l0.1,0.4l0.1,0.5l0,0.5l0,0.5c0,5-4.2,9-9.1,9c-5,0-9-4-9-9S407.1,428,412,428z"></path>
-              <path fill="#269463" d="M416,529.8l11.5,11.5h-13.9l-15-14.9h9C410.7,526.4,413.8,527.7,416,529.8z"></path>
+              <path d="M416,529.8l11.5,11.5h-13.9l-15-14.9h9C410.7,526.4,413.8,527.7,416,529.8z"></path>
             </g>
           </symbol>
           <symbol id="symbol-elevator">
@@ -72,7 +81,7 @@ export default class MapMain extends React.Component {
             </g>
           </symbol>
         </defs>
-        <g id="mapGraphicsMainGroup" transform="translate(850,-200)rotate(90)">
+        <g id="mapGraphicsMainGroup" transform="translate(710,-215)rotate(90)">
           <g id="mapFloor1" visibility={this.props.floor === 1 ? 'visible' : 'hidden'}>
             <polygon points="308.28,134.399 308.28,150.96 266.578,150.96 266.579,331.625 712.08,331.625 712.08,498.719
 	263.88,498.719 263.88,679.861 694.2,679.862 694.2,662.88 754.2,662.88 754.2,681 822.6,681 822.6,626.28 864.36,626.28

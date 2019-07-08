@@ -2,8 +2,14 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const app = express();
+const mongoose = require('mongoose');
 
 const isProduction = process.env.NODE_ENV === 'production';
+
+mongoose.connect('mongodb://localhost/dbmovies', { useNewUrlParser: true, useFindAndModify: false });
+require('./models/classroomsModel');
+require('./models/activitiesModel');
+require('./models/coursesModel');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,6 +29,9 @@ if (isProduction) {
 
   app.use(require('webpack-hot-middleware')(compiler));
 }
+
+const classRoute = require('./routes/classrooms');
+classRoute(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
