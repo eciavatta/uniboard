@@ -8,6 +8,10 @@ export default class MapMain extends React.Component {
   constructor(props) {
     super(props);
     this.state = {floor: this.props.initialFloor};
+
+    this.changeFloor = this.changeFloor.bind(this);
+    this.upperFloorClicked = this.upperFloorClicked.bind(this);
+    this.lowerFloorClicked = this.lowerFloorClicked.bind(this);
   }
 
   changeFloor(newFloor) {
@@ -27,8 +31,8 @@ export default class MapMain extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.upperFloorClicked.bind(this)}>Vai su</button>
-        <button onClick={this.lowerFloorClicked.bind(this)}>Vai giù</button>
+        <button onClick={this.upperFloorClicked}>Vai su</button>
+        <button onClick={this.lowerFloorClicked}>Vai giù</button>
         <MapGraphics floor={this.state.floor}/>
       </div>
     );

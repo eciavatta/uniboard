@@ -2,6 +2,8 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const app = express();
+const passport = require('passport');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -10,9 +12,20 @@ mongoose.connect('mongodb://localhost/uniboardDB', { useNewUrlParser: true});
 require('./models/classroomsModel');
 require('./models/activitiesModel');
 require('./models/coursesModel');
+require('./models/userPasswordsModel');
+require('./models/usersModel');
 
+//middleware init
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(require('express-session')({secret: 'WnpHBAdguCYEN9XHnsGyfXR6OdWf9KrjAS', saveUninitialized: false, resave: true}));
+app.use(passport.initialize());
+app.use(passport.session());
+//TODO usa connect-flash in login
+//TODO separa users e authentication
+require('./passportStrategyInit');
 
 if (isProduction) {
   app.use(require('./routes/index'));
@@ -30,8 +43,9 @@ if (isProduction) {
   app.use(require('webpack-hot-middleware')(compiler));
 }
 
-const classRoute = require('./routes/classrooms');
-classRoute(app);
+require('./routes/users')(app);
+require('./routes/authentication')(app);
+require('./routes/classrooms')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

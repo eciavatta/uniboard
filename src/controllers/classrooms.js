@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var Classroom = mongoose.model('Classroom');
-var Activity = mongoose.model('Activity');
+const mongoose = require('mongoose');
+const Classroom = mongoose.model('Classroom');
+const Activity = mongoose.model('Activity');
 
 exports.list_classrooms = function(req, res) {
   let onDate = new Date(parseInt(req.query.onDate));
