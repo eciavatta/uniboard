@@ -3,6 +3,11 @@ body {
   height: 100vh;
 }
 
+.loader-bg {
+  background-image: url(/static/vectors/squared1-bg.svg);
+  background-size: 150px;
+}
+
 .page-loader {
 
   .campus-image {
@@ -21,3 +26,20 @@ body {
 
 }
 
+.fade-exit {
+  display: none;
+}
+
+.fade-enter .page-container {
+  display: none;
+}
+
+.fade-enter .page-header-loader {
+  display: block;
+  width: 0;
+}
+
+.fade-enter.fade-enter-active .page-header-loader {
+  width: 100%;
+  transition: width 250ms ease-in;
+}
