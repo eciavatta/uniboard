@@ -3,11 +3,17 @@ language: node_js
 node_js:
   - '10'
 
+env:
+  global:
+    - MONGODB_USERNAME=uniboard
+    - MONGODB_PASSWORD=uniboard
+    - MONGODB_DATABASE=uniboardDB
+
 services:
   - docker
 
 before_install:
-  - docker run -d --name mongodb -e MONGO_INITDB_ROOT_USERNAME=uniboard -e MONGO_INITDB_ROOT_PASSWORD=draobiun -e MONGO_INITDB_DATABASE=uniboard -v './mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js' mongo:4
+  - docker run -d --name mongodb -p 27017:27017 -v "$PWD/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro" -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=toor -e MONGO_INITDB_DATABASE=uniboardDB mongo:4
 
 before_script:
   - yarn install

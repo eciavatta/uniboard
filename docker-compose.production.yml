@@ -7,9 +7,9 @@ services:
       - internal
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: uniboard
-      MONGO_INITDB_ROOT_PASSWORD: braobiun
-      MONGO_INITDB_DATABASE: uniboard
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: toor
+      MONGO_INITDB_DATABASE: uniboardDB
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
 
@@ -27,8 +27,8 @@ services:
       MONGODB_HOST: mongo
       MONGODB_PORT: 27017
       MONGODB_USERNAME: uniboard
-      MONGODB_PASSWORD: braobiun
-      MONGODB_DATABASE: uniboard
+      MONGODB_PASSWORD: uniboard
+      MONGODB_DATABASE: uniboardDB
 
 networks:
   internal:
