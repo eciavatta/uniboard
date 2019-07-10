@@ -8,6 +8,7 @@ services:
 
 before_install:
   - docker run -d --name mongodb -e MONGO_INITDB_ROOT_USERNAME=uniboard -e MONGO_INITDB_ROOT_PASSWORD=draobiun -e MONGO_INITDB_DATABASE=uniboard mongo:4
+  - sleep 5
   - docker exec mongodb mongo < <(cat mongo-init.js)
 
 before_script:
