@@ -4,9 +4,10 @@ node_js:
   - '10'
 
 env:
-  - MONGODB_USERNAME=uniboard
-  - MONGODB_PASSWORD=uniboard
-  - MONGODB_DATABASE=uniboardDB
+  global:
+    - MONGODB_USERNAME=uniboard
+    - MONGODB_PASSWORD=uniboard
+    - MONGODB_DATABASE=uniboardDB
 
 services:
   - docker
