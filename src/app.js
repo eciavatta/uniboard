@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-require('./db/connection');
 require('./models/classroomsModel');
 require('./models/activitiesModel');
 require('./models/coursesModel');
@@ -54,7 +53,7 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -64,5 +63,7 @@ app.use(function(err, req, res, next) {
     error: err
   });
 });
+
+setTimeout(() => require('./db/connection'), 3000);
 
 module.exports = app;

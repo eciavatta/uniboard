@@ -1,11 +1,11 @@
 db.createUser(
   {
     user: "uniboard",
-    pwd: "braobiun",
+    pwd: "uniboard",
     roles: [
       {
         role: "readWrite",
-        db: "uniboard"
+        db: "uniboardDB"
       }
     ]
   }
