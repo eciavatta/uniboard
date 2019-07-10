@@ -40,5 +40,5 @@ passportStrategyInit.deserializeUser(function(id, cb) {
     } else {
       cb(null, user);
     }
-  }).select({'__v': 0});
+  });
 });

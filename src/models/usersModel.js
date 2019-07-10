@@ -7,6 +7,10 @@ const UserSchema = new Schema({
     required: "Username is required",
     lowercase: true,
     unique: true
+  },
+  reportScore: {
+    type: Number,
+    default: 0
   }
 });
 

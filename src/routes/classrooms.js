@@ -3,4 +3,7 @@ module.exports = function(app) {
 
   app.route('/api/classrooms')
     .get(classroomsController.list_classrooms);
+
+  app.route('/api/classrooms/:id/reports')
+    .post(classroomsController.add_report);
 };
