@@ -8,7 +8,7 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve('dist/static'),
-    publicPath: isProduction ? '/static' : '/'
+    publicPath: isProduction ? '/dist' : '/'
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -46,6 +46,10 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
       }
     ]
   },

@@ -7,7 +7,7 @@ const render = (Component) => {
   ReactDOM.render(<Component />, document.getElementById('root'));
 };
 
-render(App);
+setTimeout(() => render(App), 2500);
 
 if (module.hot) {
   module.hot.accept('./App', () => {
