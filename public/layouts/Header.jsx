@@ -8,10 +8,16 @@ export default class Header extends React.Component {
   render() {
     return (
       <header className="page-header">
-        Page header
-        <NavLink to="/">Home</NavLink>
-        <NavLink to="/classrooms">Aule</NavLink>
-        <NavLink to="/notfound">Non trovato</NavLink>
+
+        <nav className="page-nav">
+          <ul className="list-inline">
+            <li className="list-inline-item"><NavLink exact to="/">Mappa</NavLink></li>
+            <li className="list-inline-item"><NavLink exact to="/classrooms">Aule</NavLink></li>
+            <li className="list-inline-item"><NavLink exact to="/lessons">Lezioni</NavLink></li>
+            <li className="list-inline-item"><NavLink exact to="/login">Accedi</NavLink></li>
+          </ul>
+        </nav>
+
       </header>
     );
   }

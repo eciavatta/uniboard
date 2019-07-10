@@ -4,11 +4,10 @@ const path = require('path');
 const app = express();
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-mongoose.connect('mongodb://localhost/uniboardDB', { useNewUrlParser: true});
+require('./db/connection');
 require('./models/classroomsModel');
 require('./models/activitiesModel');
 require('./models/coursesModel');
@@ -28,9 +27,9 @@ app.use(passport.session());
 require('./passportStrategyInit');
 
 if (isProduction) {
-  app.use(require('./routes/index'));
+  app.route('/').get((req, res) => res.sendFile(path.resolve('dist/index.html')));
 
-  app.use('/static', express.static(path.resolve('dist/static/')));
+  app.use('/dist', express.static(path.resolve('dist/static/')));
 } else {
   let configDev = require('../build/webpack.dev.babel');
   let webpack = require('webpack');
@@ -42,6 +41,8 @@ if (isProduction) {
 
   app.use(require('webpack-hot-middleware')(compiler));
 }
+
+app.use('/static', express.static(path.resolve('static/')));
 
 require('./routes/users')(app);
 require('./routes/authentication')(app);

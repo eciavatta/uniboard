@@ -1,6 +1,36 @@
 @import "../variables.scss";
 
-.Header {
-  background-color: $primary-color;
-  padding: 20px;
+.page-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 0;
+
+  .page-nav {
+    padding: 15px 25px;
+
+    li {
+      padding: 7px 0;
+
+      a {
+        color: white;
+        font-size: 18px;
+        padding: 4px 25px;
+      }
+
+      a:hover {
+        text-decoration: none;
+      }
+
+      a.active {
+        background-image: url(/static/vectors/nav-hover.svg);
+        background-size: 90px;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: red;
+      }
+
+
+    }
+  }
 }
