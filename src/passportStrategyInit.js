@@ -13,26 +13,27 @@ passportStrategyInit.use(new PassportLocalStrategy(
       } else if (!user) {
         cb(null, false, "No user found");
       } else {
-        UserPassword.findById(user._id, function (err2, userPassword) {
-          hashPassword(password, userPassword.salt, function (err, hashedPassword) {
-            if (userPassword.hash !== hashedPassword) {
-              cb(null, false, "Password is wrong"); }
-            else {
-              cb(null, user);
-            }
-          });
-        })
+        UserPassword.findById(user._id).select({'__v': 0})
+          .then(function (userPassword) {
+            hashPassword(password, userPassword.salt, function (err, hashedPassword) {
+              if (userPassword.hash !== hashedPassword) {
+                cb(null, false, "Password is wrong"); }
+              else {
+                cb(null, user);
+              }
+            });
+          }, function (err) {
+            cb(err);
+          })
       }
     });
   }));
 
 passportStrategyInit.serializeUser(function(user, cb) {
-  console.log("Serialize user");
   cb(null, user._id);
 });
 
 passportStrategyInit.deserializeUser(function(id, cb) {
-  console.log("DeSerialize user");
   User.findById(id, function (err, user) {
     if (err) {
       cb(err);

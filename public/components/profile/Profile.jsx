@@ -40,7 +40,9 @@ export default class MapMain extends React.Component {
       console.log(this.state);
       this.setState({'loginDisabled': true});
       axios.post('/login',{'username':this.state.username, 'password': this.state.password})
-        .then(() => {
+        .then(response => {
+          console.log("Response from login:");
+          console.log(response.data);
           this.requestUser();
         }, err => {
           console.log(err.response);
