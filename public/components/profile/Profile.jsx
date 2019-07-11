@@ -40,7 +40,7 @@ export default class MapMain extends React.Component {
     if (!this.state.loginDisabled) {
       console.log(this.state);
       this.setState({'loginDisabled': true});
-      axios.post('/login',{'username':this.state.username, 'password': this.state.password})
+      axios.post('/api/login',{'username':this.state.username, 'password': this.state.password})
         .then(response => {
           console.log("Response from login:");
           console.log(response.data);
@@ -54,7 +54,7 @@ export default class MapMain extends React.Component {
   }
 
   doLogout() {
-    axios.delete('/login').then(res => {
+    axios.get('/api/logout').then(res => {
         console.log(res);
         this.requestUser();
       }, err => {
