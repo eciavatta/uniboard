@@ -30,7 +30,9 @@ export default class Header extends React.Component {
         <div className="horizontal-sketch" />
         <div className="vertical-logo-sketch" />
 
-        <div className="page-header-loader" />
+        <div className="bottom-border row" />
+        <div className="page-header-loader row" />
+
       </header>
     );
   }

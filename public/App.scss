@@ -1,11 +1,11 @@
+@import 'styles/scrollbars.scss';
+@import 'globals.scss';
+
 body {
   font-family: 'Merriweather Sans', sans-serif !important;
   height: 100vh;
-}
 
-.loader-bg {
-  background-image: url(/static/vectors/squared1-bg.svg);
-  background-size: 150px;
+  @include squared-background;
 }
 
 .page-loader {

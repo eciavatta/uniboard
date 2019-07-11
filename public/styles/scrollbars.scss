@@ -1,0 +1,24 @@
+@import '../globals.scss';
+
+.scrollable {
+  overflow: auto;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  border: 2px solid;
+  @include pencil-solid-border;
+  background: #fff;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 15px;
+  opacity: 0.3 !important;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  position: absolute;
+  border: 3px solid;
+  border-image: url(/static/vectors/scrollbar-border.svg) 6 fill;
+  z-index: -1;
+
+}
