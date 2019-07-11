@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-import {name} from '../../package.json';
+const name = 'uniboardDB';
 
 let connectionString;
 

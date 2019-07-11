@@ -1,24 +1,16 @@
 const passport = require('passport');
+const unexpectedError = require('../utils').unexpectedError;
 
-exports.showLogin = function(req, res) {
-
-};
 exports.try_login = function(req, res, next) {
   console.log("user:");
   console.log(req.user);
   passport.authenticate('local', {}, function (err, user, data) {
     if (err) {
-      console.log("Error while authenticating");
-      console.log(err);
-      res.status(500);
-      res.send("Unexpected error while logging in");
+      unexpectedError(err, res);
     } else if (user) {
       req.logIn(user, function(err) {
         if (err) {
-          console.log("Error while logging in");
-          console.log(err);
-          res.status(500);
-          res.send("Unexpected error while logging in");
+          unexpectedError(err, res);
         } else {
           res.json(user);
         }
@@ -30,4 +22,10 @@ exports.try_login = function(req, res, next) {
       res.send("Invalid username or password");
     }
   })(req, res, next);
+};
+
+exports.do_logout = function(req, res) {
+  req.logout();
+  res.status(204);
+  res.send();
 };

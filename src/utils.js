@@ -13,3 +13,9 @@ exports.hashPassword = function(password, salt, callback) {
     callback(err, hash);
   });
 };
+
+exports.unexpectedError = function(err, res) {
+  console.log(err);
+  res.status(500);
+  res.send("An unexpected error occurred");
+};

@@ -12,6 +12,7 @@ require('./models/activitiesModel');
 require('./models/coursesModel');
 require('./models/userPasswordsModel');
 require('./models/usersModel');
+require('./models/userReportsModel');
 
 //middleware init
 app.use(express.json());
@@ -21,8 +22,6 @@ app.use(bodyParser.json());
 app.use(require('express-session')({secret: 'WnpHBAdguCYEN9XHnsGyfXR6OdWf9KrjAS', saveUninitialized: false, resave: true}));
 app.use(passport.initialize());
 app.use(passport.session());
-//TODO usa connect-flash in login
-//TODO separa users e authentication
 require('./passportStrategyInit');
 
 if (isProduction) {

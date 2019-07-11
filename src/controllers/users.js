@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const UserPassword = mongoose.model('UserPassword');
 const crypto = require('crypto');
-const hashPassword = require('../utils').hashPassword;
+const utils = require('../utils');
+
+const hashPassword = utils.hashPassword;
+const unexpectedError = utils.unexpectedError;
 
 exports.add_user = function(req, res) {
   const username = req.body.username;
@@ -10,18 +13,23 @@ exports.add_user = function(req, res) {
   //TODO validate pass
   new User({'username': username}).save(function (err, user) {
     if (err) {
-      res.send(err);
+      if (err.code === 11000) {
+        res.status(409);
+        res.send("Username is already taken");
+      } else {
+        unexpectedError(err, res)
+      }
     } else {
       const salt = crypto.randomBytes(16).toString('base64');
       hashPassword(password,salt,function (err, hash) {
         if (err) {
-          res.send(err);
+          unexpectedError(err, res)
         } else {
-          new UserPassword({'salt': salt, 'hash': hash, '_id':user._id}).save(function (err, inserted) {
+          new UserPassword({'salt': salt, 'hash': hash, '_id':user._id}).save(function (err) {
             if (err) {
-              res.send(err);
+              unexpectedError(err, res)
             } else {
-              res.send("Done");
+              res.json(user);
             }
           })
         }

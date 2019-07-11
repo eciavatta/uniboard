@@ -14,6 +14,7 @@ export default class MapMain extends React.Component {
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.requestUser = this.requestUser.bind(this);
+    this.doLogout = this.doLogout.bind(this);
 
     this.requestUser();
   }
@@ -40,7 +41,9 @@ export default class MapMain extends React.Component {
       console.log(this.state);
       this.setState({'loginDisabled': true});
       axios.post('/login',{'username':this.state.username, 'password': this.state.password})
-        .then(() => {
+        .then(response => {
+          console.log("Response from login:");
+          console.log(response.data);
           this.requestUser();
         }, err => {
           console.log(err.response);
@@ -48,6 +51,25 @@ export default class MapMain extends React.Component {
         });
       event.preventDefault();
     }
+  }
+
+  doLogout() {
+    axios.delete('/login').then(res => {
+        console.log(res);
+        this.requestUser();
+      }, err => {
+        console.log(err.response);
+      }
+    );
+  }
+
+  doReport(val) {
+    axios.post('/api/classrooms/5d235d4b5239c12674e9c088/reports', {'isActuallyFree': val}).then(res => {
+        console.log(res);
+      }, err => {
+        console.log(err.response);
+      }
+    );
   }
 
   render() {
@@ -63,7 +85,12 @@ export default class MapMain extends React.Component {
         </label>
         <input type="submit" value="Submit" disabled={this.state.loginDisabled}/>
       </form>
-      <p hidden={!(this.state.user)}>{JSON.stringify(this.state.user)}</p>
+      <div hidden={!(this.state.user)}>
+        <p>{JSON.stringify(this.state.user)}</p>
+        <a onClick={this.doLogout}>Log out</a>
+        <a onClick={(e) => this.doReport(false)}>Try report false</a>
+        <a onClick={(e) => this.doReport(true)}>Try report true</a>
+      </div>
     </div>
   }
 }
