@@ -3,7 +3,9 @@ const Classroom = mongoose.model('Classroom');
 const Activity = mongoose.model('Activity');
 const UserReport = mongoose.model('UserReport');
 const User = mongoose.model('User');
-const unexpectedError = require('../utils').unexpectedError;
+const utils = require('../utils');
+const ensureAuthenticated = utils.ensureAuthenticated;
+const unexpectedError = utils.unexpectedError;
 
 exports.list_classrooms = function(req, res) {
   let onDate = new Date(parseInt(req.query.onDate));
@@ -69,12 +71,10 @@ exports.add_report = function(req, res) {
   } else */if (!(isActuallyFree === true || isActuallyFree === false)) {
     res.status(400);
     res.send("Body should contain boolean isActuallyFree");
-  } else if (!req.user) {
-    res.status(403);
-    res.send("You need to be authenticated to perform this operation");
-  } else {
+  } else if (ensureAuthenticated(req,res)) {
     Classroom.findById(req.params.id, async function (err, classroom) {
       if (err) {
+        //TODO sostituisci con isValid di objectId prima di find
         if (err.name === 'CastError' && err.path === '_id') {
           res.status(400);
           res.send("Invalid classroom id");

@@ -10,7 +10,22 @@ const UserSchema = new Schema({
   },
   reportScore: {
     type: Number,
-    default: 0
+    default: 0,
+    required: "User report score is required",
+    validate: {
+      validator: function(v) {
+        return Number.isInteger(v);
+      },
+      message: "User report score should be an integer value"
+    }
+  },
+  courses: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+    }],
+    default: [],
+    required: "User courses are required"
   }
 });
 

@@ -15,6 +15,8 @@ export default class MapMain extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.requestUser = this.requestUser.bind(this);
     this.doLogout = this.doLogout.bind(this);
+    this.addCourse = this.addCourse.bind(this);
+    this.removeCourse = this.removeCourse.bind(this);
 
     this.requestUser();
   }
@@ -72,6 +74,24 @@ export default class MapMain extends React.Component {
     );
   }
 
+  addCourse(val) {
+    axios.post('/api/users/self/courses/'  + val).then(res => {
+        console.log(res);
+      }, err => {
+        console.log(err.response);
+      }
+    );
+  }
+
+  removeCourse(val) {
+    axios.delete('/api/users/self/courses/'  + val).then(res => {
+        console.log(res);
+      }, err => {
+        console.log(err.response);
+      }
+    );
+  }
+
   render() {
     return <div>
       <form onSubmit={this.handleSubmit} hidden={this.state.user !== null}>
@@ -87,9 +107,13 @@ export default class MapMain extends React.Component {
       </form>
       <div hidden={!(this.state.user)}>
         <p>{JSON.stringify(this.state.user)}</p>
-        <a onClick={this.doLogout}>Log out</a>
-        <a onClick={(e) => this.doReport(false)}>Try report false</a>
-        <a onClick={(e) => this.doReport(true)}>Try report true</a>
+        <p><a onClick={this.doLogout}>Log out</a></p>
+        <p><a onClick={(e) => this.doReport(false)}>Try report false</a></p>
+        <p><a onClick={(e) => this.doReport(true)}>Try report true</a></p>
+        <p><a onClick={(e) => this.addCourse('5d235d505239c12674e9c0b3')}>Try add course A</a></p>
+        <p><a onClick={(e) => this.addCourse('5d235d505239c12674e9c0b5')}>Try add course B</a></p>
+        <p><a onClick={(e) => this.removeCourse('5d235d505239c12674e9c0b3')}>Try remove course A</a></p>
+        <p><a onClick={(e) => this.removeCourse('5d235d505239c12674e9c0b5')}>Try remove course B</a></p>
       </div>
     </div>
   }
