@@ -33,10 +33,23 @@ exports.list_classrooms = function(req, res) {
         const resObj = classroom.toObject();
         resObj.activities = classActivities[classroom._id] ? classActivities[classroom._id] : [];
         //TODO improve function efficiency by doing a bulk version, and already use known activities.
-        const previousReportData = await findPreviousReports(new Date(), classroom);
-        const isFreeByReports = removeBeforeNewestGroup(previousReportData[0])[1];
-        if (isFreeByReports !== null) {
-          resObj.isFreeByReports = isFreeByReports;
+        const [previousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(new Date(), classroom);
+        const [reportsAfterGroup, isFreeByReports] = removeBeforeNewestGroupAndGetAgreedValue(previousReports);
+        const isFreeBySchedule = currentActivity === null;
+        if (isFreeByReports !== null && isFreeBySchedule !== isFreeByReports) {
+          let validTo;
+          if (currentActivity !== null) {
+            validTo = currentActivity.to;
+          } else {
+            const latestReportOfGroup = reportsAfterGroup[reportsAfterGroup.length - VALID_GROUP_SIZE].timestamp;
+            const hourAfterLatest = new Date(latestReportOfGroup.timestamp);
+            hourAfterLatest.setHours(latestReportOfGroup.getHours() + 1);
+            validTo = dateToHalfHours(hourAfterLatest);
+          }
+          resObj.statusByReport = {
+            'isFree': isFreeByReports,
+            'validTo': validTo
+          };
         }
         return resObj;
       })).then(promiseRes => res.json(promiseRes), err => res.send(err));
@@ -79,8 +92,8 @@ exports.add_report = function(req, res) {
           actualStatusFree: isActuallyFree,
         });
         try {
-          const previousReportsData = await findPreviousReports(now, classroom);
-          doAddReport(newReport, previousReportsData[0], previousReportsData[1], res);
+          const [sortedPreviousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(now, classroom);
+          doAddReport(newReport, sortedPreviousReports, currentActivity === null, res);
         } catch (err) {
           unexpectedError(err, res);
         }
@@ -91,19 +104,16 @@ exports.add_report = function(req, res) {
 
 /**
  * Finds valid userReport for a classroom, considering its current/previous activity
- * @returns Array [[valid UserReports], boolean no activity is scheduled now for classroom]
+ * @returns Array [[valid UserReports], Currently scheduled activity or null if none]
  */
-async function findPreviousReports(now, classroom) {
+async function findPreviousReportsAndCurrentActivity(now, classroom) {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const time = dateToHalfHours(now);
   const currActivity = await Activity.findOne({'classroom': classroom._id, 'date': today, 'from': {$lte: time}, 'to': {$gt: time}});
   let from;
-  let freeBySchedule;
   if (currActivity) {
-    from = dateFromHalfHours(today, currActivity.time);
-    freeBySchedule = false;
+    from = dateFromHalfHours(today, currActivity.from);
   } else {
-    freeBySchedule = true;
     const previousHour = new Date(now);
     previousHour.setHours(now.getHours() - 1);
     const previousTime = dateToHalfHours(previousHour);
@@ -115,16 +125,13 @@ async function findPreviousReports(now, classroom) {
       from = previousHour;
     }
   }
-  return [await UserReport.find({'timestamp': {$gte: from}, 'classroom': classroom._id}).sort({'timestamp': -1}), freeBySchedule];
+  return [await UserReport.find({'timestamp': {$gte: from}, 'classroom': classroom._id}).sort({'timestamp': -1}), currActivity ? currActivity : null];
 }
 
 const VALID_GROUP_SIZE = 3;
 
 function doAddReport(newReport, sortedPreviousReports, freeBySchedule, res) {
-  console.log("");
-  const processedReports = removeBeforeNewestGroup(sortedPreviousReports);
-  const filteredReports = processedReports[0];
-  const agreedStatus = processedReports[1];
+  const [filteredReports, agreedStatus] = removeBeforeNewestGroupAndGetAgreedValue(sortedPreviousReports);
   if ((agreedStatus !== null ? newReport.actualStatusFree === agreedStatus : newReport.actualStatusFree === freeBySchedule) || //The report agrees with what the system already thinks
     filteredReports.filter(report => report.user.equals(newReport.user)).length > 0 /*There is already a report from this user*/) {
     //The new report won't be added, but we won't tell the user
@@ -173,7 +180,7 @@ function doAddReport(newReport, sortedPreviousReports, freeBySchedule, res) {
  *    0: a new array containing all the reports that were added after the latest valid group and that group, or the an array equal to the input if no valid group was found
  *    1: the value agreed on by the latest valid group or null if there was no valid group
  */
-function removeBeforeNewestGroup(sortedReports) {
+function removeBeforeNewestGroupAndGetAgreedValue(sortedReports) {
   let currCount = 0;
   let currValue = null;
   const res = [];
@@ -198,7 +205,7 @@ function dateToHalfHours(d) {
 
 function dateFromHalfHours(today, time) {
   const res = new Date(today);
-  res.setHours(time / 2);
+  res.setHours(Math.floor(time / 2));
   if (time % 2 > 0) {
     res.setMinutes(30);
   }

@@ -46,3 +46,16 @@ exports.get_self = function(req,res) {
     res.json(req.user);
   }
 };
+
+exports.get_courses_self = function(req,res) {
+
+};
+exports.add_course_self = function(req,res) {
+
+};
+exports.remove_course_self = function(req,res) {
+
+};
+exports.get_courses_schedule_self = function(req,res) {
+
+};

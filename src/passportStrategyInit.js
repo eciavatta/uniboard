@@ -1,11 +1,11 @@
-const passportStrategyInit = require('passport');
+const passport = require('passport');
 const PassportLocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const UserPassword = mongoose.model('UserPassword');
 const hashPassword = require('./utils').hashPassword;
 
-passportStrategyInit.use(new PassportLocalStrategy(
+passport.use(new PassportLocalStrategy(
   function(username, password, cb) {
     User.findOne({'username': username}, function (err, user) {
       if (err) {
@@ -29,11 +29,11 @@ passportStrategyInit.use(new PassportLocalStrategy(
     });
   }));
 
-passportStrategyInit.serializeUser(function(user, cb) {
+passport.serializeUser(function(user, cb) {
   cb(null, user._id);
 });
 
-passportStrategyInit.deserializeUser(function(id, cb) {
+passport.deserializeUser(function(id, cb) {
   User.findById(id, function (err, user) {
     if (err) {
       cb(err);

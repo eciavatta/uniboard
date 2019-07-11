@@ -64,7 +64,7 @@ export default class MapMain extends React.Component {
   }
 
   doReport(val) {
-    axios.post('/api/classrooms/5d235d4b5239c12674e9c088/reports', {'isActuallyFree': val}).then(res => {
+    axios.post('/api/classrooms/5d235d4b5239c12674e9c090/reports', {'isActuallyFree': val}).then(res => {
         console.log(res);
       }, err => {
         console.log(err.response);
