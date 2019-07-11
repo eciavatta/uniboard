@@ -1,10 +1,31 @@
-@import "../variables.scss";
+@import "../globals.scss";
 
 .page-header {
-  position: absolute;
-  top: 0;
-  right: 0;
+
+  position: relative;
+  height: 90px;
   z-index: 0;
+
+  .header-wrapper {
+    height: 80px;
+  }
+
+  .bottom-border {
+    @include pencil-solid-border;
+    border-bottom: 3px solid;
+    opacity: 0.6;
+  }
+
+  .page-logo {
+    .logo-wrapper {
+      padding: 5px;
+    }
+
+    img {
+      height: 60px;
+      padding: 5px 15px;
+    }
+  }
 
   .page-nav {
     padding: 15px 25px;
@@ -13,7 +34,7 @@
       padding: 7px 0;
 
       a {
-        color: white;
+        color: #1F3356;
         font-size: 18px;
         padding: 4px 25px;
       }
@@ -27,10 +48,45 @@
         background-size: 90px;
         background-position: center;
         background-repeat: no-repeat;
-        color: red;
+        color: white;
       }
 
 
     }
   }
+
+  .horizontal-sketch {
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 32px;
+    width: 100%;
+
+    border-top: 3px solid;
+    border-bottom: 3px solid;
+    @include pencil-dashed-border;
+    opacity: 0.4;
+    z-index: -1;
+  }
+
+  .vertical-logo-sketch {
+    position: absolute;
+    left: 35px;
+    top: 0;
+    bottom: 10px;
+    width: 252px;
+
+    border-left: 3px solid;
+    border-right: 3px solid;
+    @include pencil-dashed-border;
+    opacity: 0.4;
+    z-index: -1;
+  }
+
+  .page-header-loader {
+    height: 3px;
+    background-color: $color-secondary-0;
+    display: none;
+  }
+
 }

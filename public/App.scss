@@ -1,6 +1,11 @@
+@import 'styles/scrollbars.scss';
+@import 'globals.scss';
+
 body {
   font-family: 'Merriweather Sans', sans-serif !important;
   height: 100vh;
+
+  @include squared-background;
 }
 
 .page-loader {
@@ -21,3 +26,20 @@ body {
 
 }
 
+.fade-exit {
+  display: none;
+}
+
+.fade-enter .page-container {
+  display: none;
+}
+
+.fade-enter .page-header-loader {
+  display: block;
+  width: 0;
+}
+
+.fade-enter.fade-enter-active .page-header-loader {
+  width: 100%;
+  transition: width 250ms ease-in;
+}

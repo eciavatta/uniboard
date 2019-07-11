@@ -1,0 +1,78 @@
+@import "../../globals.scss";
+
+.classrooms-list {
+
+  position: relative;
+  padding: 10px;
+  max-height: 500px;
+
+  .item-container {
+    position: relative;
+    padding: 0 5px;
+    margin: 5px 0;
+  }
+
+  .item-content {
+    padding: 10px 10px;
+    border: 2px solid;
+
+    @include pencil-solid-border;
+
+  }
+
+  .item-guidelines {
+    position: absolute;
+    left: -10px;
+    top: 0;
+    right: -10px;
+    bottom: 0;
+
+    border-top: 2px solid;
+    border-bottom: 2px solid;
+    @include pencil-solid-border;
+    opacity: $guidelines-opacity;
+    z-index: -1;
+
+  }
+
+  .classrooms-guidelines {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+
+    border-left: 2px solid;
+    border-right: 2px solid;
+    @include pencil-solid-border;
+    z-index: -1;
+    opacity: $guidelines-opacity;
+  }
+
+  .classroom-state, .classroom-selected {
+    position: absolute;
+    z-index: -1;
+    @include pencil-solid-border;
+
+    svg {
+      width: 14px;
+    }
+  }
+
+  .classroom-state {
+    top: 0;
+    left: 3px;
+    border-right: 2px solid;
+  }
+
+  .classroom-selected {
+    top: 0;
+    right: 3px;
+    border-left: 2px solid;
+  }
+
+  .classroom-name {
+    padding-left: 14px;
+  }
+
+}

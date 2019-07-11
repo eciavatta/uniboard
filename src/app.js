@@ -25,7 +25,7 @@ app.use(passport.session());
 require('./passportStrategyInit');
 
 if (isProduction) {
-  app.route('/').get((req, res) => res.sendFile(path.resolve('dist/index.html')));
+  app.route(/^\/[^\/]*$/).get((req, res) => res.sendFile(path.resolve('dist/index.html')));
 
   app.use('/dist', express.static(path.resolve('dist/static/')));
 } else {
@@ -38,6 +38,12 @@ if (isProduction) {
   }));
 
   app.use(require('webpack-hot-middleware')(compiler));
+
+  app.use(/^\/[^\/]*$/, require('webpack-dev-middleware')(compiler, {
+    publicPath: configDev.output.publicPath,
+  }));
+
+  app.use(/^\/[^\/]*$/, require('webpack-hot-middleware')(compiler));
 }
 
 app.use('/static', express.static(path.resolve('static/')));
