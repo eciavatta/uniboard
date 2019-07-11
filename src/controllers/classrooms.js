@@ -15,7 +15,7 @@ exports.list_classrooms = function(req, res) {
   const today = new Date(onDate.getFullYear(), onDate.getMonth(), onDate.getDate());
 
   const classroomQueryResult = Classroom.find({});
-  const activityQueryResult = Activity.find({date: today}).select({_id: 0}).populate('course','name -_id');
+  const activityQueryResult = Activity.find({date: today}).select({_id: 0}).populate('course','name');
   Promise.all([classroomQueryResult, activityQueryResult]).then(
     function (queryResults) {
       const classActivities = {};
@@ -27,6 +27,9 @@ exports.list_classrooms = function(req, res) {
         delete activityObj.classroom;
         if (activityObj.course) {
           activityObj.course = activity.course.name;
+          if (req.user && req.user.courses.includes(activity.course._id)) {
+            activityObj.attendedByUser = true;
+          }
         }
         classActivities[activity.classroom].push(activityObj);
       });
@@ -35,7 +38,8 @@ exports.list_classrooms = function(req, res) {
         const resObj = classroom.toObject();
         resObj.activities = classActivities[classroom._id] ? classActivities[classroom._id] : [];
         //TODO improve function efficiency by doing a bulk version, and already use known activities.
-        const [previousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(new Date(), classroom);
+        const now = new Date();
+        const [previousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(now, classroom);
         const [reportsAfterGroup, isFreeByReports] = removeBeforeNewestGroupAndGetAgreedValue(previousReports);
         const isFreeBySchedule = currentActivity === null;
         if (isFreeByReports !== null && isFreeBySchedule !== isFreeByReports) {
@@ -50,6 +54,7 @@ exports.list_classrooms = function(req, res) {
           }
           resObj.statusByReport = {
             'isFree': isFreeByReports,
+            'validFrom': dateToHalfHours(now),
             'validTo': validTo
           };
         }
