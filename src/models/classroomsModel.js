@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 const ClassroomSchema = new Schema({
   name: {
     type: String,
-    required: "Classroom name is required",
-    unique: true
+    required: "Classroom name is required"
   },
   mapCoordinates: {
     type: [Number],
@@ -39,6 +38,9 @@ const ClassroomSchema = new Schema({
   },
   beaconUuid: {
     type: String
+  },
+  code: {
+    type: Number
   }
 });
 
