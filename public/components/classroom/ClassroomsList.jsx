@@ -2,8 +2,8 @@ import React from "react";
 
 import "./ClassroomsList.scss";
 import SVG from '../../helpers/SvgLoader'
-
 import axios from 'axios';
+import ClassroomUtils from '../../helpers/classroomUtils';
 
 const REFRESH_TIMEOUT = 5 * 1000;
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
@@ -20,12 +20,13 @@ export default class extends React.Component {
 
     this.updateData();
   }
-
+//fill="#fc0"
   updateData() {
     axios.get('/api/classrooms').then(
       res => {
         if (this.keepUpdating) {
           console.log("List data updated");
+          res.data.forEach(classroomData => classroomData.status = ClassroomUtils.getStateOfClassroom(classroomData, ClassroomUtils.dateToHalfHoursTime(new Date())));
           this.setState({'items': res.data});
           setTimeout(this.updateData, REFRESH_TIMEOUT);
         }
@@ -53,7 +54,7 @@ export default class extends React.Component {
             <div className="item-container" key={item._id}>
               <div className="item-content">
                 <div className="classroom-state">
-                  <SVG name="classroom-status.svg" />
+                  <SVG name="classroom-status.svg" containerClass={"classroom-state-svg-container status" + item.status.code}/>
                 </div>
                 <div className="classroom-name">{item.name}</div>
               </div>
@@ -71,7 +72,7 @@ export default class extends React.Component {
     if (item.id === 1 || true) {
       return (
         <div className="classroom-selected">
-          <SVG name="classroom-status.svg" />
+          <SVG name="classroom-list-selected.svg" />
         </div>
       )
     }

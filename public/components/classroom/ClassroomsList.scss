@@ -49,6 +49,21 @@
     opacity: $guidelines-opacity;
   }
 
+
+  .classroom-state-svg-container {
+    $statuses:
+      0 #f00,
+      1 #ff0,
+      2 #0f0,
+      3 #00f;
+
+    @each $statusCode, $color in $statuses {
+      &.status#{$statusCode} svg {
+        fill: $color
+      }
+    }
+  }
+
   .classroom-state, .classroom-selected {
     position: absolute;
     z-index: -1;

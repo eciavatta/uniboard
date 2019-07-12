@@ -1,5 +1,6 @@
 import React from "react";
 import MapGraphics from "./MapGraphics";
+import Profile from "../profile/Profile";
 
 const MIN_FLOOR = 1;
 const MAX_FLOOR = 2;
@@ -34,6 +35,7 @@ export default class MapMain extends React.Component {
         <button onClick={this.upperFloorClicked}>Vai su</button>
         <button onClick={this.lowerFloorClicked}>Vai giù</button>
         <MapGraphics floor={this.state.floor}/>
+        <Profile/>
       </div>
     );
   }
