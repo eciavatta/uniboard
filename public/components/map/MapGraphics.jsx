@@ -1,20 +1,61 @@
 import React from "react";
 //import Classroom from "MapClassroom"
 import "./MapGraphics.scss";
+import {UncontrolledReactSVGPanZoom} from 'react-svg-pan-zoom';
+
+function eventFire(el, etype){
+  if (el.fireEvent) {
+    el.fireEvent('on' + etype);
+  } else {
+    var evObj = document.createEvent('Events');
+    evObj.initEvent(etype, true, false);
+    el.dispatchEvent(evObj);
+  }
+}
 
 export default class MapMain extends React.Component {
-  static doTouchEvent(type, e) {
-    console.log(type);
-    console.log(e.touches);
+  constructor(props) {
+    super(props);
+
+    this.registerTouchStart = this.registerTouchStart.bind(this);
+    this.registerTouchMove = this.registerTouchMove.bind(this);
+    this.registerTouchEnd = this.registerTouchEnd.bind(this);
   }
-  static touchS (e) {MapMain.doTouchEvent("start", e)}
-  static touchE (e) {MapMain.doTouchEvent("end", e)}
-  static touchC (e) {MapMain.doTouchEvent("cancel", e)}
-  static touchM (e) {MapMain.doTouchEvent("move", e)}
+
+  registerTouchStart(e) {
+    this.touchState = e.originalEvent.nativeEvent.targetTouches[0].target; //get element that would be clicked
+  }
+  registerTouchMove() {
+    this.touchState = null; //this should not be considered a click anymore
+  }
+  registerTouchEnd() {
+    if (this.touchState) {
+      eventFire(this.touchState, 'click'); //simulate click on element
+    }
+  }
 
   render() {
     return (
-      <svg width="605px" height="800px">
+      <UncontrolledReactSVGPanZoom
+        //this will also be the size of the controlled area, this should depend on the screen size
+        width={720}
+        height={480}
+        //makes the map seamless with the rest of the page
+        SVGBackground={"transparent"}
+        background={"transparent"}
+        //disable miniature and toolbar
+        miniatureProps={{position: "none"}}
+        toolbarProps={{position: "none"}}
+        //needs to be auto in order to enable pan and click detection on svg elements
+        tool={"auto"}
+        //removes auto pan, so no ugly black border will appear when the cursor is on the borders of this
+        detectAutoPan={false}
+        //this way react onClick function will work also on mobile touch
+        onTouchStart={this.registerTouchStart}
+        onTouchMove={this.registerTouchMove}
+        onTouchEnd={this.registerTouchEnd}>
+      <svg //the following size refers to the size of the svg image (they should be static)
+        width={605} height={800}>
         <defs>
           <symbol id="symbol-exit">
             <g className="map-exit-symbol" transform="scale(0.7 0.7)">
@@ -81,7 +122,7 @@ export default class MapMain extends React.Component {
             </g>
           </symbol>
         </defs>
-        <g id="mapGraphicsMainGroup" transform="translate(710,-215)rotate(90)">
+        <g transform="translate(710,-215)rotate(90)">
           <g id="mapFloor1" visibility={this.props.floor === 1 ? 'visible' : 'hidden'}>
             <polygon points="308.28,134.399 308.28,150.96 266.578,150.96 266.579,331.625 712.08,331.625 712.08,498.719
 	263.88,498.719 263.88,679.861 694.2,679.862 694.2,662.88 754.2,662.88 754.2,681 822.6,681 822.6,626.28 864.36,626.28
@@ -309,7 +350,7 @@ export default class MapMain extends React.Component {
           </g>
         </g>
       </svg>
+      </UncontrolledReactSVGPanZoom>
     );
   }
-
 }

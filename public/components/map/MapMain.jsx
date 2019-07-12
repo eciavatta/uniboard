@@ -35,7 +35,6 @@ export default class MapMain extends React.Component {
         <button onClick={this.upperFloorClicked}>Vai su</button>
         <button onClick={this.lowerFloorClicked}>Vai giù</button>
         <MapGraphics floor={this.state.floor}/>
-        <Profile/>
       </div>
     );
   }

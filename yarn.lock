@@ -5519,7 +5519,7 @@ promise-inflight@^1.0.1:
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha1-mEcocL8igTL8vdhoEputEsPAKeM=
 
-prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -5749,6 +5749,14 @@ react-router@5.0.1:
     react-is "^16.6.0"
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
+
+react-svg-pan-zoom@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-svg-pan-zoom/-/react-svg-pan-zoom-3.1.0.tgz#fdb2731ee3f6155701fcc4ccccdcfdb5d5ed30a8"
+  integrity sha512-hmDUarqhNnCwuZumV9Pw7o5inW7lda4sX2U1vDK2B2slrSfNu1jbelOp6aaOEyUF7WzMA1xrpH6NBWvk4UeUTQ==
+  dependencies:
+    prop-types "^15.7.2"
+    transformation-matrix "^2.0.0"
 
 react-transition-group@^4.2.1:
   version "4.2.1"
@@ -6854,6 +6862,11 @@ tough-cookie@~2.4.3:
   dependencies:
     psl "^1.1.24"
     punycode "^1.4.1"
+
+transformation-matrix@^2.0.0:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/transformation-matrix/-/transformation-matrix-2.0.5.tgz#562ac157880d7e276470b26b14c0e45cdb7770d8"
+  integrity sha512-S6L67Z8V3WEyPm2/zDh3I3bO0OQwv88dh7IY2dIOVBfIZJ4WQGdEKOsh7phTgYkvfAmHRxfOPNt1ixN/zR6D/A==
 
 trim-newlines@^1.0.0:
   version "1.0.0"
