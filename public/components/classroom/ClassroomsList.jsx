@@ -5,7 +5,7 @@ import SVG from '../../helpers/SvgLoader'
 import axios from 'axios';
 import ClassroomUtils from '../../helpers/classroomUtils';
 
-const REFRESH_TIMEOUT = 5 * 1000;
+const REFRESH_TIMEOUT = 5 * 1000; //TODO solo durante testing, poi lo mettiamo a 1 minuto o più
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
 
 export default class extends React.Component {
@@ -20,7 +20,7 @@ export default class extends React.Component {
 
     this.updateData();
   }
-//fill="#fc0"
+
   updateData() {
     axios.get('/api/classrooms').then(
       res => {
