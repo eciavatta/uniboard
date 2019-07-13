@@ -1,1 +1,11 @@
 @import "../globals.scss";
+
+.classrooms {
+  height: calc(100vh - 90px); // minus header size
+  max-height: calc(100vh - 90px);
+}
+
+.new-box {
+  background: #a2bbdd33;
+  padding: 15px 25px;
+}

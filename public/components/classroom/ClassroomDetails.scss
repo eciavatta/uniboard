@@ -1,4 +1,50 @@
+@import "../../globals.scss";
 
 .classroom-details {
-  background: red;
+
+  thead th, tr, td {
+    border: 2px solid #BDBABA;
+
+
+  }
+
+  thead th, tr:first-child {
+    border-top: none;
+  }
+
+  thead th, td:last-child, tr {
+    border-right: none;
+  }
+
+  thead th, td:first-child, tr {
+    border-left: none;
+  }
+
+  tr:last-child {
+    border-bottom: none;
+
+    td {
+      border-bottom: none;
+    }
+  }
+
+  .infotable, .timetables {
+    border: 2px solid;
+    @include pencil-solid-border;
+
+    table {
+      margin-bottom: 0;
+    }
+  }
+
+  .infotable {
+    margin-bottom: 15px;
+    z-index: 10;
+  }
+
+  .no-border-bottom {
+    border-bottom: 0 !important;
+  }
+
+
 }
