@@ -8,6 +8,14 @@ const ensureAuthenticated = utils.ensureAuthenticated;
 const unexpectedError = utils.unexpectedError;
 
 exports.list_classrooms = function(req, res) {
+  Classroom.find({}).then(
+    classrooms => res.json(classrooms),
+    err => unexpectedError(err, res)
+  );
+};
+
+/*
+exports.list_classrooms = function(req, res) {
   let onDate = new Date(parseInt(req.query.onDate));
   if (isNaN(onDate.getTime())) {
     onDate = new Date();
@@ -66,26 +74,127 @@ exports.list_classrooms = function(req, res) {
     }
   );
 };
+ */
+
+exports.list_classrooms_activities = async function (req, res) {
+  try {
+    let onDate = new Date(parseInt(req.query.onDate));
+    if (isNaN(onDate.getTime())) {
+      onDate = new Date();
+    }
+    const onDateDay = new Date(onDate.getFullYear(), onDate.getMonth(), onDate.getDate());
+
+    const groupedActivities = await Activity.aggregate([
+      {$match: {date: onDateDay}},
+      {
+        $lookup: {
+          from: 'courses',
+          localField: 'course',
+          foreignField: '_id',
+          as: 'course'
+        }
+      },
+      {
+        $unwind: {
+          path: '$course',
+          preserveNullAndEmptyArrays: true
+        }
+      },
+      {
+        $group: {
+          _id: '$classroom',
+          activities: {
+            $push: {
+              course: '$course',
+              description: '$description',
+              date: '$date',
+              from: '$from',
+              to: '$to'
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          '_id': 1,
+          'activities.course._id': 1,
+          'activities.course.name': 1,
+          'activities.date': 1,
+          'activities.from': 1,
+          'activities.to': 1
+        }
+      }
+    ]);
+
+    const classroomsWithActivities = new Set(groupedActivities.map(group => group._id));
+    const allClassrooms = await Classroom.find({}).select({'_id': 1});
+    allClassrooms.forEach(classroom => {
+      if (!classroomsWithActivities.has(classroom)) {
+        groupedActivities.push({'_id': classroom, 'activities': []});
+      }
+    });
+    const enrichedData = await Promise.all(groupedActivities.map(async function (classroomData) {
+      const activities = classroomData.activities;
+      if (req.user) {
+        activities
+          .filter(activity => req.user.courses.includes(activity.course._id))
+          .forEach(activity => activity.attendedByUser = true);
+      }
+
+      if (req.query.includeCurrentStatusByReport) {
+        const now = new Date();
+        const [previousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(now, classroomData._id, activities);
+        const [reportsAfterGroup, isFreeByReports] = removeBeforeNewestGroupAndGetAgreedValue(previousReports);
+        const isFreeBySchedule = currentActivity === null;
+        if (isFreeByReports !== null && isFreeBySchedule !== isFreeByReports) {
+          const validFrom = dateToHalfHours(now);
+          let validTo;
+          if (currentActivity !== null) {
+            validTo = currentActivity.to;
+          } else {
+            const latestReportOfGroup = reportsAfterGroup[reportsAfterGroup.length - VALID_GROUP_SIZE].timestamp;
+            const hourAfterLatest = new Date(latestReportOfGroup.timestamp);
+            hourAfterLatest.setHours(latestReportOfGroup.getHours() + 1);
+            validTo = dateToHalfHours(hourAfterLatest);
+            const earliestNextActivity = getEarliestActivityAfterTime(validFrom, activities);
+            if (earliestNextActivity && validTo > earliestNextActivity.from) {
+              validTo = earliestNextActivity.from;
+            }
+          }
+          classroomData.statusByReport = {
+            'isFree': isFreeByReports,
+            'validFrom': validFrom,
+            'validTo': validTo
+          };
+        }
+      }
+
+      return classroomData;
+    }));
+
+    res.json(enrichedData);
+  } catch (err) {
+    unexpectedError(err, res);
+  }
+};
 
 exports.add_report = function(req, res) {
   const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const isActuallyFree = req.body.isActuallyFree;
-  /*if (now.getHours() < 9 || now.getHours() >= 19 || now.getDay() === 0 || now.getDay() === 6) {
+  /*TODO if (now.getHours() < 9 || now.getHours() >= 19 || now.getDay() === 0 || now.getDay() === 6) {
     res.status(400);
     res.send("Reports are not accepted now");
   } else */if (!(isActuallyFree === true || isActuallyFree === false)) {
     res.status(400);
     res.send("Body should contain boolean isActuallyFree");
+  } else if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400);
+    res.send("Invalid course id");
   } else if (ensureAuthenticated(req,res)) {
     Classroom.findById(req.params.id, async function (err, classroom) {
       if (err) {
-        //TODO sostituisci con isValid di objectId prima di find
-        if (err.name === 'CastError' && err.path === '_id') {
-          res.status(400);
-          res.send("Invalid classroom id");
-        } else {
-          unexpectedError(err, res);
-        }
+        unexpectedError(err, res);
       } else if (!classroom) {
         console.log(classroom);
         res.status(404);
@@ -97,7 +206,8 @@ exports.add_report = function(req, res) {
           actualStatusFree: isActuallyFree,
         });
         try {
-          const [sortedPreviousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(now, classroom);
+          const classroomActivities = await Activity.find({'classroom': classroom._id, 'date': today});
+          const [sortedPreviousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(now, classroom._id, classroomActivities);
           doAddReport(newReport, sortedPreviousReports, currentActivity === null, res);
         } catch (err) {
           unexpectedError(err, res);
@@ -111,10 +221,10 @@ exports.add_report = function(req, res) {
  * Finds valid userReport for a classroom, considering its current/previous activity
  * @returns Array [[valid UserReports], Currently scheduled activity or null if none]
  */
-async function findPreviousReportsAndCurrentActivity(now, classroom) {
+async function findPreviousReportsAndCurrentActivity(now, classroomId, classroomActivities) {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const time = dateToHalfHours(now);
-  const currActivity = await Activity.findOne({'classroom': classroom._id, 'date': today, 'from': {$lte: time}, 'to': {$gt: time}});
+  const currActivity = getActivityAtTime(time, classroomActivities);
   let from;
   if (currActivity) {
     from = dateFromHalfHours(today, currActivity.from);
@@ -122,15 +232,14 @@ async function findPreviousReportsAndCurrentActivity(now, classroom) {
     const previousHour = new Date(now);
     previousHour.setHours(now.getHours() - 1);
     const previousTime = dateToHalfHours(previousHour);
-    const prevActivity = await Activity.findOne(
-      {'classroom': classroom._id, 'date': today, 'from': {$lte: previousTime}, 'to': {$gt: previousTime}});
+    const prevActivity = getActivityAtTime(previousTime, classroomActivities);
     if (prevActivity) {
       from = dateFromHalfHours(today, prevActivity.to);
     } else {
       from = previousHour;
     }
   }
-  return [await UserReport.find({'timestamp': {$gte: from}, 'classroom': classroom._id}).sort({'timestamp': -1}), currActivity ? currActivity : null];
+  return [await UserReport.find({'timestamp': {$gte: from}, 'classroom': classroomId}).sort({'timestamp': -1}), currActivity ? currActivity : null];
 }
 
 const VALID_GROUP_SIZE = 3;
@@ -215,4 +324,35 @@ function dateFromHalfHours(today, time) {
     res.setMinutes(30);
   }
   return res;
+}
+
+/**
+ * @param time time in half hours since midnight (same format as from and to in activity)
+ * @param activities a list of activities for a classroom
+ * @return Object an activity in the list that is planned during the specified time, or null if none is planned at that time
+ */
+function getActivityAtTime(time, activities) {
+  for (let i = 0; i < activities.length; i++) {
+    if (activities[i].from <= time && activities[i].to > time) {
+      return activities[i];
+    }
+  }
+  return null;
+}
+
+/**
+ * @param time time in half hours since midnight (same format as from and to in activity)
+ * @param activities a list of activities for a classroom
+ * @return Object the earliest activity that is planned to start after the specified time
+ */
+function getEarliestActivityAfterTime(time, activities) {
+  let earliest = null;
+  for (let i = 0; i < activities.length; i++) {
+    if (activities[i].from > time) {
+      if (!earliest || (earliest && activities[i].from < earliest.from)) {
+        earliest = activities[i];
+      }
+    }
+  }
+  return earliest;
 }

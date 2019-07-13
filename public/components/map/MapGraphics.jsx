@@ -1,6 +1,7 @@
 import React from "react";
 //import Classroom from "MapClassroom"
 import "./MapGraphics.scss";
+import ClassroomUtils from "../../helpers/classroomUtils";
 import {UncontrolledReactSVGPanZoom} from 'react-svg-pan-zoom';
 
 function eventFire(el, etype){
@@ -17,7 +18,8 @@ const statusToColor = [
   "#f00",
   "#ff0",
   "#0f0",
-  "#00f"];
+  "#00f",
+  "none"];
 
 export default class MapGraphics extends React.Component {
   constructor(props) {
@@ -26,6 +28,7 @@ export default class MapGraphics extends React.Component {
     this.registerTouchStart = this.registerTouchStart.bind(this);
     this.registerTouchMove = this.registerTouchMove.bind(this);
     this.registerTouchEnd = this.registerTouchEnd.bind(this);
+    this.renderClassroom = this.renderClassroom.bind(this);
   }
 
   registerTouchStart(e) {
@@ -233,7 +236,7 @@ export default class MapGraphics extends React.Component {
             <use href="#symbol-bathroomA" transform="translate(482, 543)  scale(0.037) rotate(-90)"/>
             <use href="#symbol-bathroomA" transform="translate(823, 288.5) scale(0.04) rotate(-90)"/>
             <use href="#symbol-bathroomA" transform="scale(0.05) translate(7900,5400)"/>
-            {this.props.items.filter(classroom => classroom.floor === 1).map(MapGraphics.renderClassroom)}
+            {this.props.classrooms.filter(classroom => classroom.floor === 1).map(this.renderClassroom)}
           </g>
           <g id="mapFloor2" visibility={this.props.floor === 2 ? 'visible' : 'hidden'}>
             <path d="M881.4,603.48l77.64-34.08l4.68-2.279l4.561-2.881l4.319-3.119l3.96-3.601l3.601-3.84l3.359-4.2l2.881-4.439
@@ -343,7 +346,7 @@ export default class MapGraphics extends React.Component {
             <use href="#symbol-bathroomA" transform="translate(482, 543)  scale(0.037) rotate(-90)"/>
             <use href="#symbol-bathroomA" transform="translate(777, 454) scale(0.03) rotate(-90)"/>
             <use href="#symbol-bathroomA" transform="scale(0.05) translate(7900,5400)"/>
-            {this.props.items.filter(classroom => classroom.floor === 2).map(MapGraphics.renderClassroom)}
+            {this.props.classrooms.filter(classroom => classroom.floor === 2).map(this.renderClassroom)}
           </g>
           /*elevator n stairs*/
           <g>
@@ -362,7 +365,13 @@ export default class MapGraphics extends React.Component {
     );
   }
 
-  static renderClassroom(classroom) {
-    return (<polygon key={classroom._id} points={classroom.mapCoordinates} fill={statusToColor[classroom.status.code]} onClick={() => alert("Hai cliccat " + classroom.name)}/>);
+  renderClassroom(classroom) {
+    return (
+      <polygon
+        key={classroom._id}
+        points={classroom.mapCoordinates}
+        fill={statusToColor[ClassroomUtils.getStateOfClassroom(classroom, this.props.classroomActivities, this.props.selectedTime).code]}
+        onClick={() => alert("Hai cliccato " + classroom.name)}
+    />);
   }
 }

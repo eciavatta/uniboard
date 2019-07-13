@@ -9,7 +9,30 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 import './App.scss'
 
+import ClassroomUtils from './helpers/classroomUtils'
+import axios from 'axios';
+
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {classroomStaticData: []};
+
+    this.getClassroomData = this.getClassroomData.bind(this);
+
+    this.getClassroomData();
+  }
+
+  getClassroomData() {
+    axios.get('/api/classrooms').then(
+      res => this.setState({classroomStaticData: ClassroomUtils.prepareClassroomData(res.data)}),
+      err => {
+        console.log("Error while retrieving classroom data, trying again in a while");
+        console.log(err.response);
+        setTimeout(() => this.getClassroomData(), 5000)
+      }
+    )
+  }
 
   render() {
     return (
@@ -19,7 +42,7 @@ class App extends React.Component {
           <TransitionGroup>
             <CSSTransition timeout={500} classNames='fade' key={location.key}>
               <Switch location={location}>
-                <Route path="/" exact component={Main} />
+                <Route exact path="/" render={() => <Main classroomStaticData={this.state.classroomStaticData}/>}/>
                 <Route path="/classrooms" component={Classrooms} />
                 <Route path="/lessons" component={Classrooms} />
                 <Route component={NotFound} />

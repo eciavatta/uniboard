@@ -24,6 +24,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 require('./passportStrategyInit');
 
+require('./routes/users')(app);
+require('./routes/authentication')(app);
+require('./routes/classrooms')(app);
+require('./routes/courses')(app);
+
 if (isProduction) {
   app.route(/^\/[^\/]*$/).get((req, res) => res.sendFile(path.resolve('dist/index.html')));
 
@@ -43,11 +48,6 @@ if (isProduction) {
 }
 
 app.use('/static', express.static(path.resolve('static/')));
-
-require('./routes/users')(app);
-require('./routes/authentication')(app);
-require('./routes/classrooms')(app);
-require('./routes/courses')(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
