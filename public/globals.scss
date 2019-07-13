@@ -15,6 +15,8 @@ $color-secondary-4: #1F3356;
 $guidelines-opacity: 0.4;
 $guidelines-width: 2px;
 
+$free-classroom-color : #37c861;
+
 @mixin squared-background {
   background-image: url(/static/vectors/squared1-bg.svg);
   background-size: 150px;
@@ -36,6 +38,7 @@ $guidelines-width: 2px;
   right: 0;
   @include pencil-solid-border;
   opacity: $guidelines-opacity;
+  z-index: -1;
 }
 
 .row-guidelines {

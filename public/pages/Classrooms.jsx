@@ -3,35 +3,37 @@ import React from 'react';
 import SinglePage from '../layouts/SinglePage'
 import ClassroomList from "../components/classroom/ClassroomsList";
 
-import './Main.scss';
+import './Classrooms.scss';
 import ClassroomDetails from "../components/classroom/ClassroomDetails";
-
-let classroomTestData = [];
-
-for (let i = 0; i < 20; i++) {
-  classroomTestData.push({
-    id: i,
-    name: `Aula 2.${i}`,
-    state: 'free'
-  })
-}
 
 export default class Classrooms extends React.Component {
 
   render() {
     return (
       <SinglePage>
-        <div className="row position-relative">
-          <div className="col-3 position-relative">
-            <ClassroomList items={classroomTestData} />
-            <div className="column-guidelines invisible" />
+        <div className="classrooms container-fluid p-lg-3 p-xl-5">
+          <div className="row position-relative">
+            <div className="col-md-3">
+              <div className="new-box">Campo di ricerca qui</div>
+            </div>
+            <div className="col-md">
+              <div className="new-box">Filtri per le classi qui</div>
+            </div>
+            <div className="col-md-auto">
+              <div className="new-box">Legenda qui</div>
+            </div>
+            <div className="row-guidelines" />
           </div>
-
-          <div className="col-9 position-relative">
-            <ClassroomDetails />
-            <div className="column-guidelines invisible" />
+          <div className="row position-relative" style={{marginTop: '15px', height: 'calc(100% - 50px)'}}>
+            <div className="col-md-3 h-100">
+              <ClassroomList />
+              <div className="column-guidelines" style={{left: '15px', right: '15px', bottom: '-15px'}} />
+            </div>
+            <div className="col-md-9 h-100">
+              <ClassroomDetails />
+            </div>
+            <div className="row-guidelines" />
           </div>
-          <div className="row-guidelines invisible" />
         </div>
       </SinglePage>
     );

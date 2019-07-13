@@ -9,6 +9,7 @@ const REFRESH_TIMEOUT = 5 * 1000; //TODO solo durante testing, poi lo mettiamo a
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
 
 export default class extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -48,22 +49,22 @@ export default class extends React.Component {
 
   render() {
     return (
-      <div className="classrooms-list scrollable">
+      <div className="classrooms-list scrollable h-100 position-relative">
         {
           this.state.items.map(item => (
-            <div className="item-container" key={item._id}>
+            <div className="item-container position-relative" key={item._id}>
               <div className="item-content">
                 <div className="classroom-state">
-                  <SVG name="classroom-status.svg" containerClass={"classroom-state-svg-container status" + item.status.code}/>
+                  <SVG name="classroom-status.svg"
+                       containerClass={"classroom-state-svg-container status" + item.status.code}/>
                 </div>
                 <div className="classroom-name">{item.name}</div>
               </div>
-              { this.activeBadge(item) }
-              <div className="item-guidelines" />
+              {this.activeBadge(item)}
+              <div className="row-guidelines"/>
             </div>
           ))
         }
-        <div className="classrooms-guidelines" />
       </div>
     );
   }

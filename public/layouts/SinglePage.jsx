@@ -12,7 +12,7 @@ export default class SinglePage extends React.Component {
       <div className="single-page">
         <Header />
 
-        <div className="page-container container-fluid">
+        <div className="page-container">
           { this.props.children }
         </div>
 

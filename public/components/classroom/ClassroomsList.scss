@@ -2,14 +2,16 @@
 
 .classrooms-list {
 
-  position: relative;
-  padding: 10px;
-  max-height: 500px;
+  margin: 0;
+  padding: 0;
 
   .item-container {
-    position: relative;
-    padding: 0 5px;
-    margin: 5px 0;
+    margin: 5px 15px;
+
+    .row-guidelines {
+      left: -15px;
+      right: -15px;
+    }
   }
 
   .item-content {
@@ -17,44 +19,13 @@
     border: 2px solid;
 
     @include pencil-solid-border;
-
   }
-
-  .item-guidelines {
-    position: absolute;
-    left: -10px;
-    top: 0;
-    right: -10px;
-    bottom: 0;
-
-    border-top: 2px solid;
-    border-bottom: 2px solid;
-    @include pencil-solid-border;
-    opacity: $guidelines-opacity;
-    z-index: -1;
-
-  }
-
-  .classrooms-guidelines {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 15px;
-    right: 15px;
-
-    border-left: 2px solid;
-    border-right: 2px solid;
-    @include pencil-solid-border;
-    z-index: -1;
-    opacity: $guidelines-opacity;
-  }
-
 
   .classroom-state-svg-container {
     $statuses:
       0 #f00,
       1 #ff0,
-      2 #0f0,
+      2 $free-classroom-color,
       3 #00f;
 
     @each $statusCode, $color in $statuses {
@@ -76,13 +47,15 @@
 
   .classroom-state {
     top: 0;
-    left: 3px;
+    left: 0;
+    width: 15px;
     border-right: 2px solid;
   }
 
   .classroom-selected {
     top: 0;
-    right: 3px;
+    right: 0;
+    width: 15px;
     border-left: 2px solid;
   }
 
