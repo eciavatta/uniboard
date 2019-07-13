@@ -25,8 +25,6 @@ export default class MapMain extends React.Component {
     this.lowerFloorClicked = this.lowerFloorClicked.bind(this);
     this.updateData = this.updateData.bind(this);
 
-    console.log("Costruito, props");
-    console.log(this.props.classroomStaticData);
     this.updateData();
   }
 

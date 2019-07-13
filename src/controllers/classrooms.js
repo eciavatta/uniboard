@@ -14,68 +14,6 @@ exports.list_classrooms = function(req, res) {
   );
 };
 
-/*
-exports.list_classrooms = function(req, res) {
-  let onDate = new Date(parseInt(req.query.onDate));
-  if (isNaN(onDate.getTime())) {
-    onDate = new Date();
-  }
-  const today = new Date(onDate.getFullYear(), onDate.getMonth(), onDate.getDate());
-
-  const classroomQueryResult = Classroom.find({});
-  const activityQueryResult = Activity.find({date: today}).select({_id: 0}).populate('course','name');
-  Promise.all([classroomQueryResult, activityQueryResult]).then(
-    function (queryResults) {
-      const classActivities = {};
-      queryResults[1].forEach(function(activity) {
-        if (!classActivities[activity.classroom]) {
-          classActivities[activity.classroom] = [];
-        }
-        const activityObj = activity.toObject();
-        delete activityObj.classroom;
-        if (activityObj.course) {
-          activityObj.course = activity.course.name;
-          if (req.user && req.user.courses.includes(activity.course._id)) {
-            activityObj.attendedByUser = true;
-          }
-        }
-        classActivities[activity.classroom].push(activityObj);
-      });
-
-      Promise.all(queryResults[0].map(async function(classroom) {
-        const resObj = classroom.toObject();
-        resObj.activities = classActivities[classroom._id] ? classActivities[classroom._id] : [];
-        //TODO improve function efficiency by doing a bulk version, and already use known activities.
-        const now = new Date();
-        const [previousReports, currentActivity] = await findPreviousReportsAndCurrentActivity(now, classroom);
-        const [reportsAfterGroup, isFreeByReports] = removeBeforeNewestGroupAndGetAgreedValue(previousReports);
-        const isFreeBySchedule = currentActivity === null;
-        if (isFreeByReports !== null && isFreeBySchedule !== isFreeByReports) {
-          let validTo;
-          if (currentActivity !== null) {
-            validTo = currentActivity.to;
-          } else {
-            const latestReportOfGroup = reportsAfterGroup[reportsAfterGroup.length - VALID_GROUP_SIZE].timestamp;
-            const hourAfterLatest = new Date(latestReportOfGroup.timestamp);
-            hourAfterLatest.setHours(latestReportOfGroup.getHours() + 1);
-            validTo = dateToHalfHours(hourAfterLatest);
-          }
-          resObj.statusByReport = {
-            'isFree': isFreeByReports,
-            'validFrom': dateToHalfHours(now),
-            'validTo': validTo
-          };
-        }
-        return resObj;
-      })).then(promiseRes => res.json(promiseRes), err => res.send(err));
-    },
-    function (err) {
-      res.send(err);
-    }
-  );
-};
- */
-
 exports.list_classrooms_activities = async function (req, res) {
   try {
     let onDate = new Date(parseInt(req.query.onDate));
@@ -126,11 +64,13 @@ exports.list_classrooms_activities = async function (req, res) {
       }
     ]);
 
-    const classroomsWithActivities = new Set(groupedActivities.map(group => group._id));
+    const classroomsWithActivities = new Set(groupedActivities.map(group => group._id.toString()));
     const allClassrooms = await Classroom.find({}).select({'_id': 1});
     allClassrooms.forEach(classroom => {
-      if (!classroomsWithActivities.has(classroom)) {
-        groupedActivities.push({'_id': classroom, 'activities': []});
+      if (!classroomsWithActivities.has(classroom._id.toString())) {
+        groupedActivities.push({'_id': classroom._id, 'activities': []});
+      } else {
+        console.log("Banana");
       }
     });
     const enrichedData = await Promise.all(groupedActivities.map(async function (classroomData) {

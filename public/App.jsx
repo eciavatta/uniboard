@@ -43,7 +43,7 @@ class App extends React.Component {
             <CSSTransition timeout={500} classNames='fade' key={location.key}>
               <Switch location={location}>
                 <Route exact path="/" render={() => <Main classroomStaticData={this.state.classroomStaticData}/>}/>
-                <Route path="/classrooms" component={Classrooms} />
+                <Route path="/classrooms" render={() => <Classrooms classroomStaticData={this.state.classroomStaticData}/>}/>
                 <Route path="/lessons" component={Classrooms} />
                 <Route component={NotFound} />
               </Switch>

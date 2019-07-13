@@ -26,7 +26,8 @@
       0 #f00,
       1 #ff0,
       2 $free-classroom-color,
-      3 #00f;
+      3 #00f,
+      4 none;
 
     @each $statusCode, $color in $statuses {
       &.status#{$statusCode} svg {
