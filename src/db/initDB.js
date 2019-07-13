@@ -3,7 +3,7 @@ require('../models/classroomsModel');
 require('../models/coursesModel');
 require('../models/activitiesModel');
 
-db = mongoose.connect('mongodb://localhost/uniboardDB', { useNewUrlParser: true});
+setTimeout(() => require('./connection'), 3000);
 
 const Classroom = mongoose.model('Classroom');
 const Course = mongoose.model('Course');

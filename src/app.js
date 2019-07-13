@@ -33,17 +33,13 @@ if (isProduction) {
   let webpack = require('webpack');
   let compiler = webpack(configDev);
 
+  app.use(require('connect-history-api-fallback')());
+
   app.use(require('webpack-dev-middleware')(compiler, {
     publicPath: configDev.output.publicPath,
   }));
 
   app.use(require('webpack-hot-middleware')(compiler));
-
-  app.use(/^\/[^\/]*$/, require('webpack-dev-middleware')(compiler, {
-    publicPath: configDev.output.publicPath,
-  }));
-
-  app.use(/^\/[^\/]*$/, require('webpack-hot-middleware')(compiler));
 }
 
 app.use('/static', express.static(path.resolve('static/')));

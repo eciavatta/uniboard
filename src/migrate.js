@@ -1,1 +1,1 @@
-console.log('anguria');
+require('./db/initDB');

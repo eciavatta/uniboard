@@ -20,7 +20,7 @@ services:
       - ./:/app
     ports:
       - "3000:3000"
-    command: "npx npm-run-all --serial migrate dev"
+    command: "yarn dev"
     depends_on:
       - mongo
     networks:

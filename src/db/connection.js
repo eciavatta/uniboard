@@ -30,4 +30,5 @@ mongoose.connect(connectionString, {useNewUrlParser: true}).then(
   }
 );
 
-export default mongoose.connection
+module.exports = mongoose.connection;
+
