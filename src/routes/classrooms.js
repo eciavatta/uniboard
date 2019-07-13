@@ -7,6 +7,9 @@ module.exports = function(app) {
   app.route('/api/classrooms/activities')
     .get(classroomsController.list_classrooms_activities);
 
+  app.route('/api/classrooms/:id/activities')
+    .get(classroomsController.get_classroom_activities);
+
   app.route('/api/classrooms/:id/reports')
     .post(classroomsController.add_report);
 };

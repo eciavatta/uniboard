@@ -51,6 +51,7 @@ export default class Classrooms extends React.Component {
   }
 
   render() {
+    let selectedClassroom = ClassroomUtils.findClassroomById(window.location.hash.substr(1), this.props.classroomStaticData);
     return (
       <SinglePage>
         <div className="classrooms container-fluid p-lg-3 p-xl-5">
@@ -68,11 +69,13 @@ export default class Classrooms extends React.Component {
           </div>
           <div className="row position-relative" style={{marginTop: '15px', height: 'calc(100% - 50px)'}}>
             <div className="col-md-3 h-100">
-              <ClassroomList classrooms={this.props.classroomStaticData} classroomActivities={this.state.classroomActivities}/>/>
+              <ClassroomList classrooms={this.props.classroomStaticData} classroomActivities={this.state.classroomActivities}/>
               <div className="column-guidelines" style={{left: '15px', right: '15px', bottom: '-15px'}} />
             </div>
             <div className="col-md-9 h-100">
-              <ClassroomDetails />
+              <ClassroomDetails
+                classroom={selectedClassroom}
+                classroomActivities={this.state.classroomActivities}/>
             </div>
             <div className="row-guidelines" />
           </div>

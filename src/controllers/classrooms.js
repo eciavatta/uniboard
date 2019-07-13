@@ -128,7 +128,7 @@ exports.add_report = function(req, res) {
     res.send("Body should contain boolean isActuallyFree");
   } else if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400);
-    res.send("Invalid course id");
+    res.send("Invalid classroom id");
   } else if (ensureAuthenticated(req,res)) {
     Classroom.findById(req.params.id, async function (err, classroom) {
       if (err) {
@@ -152,6 +152,29 @@ exports.add_report = function(req, res) {
         }
       }
     })
+  }
+};
+
+exports.get_classroom_activities = function(req,res) {
+  const now = new Date();
+  let fromDate = new Date(parseInt(req.query.fromDate));
+  if (isNaN(fromDate.getTime())) {
+    fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+  let toDate = new Date(parseInt(req.query.toDate));
+  if (isNaN(toDate.getTime())) {
+    toDate = new Date(fromDate);
+    toDate.setDate(fromDate.getDate() + 1);
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400);
+    res.send("Invalid classroom id");
+  } else {
+    Activity.find({'classroom': req.params.id, 'date': {$gte: fromDate, $lt: toDate}}).populate('course', 'name').then(
+      activities => res.json(activities),
+      err => unexpectedError(err, res)
+    );
   }
 };
 

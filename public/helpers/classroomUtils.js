@@ -78,6 +78,15 @@ exports.prepareClassroomActivitiesData = function(classroomActivities) {
   return res;
 };
 
+exports.findClassroomById = function(id, classroom) {
+  for (let i = 0; i < classroom.length; i++) {
+    if (classroom[i]._id === id) {
+      return classroom[i];
+    }
+  }
+  return null;
+};
+
 function halfHoursTimeToDate(time) {
   const res = new Date();
   res.setHours(Math.floor(time / 2));
