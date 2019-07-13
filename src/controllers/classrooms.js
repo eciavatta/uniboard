@@ -69,8 +69,6 @@ exports.list_classrooms_activities = async function (req, res) {
     allClassrooms.forEach(classroom => {
       if (!classroomsWithActivities.has(classroom._id.toString())) {
         groupedActivities.push({'_id': classroom._id, 'activities': []});
-      } else {
-        console.log("Banana");
       }
     });
     const enrichedData = await Promise.all(groupedActivities.map(async function (classroomData) {
