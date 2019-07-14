@@ -44,8 +44,9 @@ export default class ClassroomDetails extends React.Component {
   }
 
   render() {
-    if (this.state.activitiesClassroom !== this.props.classroom && this.props.classroom) {//to initialize schedule only after classroom is added
-      setTimeout(() => this.changeWeek(0), 0);//prevents infinite loops
+    if (this.activitiesClassroom !== this.props.classroom && this.props.classroom) {//to initialize schedule only after classroom is added
+      this.activitiesClassroom = this.props.classroom;
+      setTimeout(() => this.changeWeek(0), 0);//Should not change state in render
     }
     return (
       <div className="classroom-details">
@@ -172,13 +173,12 @@ export default class ClassroomDetails extends React.Component {
 
     this.setState({
       'weekChangeDisabled': true,
-      'currWeek': weekStart,
-      'activitiesClassroom': savedClassroom
+      'currWeek': weekStart
     });
 
     axios.get('/api/classrooms/' + this.props.classroom._id + '/activities?fromDate=' + weekStart.getTime() + '&toDate=' + weekEnd.getTime()).then(
       res => {
-        if (savedClassroom === this.state.activitiesClassroom) {
+        if (savedClassroom === this.activitiesClassroom) {
           console.log("Aggiornate attività settimana");
           console.log(res.data);
           this.setState({
@@ -187,7 +187,7 @@ export default class ClassroomDetails extends React.Component {
           })
         }
       }, err => {
-        if (savedClassroom === this.state.activitiesClassroom) {
+        if (savedClassroom === this.activitiesClassroom) {
           console.log(err.response);
           this.setState({'weekChangeDisabled': false});
           //todo alert
