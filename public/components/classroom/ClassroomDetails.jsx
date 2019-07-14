@@ -26,7 +26,9 @@ export default class ClassroomDetails extends React.Component {
 
     this.state = {
       'weekActivities': [],
-      'currWeek': null
+      'currWeek': null,
+      'activitiesClassroom': null,
+      'weekChangeDisabled': true
     };
 
     this.changeWeek = this.changeWeek.bind(this);
@@ -34,38 +36,17 @@ export default class ClassroomDetails extends React.Component {
     this.noInfo = this.noInfo.bind(this);
     this.weekInfo = this.weekInfo.bind(this);
     this.noWeekInfo = this.noWeekInfo.bind(this);
-    this.getDayOfWeek = this.getDayOfWeek.bind(this);
-
-    if (this.props.classroom) {
-      this.changeWeek(0);
-    }
-  }
-
-  changeWeek(weekDelta) {
-    const now = new Date();
-    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 7 * weekDelta); //sunday
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 7);
-
-    //TODO disabilita pulsanti fino a che non ho risposta
-    axios.get('/api/classrooms/' + this.props.classroom._id + '/activities?fromDate=' + weekStart.getTime() + '&toDate=' + weekEnd.getTime()).then(
-      weekActivities => {
-        console.log("Aggiornate attività settimana");
-        console.log(weekActivities);
-        this.setState({
-          'weekActivities':weekActivities,
-          'currWeek': weekStart
-        })
-        //TODO abilita pulsanti
-      }, err => {
-        console.log(err.response);
-        //TODO abilita pulsanti e allerta utente
-      }
-    )
+    this.getDayOfWeekDate = this.getDayOfWeekDate.bind(this);
+    this.getActivityAt = this.getActivityAt.bind(this);
+    this.prevWeek = this.prevWeek.bind(this);
+    this.nextWeek = this.nextWeek.bind(this);
+    this.doReport = this.doReport.bind(this);
   }
 
   render() {
+    if (this.state.activitiesClassroom !== this.props.classroom && this.props.classroom) {//to initialize schedule only after classroom is added
+      setTimeout(() => this.changeWeek(0), 0);//prevents infinite loops
+    }
     return (
       <div className="classroom-details">
         {this.props.classroom ? this.showInfo() : this.noInfo()}
@@ -75,6 +56,8 @@ export default class ClassroomDetails extends React.Component {
   }
 
   showInfo() {
+    this.classroomStateCode = ClassroomUtils.getStateOfClassroom(
+      this.props.classroom, this.props.classroomActivities, ClassroomUtils.dateToHalfHoursTime(new Date())).code;
     return (<div>
       <div className="infotable position-relative">
         <table className="table">
@@ -92,7 +75,7 @@ export default class ClassroomDetails extends React.Component {
           <tr>
             <td>{FLOOR_TO_WORDS[this.props.classroom.floor]}</td>
             <td>100 posti</td>
-            <td>{STATUS_TO_WORDS[ClassroomUtils.getStateOfClassroom(this.props.classroom, this.props.classroomActivities, ClassroomUtils.dateToHalfHoursTime(new Date())).code]}</td>
+            <td>{STATUS_TO_WORDS[this.classroomStateCode]}</td>
             <td>N.A.</td>
             <td>N.A.</td>
             <td>N.A.</td>
@@ -102,6 +85,11 @@ export default class ClassroomDetails extends React.Component {
       </div>
 
       {this.state.currWeek ? this.weekInfo() : this.noWeekInfo()}
+
+      <button disabled={this.state.weekChangeDisabled} onClick={this.prevWeek}>Settimana precedente</button>
+      <button disabled={this.state.weekChangeDisabled} onClick={this.nextWeek}>Settimana successiva</button>
+      <button disabled={!this.props.classroomActivities} onClick={this.doReport}>Effettua segnalazione</button>
+      <button onClick={() => alert(/*TODO*/"TODO")}>Mostra su mappa</button>
     </div>);
   }
 
@@ -112,35 +100,55 @@ export default class ClassroomDetails extends React.Component {
   }
 
   weekInfo() {
+    const dayStart = 9 * 2;
+    const dayEnd = 19 * 2;
+
+    const colSpanLeft = [0, 0, 0, 0, 0];
+    const rows = [];
+    for (let i = dayStart; i < dayEnd; i++) {
+      rows.push(i);
+    }
+    const days = [0,1,2,3,4];
+
     return (
       <div className="timetables">
         <table className="table">
           <thead>
           <tr>
             <th scope="col" />
-            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeek(1))}</th>
-            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeek(2))}</th>
-            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeek(3))}</th>
-            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeek(4))}</th>
-            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeek(5))}</th>
+            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeekDate(1))}</th>
+            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeekDate(2))}</th>
+            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeekDate(3))}</th>
+            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeekDate(4))}</th>
+            <th scope="col">{ClassroomDetails.dateToString(this.getDayOfWeekDate(5))}</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <th rowSpan="2" className="no-border-bottom">8:00 - 9:00</th>
-            <td>Programmazione in Cobol</td>
-            <td>Filosofia</td>
-            <td>Storia dell'arte</td>
-            <td>Letteratura cinese</td>
-            <td>Anatomia</td>
-          </tr>
-          <tr>
-            <td>Programmazione in Cobol</td>
-            <td>Filosofia</td>
-            <td>Storia dell'arte</td>
-            <td>Letteratura cinese</td>
-            <td>Anatomia</td>
-          </tr>
+          {rows.map(rowTimeIndex => {
+            return (
+              <tr key={rowTimeIndex}>
+                {(rowTimeIndex % 2 === 0) &&
+                  <th rowSpan="2" className="no-border-bottom">{rowTimeIndex / 2}:00 - {(rowTimeIndex / 2) + 1}:00</th>}
+                {days.map(day => {
+                  if (colSpanLeft[day] > 0) {
+                    colSpanLeft[day]--;
+                    return null;
+                  } else {
+                    const startingActivity = this.getActivityAt(day + 1, rowTimeIndex);
+                    if (startingActivity) {
+                      colSpanLeft[day] = startingActivity.to - startingActivity.from - 1;
+                      return (
+                        <td key={rowTimeIndex + "_" + day} rowSpan={Math.min(dayEnd, startingActivity.to) - startingActivity.from}>
+                          {startingActivity.course ? startingActivity.course.name : startingActivity.description}
+                        </td>)
+                    } else {
+                      return <td key={rowTimeIndex + "_" + day}/>
+                    }
+                  }
+                })}
+              </tr>
+            )
+          })}
           </tbody>
         </table>
       </div>
@@ -153,10 +161,85 @@ export default class ClassroomDetails extends React.Component {
     )
   }
 
-  getDayOfWeek(i) {
+  changeWeek(weekDelta) {
+    const savedClassroom = this.props.classroom;
+    this.weekDelta = weekDelta;
+    const now = new Date();
+    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 7 * weekDelta); //sunday
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+
+    this.setState({
+      'weekChangeDisabled': true,
+      'currWeek': weekStart,
+      'activitiesClassroom': savedClassroom
+    });
+
+    axios.get('/api/classrooms/' + this.props.classroom._id + '/activities?fromDate=' + weekStart.getTime() + '&toDate=' + weekEnd.getTime()).then(
+      res => {
+        if (savedClassroom === this.state.activitiesClassroom) {
+          console.log("Aggiornate attività settimana");
+          console.log(res.data);
+          this.setState({
+            'weekActivities':res.data,
+            'weekChangeDisabled': false
+          })
+        }
+      }, err => {
+        if (savedClassroom === this.state.activitiesClassroom) {
+          console.log(err.response);
+          this.setState({'weekChangeDisabled': false});
+          //todo alert
+          alert("C'è stato un errore nel recuperare gli orari della'aula, riprova più tardi");
+        }
+      }
+    )
+  }
+  prevWeek() {this.changeWeek(this.weekDelta - 1);}
+  nextWeek() {this.changeWeek(this.weekDelta + 1);}
+
+
+  getDayOfWeekDate(i) {
     const res = new Date(this.state.currWeek);
     res.setDate(res.getDate() + i);
     return res
+  }
+
+  getActivityAt(day, from) {
+    for (let i = 0; i < this.state.weekActivities.length; i++) {
+      if (this.state.weekActivities[i].from === from &&
+          new Date(this.state.weekActivities[i].date).getTime() === this.getDayOfWeekDate(day).getTime()) {
+        return this.state.weekActivities[i];
+      }
+    }
+    return null;
+  }
+
+  doReport() {
+    if (this.classroomStateCode >= 0 && this.classroomStateCode < 4) {
+      const classroomStatusFree = this.classroomStateCode !== 0;
+      if (confirm("L'aula ci risulta " + (classroomStatusFree ? "libera" : "occupata") +
+        ". Vuoi segnalare che l'aula è in realtà " + (classroomStatusFree ? "occupata" : "libera") + "?")) {
+        axios.post('/api/classrooms/' + this.props.classroom._id + '/reports', {'isActuallyFree': !classroomStatusFree}).then(
+          res => {
+            //TODO alert
+            alert("Grazie per la tua segnalazione!");
+          }, err => {
+            let msg = "C'è stato un errore inaspettato nell'effettuare la richiesta, riprova più tardi";
+            console.log(err.response);
+            if (err.response.status ===  403) {
+              msg = "Devi essere autenticato per effettuare questa operazione";
+            }
+            //TODO alert
+            alert(msg);
+          }
+        )
+      }
+    } else {
+      //TODO alert
+      alert("Al momento non è possibile effettuare una segnalazione, attendi il completo caricamento della pagina");
+    }
   }
 
   static dateToString(date) {

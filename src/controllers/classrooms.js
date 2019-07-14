@@ -90,9 +90,9 @@ exports.list_classrooms_activities = async function (req, res) {
           if (currentActivity !== null) {
             validTo = currentActivity.to;
           } else {
-            const latestReportOfGroup = reportsAfterGroup[reportsAfterGroup.length - VALID_GROUP_SIZE].timestamp;
+            const latestReportOfGroup = reportsAfterGroup[reportsAfterGroup.length - VALID_GROUP_SIZE];
             const hourAfterLatest = new Date(latestReportOfGroup.timestamp);
-            hourAfterLatest.setHours(latestReportOfGroup.getHours() + 1);
+            hourAfterLatest.setHours(hourAfterLatest.getHours() + 1);
             validTo = dateToHalfHours(hourAfterLatest);
             const earliestNextActivity = getEarliestActivityAfterTime(validFrom, activities);
             if (earliestNextActivity && validTo > earliestNextActivity.from) {
@@ -134,7 +134,6 @@ exports.add_report = function(req, res) {
       if (err) {
         unexpectedError(err, res);
       } else if (!classroom) {
-        console.log(classroom);
         res.status(404);
         res.send("No classroom matching provided id was found");
       } else {

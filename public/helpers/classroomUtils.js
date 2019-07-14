@@ -5,9 +5,9 @@
  * @return Object
  *  code (Number) can be:
  *    0: there is an activity in this classroom at the specified time. If this activity is a lesson of a course attended by the user (if logged in) this will be 3 instead
- *    1: there is an activity in this classroom starting in less than 30 minutes, but it is currently free. If this activity is a lesson of a course attended by the user (if logged in) this will be 3 instead instead
+ *    1: there is an activity in this classroom starting in less than 30 minutes, but it is currently free.
  *    2: there is no activity in this classroom and there won't be any for more than 30 minutes
- *    3: special condition of 0 or 1
+ *    3: special condition of 0
  *    4: unknown status
  *  isByReport (Boolean) is true if the current status is obtained by user reports
  */
@@ -21,7 +21,7 @@ exports.getStateOfClassroom = function(classroom, classroomActivities, time) {
 
   let statusByReport = false;
   if (activitiesData.statusByReport && activitiesData.statusByReport.validFrom <= time && activitiesData.statusByReport.validTo > time ) {
-    if (!activitiesData.statusByReport) {
+    if (!activitiesData.statusByReport.isFree) {
       return {'code': 0, 'isByReport': true}; //is occupied but there should not be any activity
     }
     statusByReport = true;
