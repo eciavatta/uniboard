@@ -138,17 +138,24 @@ exports.remove_course_self = function(req,res) {
 
 exports.get_courses_schedule_self = function(req,res) {
   if (ensureAuthenticated(req, res)) {
-    let onDate = new Date(parseInt(req.query.onDate));
-    if (isNaN(onDate.getTime())) {
-      onDate = new Date();
+    const now = new Date();
+    let fromDate = new Date(parseInt(req.query.fromDate));
+    if (isNaN(fromDate.getTime())) {
+      fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     }
-    const reqDate = new Date(onDate.getFullYear(), onDate.getMonth(), onDate.getDate());
-    Activity.find({'course': {$in: req.user.courses}, 'date': reqDate}, function(err, activities) {
-      if (err) {
-        unexpectedError(err, res);
-      } else {
-        res.json(activities);
-      }
-    });
+    let toDate = new Date(parseInt(req.query.toDate));
+    if (isNaN(toDate.getTime())) {
+      toDate = new Date(fromDate);
+      toDate.setDate(fromDate.getDate() + 1);
+    }
+
+    if (req.user.courses.length === 0) {
+      res.status(204);
+      res.send();
+    } else {
+      Activity.find({'course': {$in: req.user.courses}, 'date': {$gte: fromDate, $lt: toDate}}).populate('course', 'name').then(
+        activities => res.json(activities),
+        err => unexpectedError(err, res));
+    }
   }
 };

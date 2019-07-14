@@ -1,7 +1,6 @@
-@import "../../globals.scss";
+@import "../globals.scss";
 
-.classroom-details {
-
+.activities-table {
   thead th, tr, td {
     border: 2px solid #BDBABA;
   }
@@ -26,17 +25,16 @@
     }
   }
 
-  .infotable {
+  .selectedColumn {
+    background: red;
+  }
+
+  &.timetables {
     border: 2px solid;
     @include pencil-solid-border;
 
     table {
       margin-bottom: 0;
     }
-  }
-
-  .infotable {
-    margin-bottom: 15px;
-    z-index: 10;
   }
 }

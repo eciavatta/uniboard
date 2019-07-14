@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 import Main from "./pages/Main";
 import Classrooms from "./pages/Classrooms";
+import Lessons from "./pages/Lessons";
 import NotFound from "./pages/NotFound";
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
@@ -44,7 +45,7 @@ class App extends React.Component {
               <Switch location={location}>
                 <Route exact path="/" render={() => <Main classroomStaticData={this.state.classroomStaticData}/>}/>
                 <Route path="/classrooms" render={() => <Classrooms classroomStaticData={this.state.classroomStaticData}/>}/>
-                <Route path="/lessons" component={Classrooms} />
+                <Route path="/lessons" component={Lessons} />
                 <Route component={NotFound} />
               </Switch>
             </CSSTransition>
