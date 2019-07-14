@@ -44,6 +44,12 @@ export default class ClassroomDetails extends React.Component {
       this.loadWeekData();//Should not change state in render
     }
   }
+  componentDidMount() {
+    if (this.props.classroom) {
+      this.activitiesClassroom = this.props.classroom;
+      this.loadWeekData();//Should not change state in render
+    }
+  }
 
   render() {
     return (
