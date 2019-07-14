@@ -21,6 +21,7 @@ export default class Classrooms extends React.Component {
       'filteredClassrooms': this.props.classroomStaticData
     };
 
+    this.classroomNameFilter = "";
     this.keepUpdating = true;
     this.showClassrooms = true;
     this.showLaboratories = true;
@@ -32,6 +33,7 @@ export default class Classrooms extends React.Component {
     this.showLaboratoriesChanged = this.showLaboratoriesChanged.bind(this);
     this.showFloor2Changed = this.showFloor2Changed.bind(this);
     this.showFloor1Changed = this.showFloor1Changed.bind(this);
+    this.classroomNameFilterChanged = this.classroomNameFilterChanged.bind(this);
 
 
     this.updateData();
@@ -39,6 +41,13 @@ export default class Classrooms extends React.Component {
 
   componentWillUnmount() {
     this.keepUpdating = false;//or we get a memory leak
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.classroomStaticData !== this.props.classroomStaticData) {
+      this.classroomBaseData = this.props.classroomStaticData;
+      this.updateFilteredClassrooms();
+    }
   }
 
   updateData() {
@@ -62,7 +71,7 @@ export default class Classrooms extends React.Component {
   }
 
   updateFilteredClassrooms() {
-    const filteredClassrooms = this.props.classroomStaticData
+    const filteredClassrooms = this.classroomBaseData
       .filter(classroom => {
         if (classroom.floor === 1) {
           return this.showFloor1;
@@ -77,8 +86,14 @@ export default class Classrooms extends React.Component {
           return this.showLaboratories;
         }
         return false;
+      }).filter(classroom => {
+        return classroom.name.includes(this.classroomNameFilter);
       });
     this.setState({'filteredClassrooms': filteredClassrooms});
+  }
+  classroomNameFilterChanged(c) {
+    this.classroomNameFilter = c;
+    this.updateFilteredClassrooms();
   }
   showClassroomsChanged(c) {
     this.showClassrooms = c;
@@ -98,9 +113,6 @@ export default class Classrooms extends React.Component {
   }
 
   render() {
-    if (this.state.filteredClassrooms !== this.props.classroomStaticData) {
-      setTimeout(() => this.updateFilteredClassrooms(), 0);
-    }
     let selectedClassroom = ClassroomUtils.findClassroomById(window.location.hash.substr(1), this.props.classroomStaticData);
     return (
       <SinglePage>
@@ -108,7 +120,7 @@ export default class Classrooms extends React.Component {
           <div className="row position-relative">
             <div className="col-md-3">
               <div className="filter-box position-relative">
-                <InputField placeholder="Filtra aule" onChange={(text) => console.log(text)} />
+                <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} />
                 <div className="column-guidelines" />
               </div>
             </div>

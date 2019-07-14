@@ -43,11 +43,14 @@ export default class ClassroomDetails extends React.Component {
     this.doReport = this.doReport.bind(this);
   }
 
-  render() {
-    if (this.activitiesClassroom !== this.props.classroom && this.props.classroom) {//to initialize schedule only after classroom is added
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.classroom !== this.props.classroom && this.props.classroom) {//to initialize schedule only after classroom is added
       this.activitiesClassroom = this.props.classroom;
-      setTimeout(() => this.changeWeek(0), 0);//Should not change state in render
+      this.changeWeek(0);//Should not change state in render
     }
+  }
+
+  render() {
     return (
       <div className="classroom-details">
         {this.props.classroom ? this.showInfo() : this.noInfo()}
