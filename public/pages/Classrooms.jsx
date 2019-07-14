@@ -21,6 +21,7 @@ export default class Classrooms extends React.Component {
       'filteredClassrooms': this.props.classroomStaticData
     };
 
+    this.classroomBaseData = [];
     this.classroomNameFilter = "";
     this.keepUpdating = true;
     this.showClassrooms = true;

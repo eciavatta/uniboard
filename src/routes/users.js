@@ -7,8 +7,10 @@ module.exports = function(app) {
   app.route('/api/users/self')
     .get(usersController.get_self);
 
-  //corsi che l'utente segue
+  app.route('/api/users/self/score')//more score info
+    .get(usersController.get_self_score);
 
+  //corsi che l'utente segue
   app.route('/api/users/self/courses')
     .get(usersController.get_courses_self);
 

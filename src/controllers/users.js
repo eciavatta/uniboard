@@ -47,6 +47,34 @@ exports.get_self = function(req,res) {
   }
 };
 
+exports.get_self_score = function(req,res) {
+  if (ensureAuthenticated(req,res)) {
+    User.aggregate([
+      {$match: {'reportScore': {$gt: req.user.reportScore}}},
+      {$group: {
+        _id: null,
+        count: { $sum: 1 },
+        min: { $min: "$reportScore"}
+      }},
+      { $project: { _id: 0 } }
+    ]).then(
+      queryResult => {
+        let aggregateData = queryResult[0];
+        if (!aggregateData) {
+          aggregateData = {};
+        }
+        res.json({
+          score: req.user.reportScore,
+          position: (aggregateData.count ? aggregateData.count : 0) + 1,
+          toNext: aggregateData.min ? aggregateData.min - req.user.reportScore : 0
+        });
+      }, err => {
+        unexpectedError(err, res);
+      }
+    )
+  }
+};
+
 exports.get_courses_self = function(req,res) {
   if (ensureAuthenticated(req,res)) {
     User.findById(req.user._id).populate({'path': 'courses'}).select('courses -_id').exec(function (err, userCourses) {
