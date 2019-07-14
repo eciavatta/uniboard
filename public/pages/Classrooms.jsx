@@ -17,12 +17,22 @@ export default class Classrooms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'classroomActivities': {}
+      'classroomActivities': {},
+      'filteredClassrooms': this.props.classroomStaticData
     };
 
     this.keepUpdating = true;
+    this.showClassrooms = true;
+    this.showLaboratories = true;
+    this.showFloor2 = true;
+    this.showFloor1 = true;
 
     this.updateData = this.updateData.bind(this);
+    this.showClassroomsChanged = this.showClassroomsChanged.bind(this);
+    this.showLaboratoriesChanged = this.showLaboratoriesChanged.bind(this);
+    this.showFloor2Changed = this.showFloor2Changed.bind(this);
+    this.showFloor1Changed = this.showFloor1Changed.bind(this);
+
 
     this.updateData();
   }
@@ -51,7 +61,46 @@ export default class Classrooms extends React.Component {
     );
   }
 
+  updateFilteredClassrooms() {
+    const filteredClassrooms = this.props.classroomStaticData
+      .filter(classroom => {
+        if (classroom.floor === 1) {
+          return this.showFloor1;
+        } else if (classroom.floor === 2) {
+          return this.showFloor2;
+        }
+        return false;
+      }).filter(classroom => {
+        if (classroom.roomType === "Classroom") {
+          return this.showClassrooms;
+        } else if (classroom.roomType === "Laboratory") {
+          return this.showLaboratories;
+        }
+        return false;
+      });
+    this.setState({'filteredClassrooms': filteredClassrooms});
+  }
+  showClassroomsChanged(c) {
+    this.showClassrooms = c;
+    this.updateFilteredClassrooms();
+  }
+  showLaboratoriesChanged(c) {
+    this.showLaboratories = c;
+    this.updateFilteredClassrooms();
+  }
+  showFloor2Changed(c) {
+    this.showFloor2 = c;
+    this.updateFilteredClassrooms();
+  }
+  showFloor1Changed(c) {
+    this.showFloor1 = c;
+    this.updateFilteredClassrooms();
+  }
+
   render() {
+    if (this.state.filteredClassrooms !== this.props.classroomStaticData) {
+      setTimeout(() => this.updateFilteredClassrooms(), 0);
+    }
     let selectedClassroom = ClassroomUtils.findClassroomById(window.location.hash.substr(1), this.props.classroomStaticData);
     return (
       <SinglePage>
@@ -67,16 +116,16 @@ export default class Classrooms extends React.Component {
               <div className="filter-box selects position-relative">
                 <div className="row">
                   <div className="col-auto">
-                    <SelectField checked={true} onChange={(c) => console.log(c)}>Aule</SelectField>
+                    <SelectField checked={true} onChange={this.showClassroomsChanged}>Aule</SelectField>
                   </div>
                   <div className="col-auto">
-                    <SelectField checked={true}>Laboratori</SelectField>
+                    <SelectField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</SelectField>
                   </div>
                   <div className="col-auto">
-                    <SelectField checked={true}>Piano terra</SelectField>
+                    <SelectField checked={true} onChange={this.showFloor1Changed}>Piano terra</SelectField>
                   </div>
                   <div className="col-auto">
-                    <SelectField checked={true}>Primo piano</SelectField>
+                    <SelectField checked={true} onChange={this.showFloor2Changed}>Primo piano</SelectField>
                   </div>
                 </div>
                 <div className="column-guidelines" />
@@ -92,7 +141,7 @@ export default class Classrooms extends React.Component {
           </div>
           <div className="row position-relative" style={{marginTop: '15px', height: 'calc(100% - 50px)'}}>
             <div className="col-md-3 h-100">
-              <ClassroomList classrooms={this.props.classroomStaticData} classroomActivities={this.state.classroomActivities}/>
+              <ClassroomList classrooms={this.state.filteredClassrooms} classroomActivities={this.state.classroomActivities}/>
               <div className="column-guidelines" style={{left: '15px', right: '15px', bottom: '-15px'}} />
             </div>
             <div className="col-md-9 h-100">
