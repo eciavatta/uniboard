@@ -6,6 +6,8 @@ body {
   height: 100vh;
 
   @include squared-background;
+
+  color: $color-text-0;
 }
 
 .page-loader {

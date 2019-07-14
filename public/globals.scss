@@ -12,6 +12,15 @@ $color-secondary-2: #759DE7;
 $color-secondary-3: #335698;
 $color-secondary-4: #1F3356;
 
+$color-text-0: #241c1c;
+$color-text-1: #483737;
+$color-text-2: #6c5353;
+$color-text-3: #916f6f;
+$color-text-4: #ac9393;
+$color-text-5: #c8b7b7;
+$color-text-6: #e3dbdb;
+
+
 $guidelines-opacity: 0.4;
 $guidelines-width: 2px;
 
@@ -52,3 +61,8 @@ $free-classroom-color : #37c861;
   border-left: $guidelines-width solid;
   border-right: $guidelines-width solid;
 }
+
+input:focus {
+  outline: none;
+}
+

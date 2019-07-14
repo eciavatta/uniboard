@@ -5,7 +5,8 @@ import ClassroomList from "../components/classroom/ClassroomsList";
 
 import './Classrooms.scss';
 import ClassroomDetails from "../components/classroom/ClassroomDetails";
-import Main from "./Main";
+import InputField from '../components/inputs/InputField'
+import SelectField from '../components/inputs/SelectField'
 import axios from "axios";
 import ClassroomUtils from "../helpers/classroomUtils";
 
@@ -57,13 +58,35 @@ export default class Classrooms extends React.Component {
         <div className="classrooms container-fluid p-lg-3 p-xl-5">
           <div className="row position-relative">
             <div className="col-md-3">
-              <div className="new-box">Campo di ricerca qui</div>
+              <div className="filter-box position-relative">
+                <InputField placeholder="Filtra aule" onChange={(text) => console.log(text)} />
+                <div className="column-guidelines" />
+              </div>
             </div>
             <div className="col-md">
-              <div className="new-box">Filtri per le classi qui</div>
+              <div className="filter-box selects position-relative">
+                <div className="row">
+                  <div className="col-auto">
+                    <SelectField checked={true} onChange={(c) => console.log(c)}>Aule</SelectField>
+                  </div>
+                  <div className="col-auto">
+                    <SelectField checked={true}>Laboratori</SelectField>
+                  </div>
+                  <div className="col-auto">
+                    <SelectField checked={true}>Piano terra</SelectField>
+                  </div>
+                  <div className="col-auto">
+                    <SelectField checked={true}>Primo piano</SelectField>
+                  </div>
+                </div>
+                <div className="column-guidelines" />
+              </div>
             </div>
             <div className="col-md-auto">
-              <div className="new-box">Legenda qui</div>
+              <div className="new-box">
+
+
+              </div>
             </div>
             <div className="row-guidelines" />
           </div>

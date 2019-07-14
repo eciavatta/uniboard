@@ -1,0 +1,35 @@
+@import "../../globals.scss";
+
+.input-field-container {
+  border: 2px solid;
+  @include pencil-solid-border;
+
+  .row-guidelines {
+    left: -15px;
+    right: -15px;
+    top: -2px;
+    bottom: -2px;
+  }
+
+  .column-guidelines {
+    left: -2px;
+    right: -2px;
+    top: -15px;
+    bottom: -15px;
+  }
+}
+
+.input-field {
+  width: 100%;
+  border: none;
+  padding: 3px 10px;
+  opacity: 0.5;
+}
+
+.input-field:focus {
+  opacity: 1;
+}
+
+input:focus {
+  outline: none;
+}

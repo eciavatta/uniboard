@@ -4,15 +4,13 @@
 
   thead th, tr, td {
     border: 2px solid #BDBABA;
-
-
   }
 
   thead th, tr:first-child {
     border-top: none;
   }
 
-  thead th, td:last-child, tr {
+  thead th:last-child, td:last-child, tr {
     border-right: none;
   }
 
@@ -41,10 +39,5 @@
     margin-bottom: 15px;
     z-index: 10;
   }
-
-  .no-border-bottom {
-    border-bottom: 0 !important;
-  }
-
 
 }
