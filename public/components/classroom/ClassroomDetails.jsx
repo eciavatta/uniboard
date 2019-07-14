@@ -207,9 +207,13 @@ export default class ClassroomDetails extends React.Component {
   }
 
   getActivityAt(day, from) {
+    const dayOfWeek = this.getDayOfWeekDate(day);
     for (let i = 0; i < this.state.weekActivities.length; i++) {
+      const activityDate = new Date(this.state.weekActivities[i].date);
       if (this.state.weekActivities[i].from === from &&
-          new Date(this.state.weekActivities[i].date).getTime() === this.getDayOfWeekDate(day).getTime()) {
+        activityDate.getFullYear() === dayOfWeek.getFullYear() &&
+        activityDate.getMonth() === dayOfWeek.getMonth() &&
+        activityDate.getDate() === dayOfWeek.getDate()) {
         return this.state.weekActivities[i];
       }
     }
