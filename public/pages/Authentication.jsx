@@ -24,7 +24,7 @@ export default class extends React.Component {
     super(props);
 
     this.state = {
-      redirect: false,
+      loadingLoggedInfo: true,
       loginId: "",
       loginPassword: "",
       registerUsername: "",
@@ -57,7 +57,12 @@ export default class extends React.Component {
     this.acceptTermChanged = this.acceptTermChanged.bind(this);
   }
 
-
+  componentDidMount() {
+    axios.get('api/users/self').then(
+      res => this.doRedirect(),
+      err => this.setState({'loadingLoggedInfo': false})
+    )
+  }
 
   onLoginSubmit(e) {
     if (!this.state.loginDisabled) {
@@ -69,7 +74,7 @@ export default class extends React.Component {
       });
       axios.post('/api/login',{'username':this.state.loginId, 'password': this.state.loginPassword})
         .then(response => {
-          this.setState({'redirect': true});
+          this.doRedirect();
         }, err => {
           if (err.response.status === 401) {
             this.setState({
@@ -85,6 +90,12 @@ export default class extends React.Component {
         });
     }
     e.preventDefault();
+  }
+
+  doRedirect() {
+    const query = new URLSearchParams(this.props.location.search);
+    const redirectTo = query.get('redirectTo');
+    this.props.history.push(redirectTo ? redirectTo : "/");
   }
 
   onRegisterSubmit(e) {
@@ -181,17 +192,12 @@ export default class extends React.Component {
     this.setState({invalidRegisterTerms: !c});
   }
 
-  renderRedirect() {
-    //TODO maybe should change redirect to
-    if (this.state.redirect) {
-      return <Redirect to='/'/>
-    }
-  }
-
   render() {
+    if (this.state.loadingLoggedInfo) {
+      return <SinglePage><p>Caricando...</p></SinglePage>
+    }
     return (
       <SinglePage>
-        {this.renderRedirect()}
         <div className="login container">
           <div className="row h-100">
             <div className={'col-md-6 align-self-center d-md-block' + (this.props.isRegister ? ' d-none' : '')}>

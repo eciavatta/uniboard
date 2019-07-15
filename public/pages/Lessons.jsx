@@ -133,10 +133,7 @@ export default class Lessons extends React.Component {
         }
       }, err => {
         if (err.response.status === 403) {
-          this.setState({
-            'status': Status.NOT_LOGGED,
-            'weekChangeDisabled': false
-          });
+          this.props.history.push("/login?redirectTo=%2Flessons");
         } else {
           this.setState({
             'status': Status.ERROR,
