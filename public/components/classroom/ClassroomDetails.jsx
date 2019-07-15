@@ -6,6 +6,7 @@ import ClassroomUtils from '../../helpers/classroomUtils';
 import ActivitiesTable from '../ActivitiesTable';
 
 import axios from "axios";
+import ButtonField from "../inputs/ButtonField";
 
 const FLOOR_TO_WORDS = [
   "Piano sotterraneo",
@@ -52,57 +53,66 @@ export default class ClassroomDetails extends React.Component {
   }
 
   render() {
-    return (
-      <div className="classroom-details scrollable h-100 position-relative">
-        {this.props.classroom ? this.showInfo() : this.noInfo()}
-        <div className="column-guidelines" style={{bottom: '-15px'}} />
-      </div>
-    );
+    return this.props.classroom ? this.showInfo() : this.noInfo();
   }
 
   showInfo() {
     this.classroomStateCode = ClassroomUtils.getStateOfClassroom(
       this.props.classroom, this.props.classroomActivities, ClassroomUtils.dateToHalfHoursTime(new Date())).code;
-    return (<div>
-      <div className="infotable position-relative">
-        <table className="table">
-          <thead>
-          <tr>
-            <th scope="col">Piano</th>
-            <th scope="col">Capienza</th>
-            <th scope="col">Stato</th>
-            <th scope="col">Temperatura</th>
-            <th scope="col">Sensori</th>
-            <th scope="col">Sensori</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>{FLOOR_TO_WORDS[this.props.classroom.floor]}</td>
-            <td>100 posti</td>
-            <td>{STATUS_TO_WORDS[this.classroomStateCode]}</td>
-            <td>N.A.</td>
-            <td>N.A.</td>
-            <td>N.A.</td>
-          </tr>
-          </tbody>
-        </table>
+
+    return (
+      <div className="classroom-details scrollable h-100 position-relative">
+        <div className="details row position-relative">
+          <div className="info-table col-lg-6">
+            <table className="table">
+              <thead>
+              <tr>
+                <th scope="col">Piano</th>
+                <th scope="col">Capienza</th>
+                <th scope="col">Stato</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>{FLOOR_TO_WORDS[this.props.classroom.floor]}</td>
+                <td>100 posti</td>
+                <td>{STATUS_TO_WORDS[this.classroomStateCode]}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="buttons-box col-lg-6">
+            <div className="row">
+              <div className="col">
+                <ButtonField disabled={!this.props.classroomActivities} onClick={this.doReport}
+                             text="Effettua segnalazione" />
+              </div>
+              <div className="col">
+                <ButtonField onClick={() => alert(/*TODO*/"TODO")} text="Mostra su mappa" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {this.state.weekActivities
+          ? <ActivitiesTable activities={this.state.weekActivities}
+                             currWeek={this.state.weekStart}
+                             selectedDay={Math.min(Math.max(new Date().getDay(), 1), 5)}/>
+          : this.noWeekInfo()}
+
+        <div className="column-guidelines" style={{bottom: '-15px'}} />
       </div>
-
-      {this.state.weekActivities
-        ? <ActivitiesTable activities={this.state.weekActivities}
-                           currWeek={this.state.weekStart}
-                           selectedDay={Math.min(Math.max(new Date().getDay(), 1), 5)}/>
-        : this.noWeekInfo()}
-
-      <button disabled={!this.props.classroomActivities} onClick={this.doReport}>Effettua segnalazione</button>
-      <button onClick={() => alert(/*TODO*/"TODO")}>Mostra su mappa</button>
-    </div>);
+    );
   }
 
   noInfo() {
     return (
-      <p>Nessuna aula selezionata</p>
+      <div className="classroom-details scrollable h-100 position-relative">
+        <p>Nessuna aula selezionata</p>
+
+        <div className="column-guidelines" style={{bottom: '-15px'}} />
+      </div>
     )
   }
 

@@ -26,7 +26,7 @@
     }
   }
 
-  .infotable {
+  .info-table {
     border: 2px solid;
     @include pencil-solid-border;
 
@@ -35,8 +35,12 @@
     }
   }
 
-  .infotable {
+  .details {
     margin-bottom: 15px;
     z-index: 10;
+  }
+
+  .buttons-box {
+    padding: 25px 30px;
   }
 }

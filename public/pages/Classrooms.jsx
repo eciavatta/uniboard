@@ -147,7 +147,7 @@ export default class Classrooms extends React.Component {
     return (
       <SinglePage>
         <div className="classrooms container-fluid">
-          <div className="row position-relative">
+          <div className="row position-relative d-none d-lg-flex">
             <div className="col-md-3">
               <div className="filter-box position-relative">
                 <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} value={this.state.classroomNameFilter} />
@@ -157,6 +157,11 @@ export default class Classrooms extends React.Component {
             <div className="col-md">
               <div className="filter-box selects position-relative">
                 <div className="row">
+                  <div className="col-auto">
+                    <SelectField options={{'name': 'Nome', 'proximity': 'Vicinanza'}} onChange={(value) => console.log(value)} value={'name'}>
+                      Ordina per:
+                    </SelectField>
+                  </div>
                   <div className="col-auto">
                     <CheckboxField checked={true} onChange={this.showClassroomsChanged}>Aule</CheckboxField>
                   </div>
