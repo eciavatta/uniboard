@@ -6,9 +6,6 @@ export default class extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      'value': props.value
-    };
 
     this.changeState = this.changeState.bind(this);
   }
@@ -22,7 +19,7 @@ export default class extends React.Component {
   render() {
     return (
       <div className="input-field-container position-relative">
-        <input type={this.props.type ? this.props.type : 'text' } className="input-field" placeholder={this.props.placeholder} value={this.state.value}
+        <input type={this.props.type ? this.props.type : 'text' } className="input-field" placeholder={this.props.placeholder} value={this.props.value}
                onChange={this.changeState} id={this.props.id}/>
 
         <div className="row-guidelines" />

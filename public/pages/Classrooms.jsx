@@ -19,7 +19,8 @@ export default class Classrooms extends React.Component {
     super(props);
     this.state = {
       'classroomActivities': {},
-      'filteredClassrooms': this.props.classroomStaticData
+      'filteredClassrooms': this.props.classroomStaticData,
+      'classroomNameFilter': ""
     };
 
     this.classroomBaseData = [];
@@ -36,7 +37,7 @@ export default class Classrooms extends React.Component {
     this.showFloor2Changed = this.showFloor2Changed.bind(this);
     this.showFloor1Changed = this.showFloor1Changed.bind(this);
     this.classroomNameFilterChanged = this.classroomNameFilterChanged.bind(this);
-
+    this.sortByChanged = this.sortByChanged.bind(this);
 
     this.updateData();
   }
@@ -72,7 +73,7 @@ export default class Classrooms extends React.Component {
     );
   }
 
-  updateFilteredClassrooms() {
+  updateFilteredClassrooms(nameFilter) {
     const filteredClassrooms = this.classroomBaseData
       .filter(classroom => {
         if (classroom.floor === 1) {
@@ -89,13 +90,36 @@ export default class Classrooms extends React.Component {
         }
         return false;
       }).filter(classroom => {
-        return classroom.name.includes(this.classroomNameFilter);
-      });
+        return classroom.name.includes(nameFilter !== undefined ? nameFilter : this.state.classroomNameFilter);
+      }).sort((c1, c2) => c1.name.localeCompare(c2.name));
+    //we always sort by name first, so if two classrooms have the same value for the sort by they will be sorted by name as secondary value
+
+    if (this.sortBy === 'proximity') {
+      if (!window.uniboardApp) {
+        //TODO alert
+        alert("Scarica l'app di uniboard per poter usare questa funzionalità");
+      } else {
+        //TODO
+      }
+    } else if (this.sortBy === 'free') {
+      filteredClassrooms.sort((c1, c2) => {
+        const nowTime = ClassroomUtils.dateToHalfHoursTime(new Date());
+        const c1StatusCode = ClassroomUtils.getStateOfClassroom(c1, this.state.classroomActivities, nowTime).code;
+        const c2StatusCode = ClassroomUtils.getStateOfClassroom(c2, this.state.classroomActivities, nowTime).code;
+        const codeForSort = (code) => {
+          if (code === 2) {return 0;}
+          if (code === 1) {return 1;}
+          return 2;
+        };
+        return codeForSort(c1StatusCode) - codeForSort(c2StatusCode);
+      })
+    }
+
     this.setState({'filteredClassrooms': filteredClassrooms});
   }
   classroomNameFilterChanged(c) {
-    this.classroomNameFilter = c;
-    this.updateFilteredClassrooms();
+    this.setState({classroomNameFilter: c});
+    this.updateFilteredClassrooms(c);
   }
   showClassroomsChanged(c) {
     this.showClassrooms = c;
@@ -113,6 +137,10 @@ export default class Classrooms extends React.Component {
     this.showFloor1 = c;
     this.updateFilteredClassrooms();
   }
+  sortByChanged(c) {
+    this.sortBy = c;
+    this.updateFilteredClassrooms();
+  }
 
   render() {
     let selectedClassroom = ClassroomUtils.findClassroomById(window.location.hash.substr(1), this.props.classroomStaticData);
@@ -122,7 +150,7 @@ export default class Classrooms extends React.Component {
           <div className="row position-relative">
             <div className="col-md-3">
               <div className="filter-box position-relative">
-                <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} />
+                <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} value={this.state.classroomNameFilter} />
                 <div className="column-guidelines" />
               </div>
             </div>
@@ -142,7 +170,7 @@ export default class Classrooms extends React.Component {
                     <CheckboxField checked={true} onChange={this.showFloor2Changed}>Primo piano</CheckboxField>
                   </div>
                   <div className="col-auto">
-                    <SelectField options={{'name': 'Nome', 'proximity': 'Vicinanza'}} onChange={(value) => console.log(value)} value={'name'}>
+                    <SelectField options={{'name': 'Nome', 'free': 'Libere', 'proximity': 'Vicinanza'}} onChange={this.sortByChanged} value={'name'}>
                       Ordina per:
                     </SelectField>
                   </div>

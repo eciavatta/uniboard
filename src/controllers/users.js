@@ -10,35 +10,68 @@ const hashPassword = utils.hashPassword;
 const unexpectedError = utils.unexpectedError;
 const ensureAuthenticated = utils.ensureAuthenticated;
 
+const EMAIL_RE = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+function validateEmail(email) {
+  return EMAIL_RE.test(email.toLowerCase());
+}
+const PASSWORD_RE = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})");
+function validatePassword(password) {
+  return PASSWORD_RE.test(password);
+}
+
 exports.add_user = function(req, res) {
-  const username = req.body.username;
-  const password = req.body.password;
-  //TODO validate pass
-  new User({'username': username}).save(function (err, user) {
-    if (err) {
-      if (err.code === 11000) {
-        res.status(409);
-        res.send("Username is already taken");
-      } else {
-        unexpectedError(err, res)
-      }
-    } else {
-      const salt = crypto.randomBytes(16).toString('base64');
-      hashPassword(password,salt,function (err, hash) {
-        if (err) {
-          unexpectedError(err, res)
+  let username = req.body.username;
+  let email = req.body.email;
+  let password = req.body.password;
+  const invalidFields = [];
+
+  if (!username || username.length < 4) {
+    invalidFields.push('username');
+  }
+  if (!email || !validateEmail(email)) {
+    invalidFields.push('email');
+  }
+  if (!password || !validatePassword(password)) {
+    invalidFields.push('password');
+  }
+
+  if (invalidFields.length > 0) {
+    res.status(400);
+    res.json({'invalidFields': invalidFields})
+  } else {
+    new User({'username': username, 'email': email}).save().then(
+      user => {
+        const salt = crypto.randomBytes(16).toString('base64');
+        hashPassword(password,salt,function (err, hash) {
+          if (err) {
+            unexpectedError(err, res)
+          } else {
+            new UserPassword({'salt': salt, 'hash': hash, '_id':user._id}).save(function (err) {
+              if (err) {
+                unexpectedError(err, res)
+              } else {
+                res.json(user);
+              }
+            })
+          }
+        })
+      }, err => {
+        if (err.code === 11000) {
+          if (err.errmsg.includes('username')) {
+            res.status(409);
+            res.json({'duplicateFields': ['username']});
+          } else if (err.errmsg.includes('email')) {
+            res.status(409);
+            res.json({'duplicateFields': ['email']});
+          } else {
+            unexpectedError(err, res);
+          }
         } else {
-          new UserPassword({'salt': salt, 'hash': hash, '_id':user._id}).save(function (err) {
-            if (err) {
-              unexpectedError(err, res)
-            } else {
-              res.json(user);
-            }
-          })
+          unexpectedError(err, res)
         }
-      })
-    }
-  })
+      }
+    )
+  }
 };
 
 exports.get_self = function(req,res) {

@@ -7,7 +7,7 @@ const hashPassword = require('./utils').hashPassword;
 
 passport.use(new PassportLocalStrategy(
   function(username, password, cb) {
-    User.findOne({'username': username}, function (err, user) {
+    User.findOne({ $or:[ {'username': username}, {'email': username}]}, function (err, user) {
       if (err) {
         cb(err);
       } else if (!user) {

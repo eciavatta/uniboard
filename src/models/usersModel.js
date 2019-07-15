@@ -8,6 +8,12 @@ const UserSchema = new Schema({
     lowercase: true,
     unique: true
   },
+  email: {
+    type: String,
+    required: "Email is required",
+    lowercase: true,
+    unique: true
+  },
   reportScore: {
     type: Number,
     default: 0,
