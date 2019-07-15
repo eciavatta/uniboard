@@ -20,37 +20,27 @@ export default class Classrooms extends React.Component {
     this.state = {
       'classroomActivities': {},
       'filteredClassrooms': this.props.classroomStaticData,
-      'classroomNameFilter': ""
+      'classroomNameFilter': "",
+      'showClassrooms': true,
+      'showLaboratories': true,
+      'sortBy': 'name',
     };
 
-    this.classroomBaseData = [];
-    this.classroomNameFilter = "";
     this.keepUpdating = true;
-    this.showClassrooms = true;
-    this.showLaboratories = true;
-    this.showFloor2 = true;
-    this.showFloor1 = true;
 
     this.updateData = this.updateData.bind(this);
     this.showClassroomsChanged = this.showClassroomsChanged.bind(this);
     this.showLaboratoriesChanged = this.showLaboratoriesChanged.bind(this);
-    this.showFloor2Changed = this.showFloor2Changed.bind(this);
-    this.showFloor1Changed = this.showFloor1Changed.bind(this);
     this.classroomNameFilterChanged = this.classroomNameFilterChanged.bind(this);
     this.sortByChanged = this.sortByChanged.bind(this);
-
-    this.updateData();
   }
 
   componentWillUnmount() {
     this.keepUpdating = false;//or we get a memory leak
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.classroomStaticData !== this.props.classroomStaticData) {
-      this.classroomBaseData = this.props.classroomStaticData;
-      this.updateFilteredClassrooms();
-    }
+  componentDidMount() {
+    this.updateData();
   }
 
   updateData() {
@@ -73,35 +63,32 @@ export default class Classrooms extends React.Component {
     );
   }
 
-  updateFilteredClassrooms(nameFilter) {
-    const filteredClassrooms = this.classroomBaseData
+  getFilteredClassroom() {
+    if (!this.props.classroomStaticData || this.props.classroomStaticData.length === 0) {
+      return [];
+    }
+
+    const filteredClassrooms = this.props.classroomStaticData
       .filter(classroom => {
-        if (classroom.floor === 1) {
-          return this.showFloor1;
-        } else if (classroom.floor === 2) {
-          return this.showFloor2;
-        }
-        return false;
-      }).filter(classroom => {
         if (classroom.roomType === "Classroom") {
-          return this.showClassrooms;
+          return this.state.showClassrooms;
         } else if (classroom.roomType === "Laboratory") {
-          return this.showLaboratories;
+          return this.state.showLaboratories;
         }
         return false;
       }).filter(classroom => {
-        return classroom.name.toLowerCase().includes(nameFilter !== undefined ? nameFilter : this.state.classroomNameFilter);
+        return classroom.name.toLowerCase().includes(this.state.classroomNameFilter);
       }).sort((c1, c2) => c1.name.localeCompare(c2.name));
     //we always sort by name first, so if two classrooms have the same value for the sort by they will be sorted by name as secondary value
 
-    if (this.sortBy === 'proximity') {
+    if (this.state.sortBy === 'proximity') {
       if (!window.uniboardApp) {
         //TODO alert
         alert("Scarica l'app di uniboard per poter usare questa funzionalità");
       } else {
         //TODO
       }
-    } else if (this.sortBy === 'free') {
+    } else if (this.state.sortBy === 'free') {
       filteredClassrooms.sort((c1, c2) => {
         const nowTime = ClassroomUtils.dateToHalfHoursTime(new Date());
         const c1StatusCode = ClassroomUtils.getStateOfClassroom(c1, this.state.classroomActivities, nowTime).code;
@@ -115,31 +102,27 @@ export default class Classrooms extends React.Component {
       })
     }
 
-    this.setState({'filteredClassrooms': filteredClassrooms});
+    return filteredClassrooms;
   }
   classroomNameFilterChanged(c) {
-    this.setState({classroomNameFilter: c.toLowerCase()});
-    this.updateFilteredClassrooms(c.toLowerCase());
+    this.setState({
+      'classroomNameFilter': c
+    });
   }
   showClassroomsChanged(c) {
-    this.showClassrooms = c;
-    this.updateFilteredClassrooms();
+    this.setState({
+      'showClassrooms': c
+    });
   }
   showLaboratoriesChanged(c) {
-    this.showLaboratories = c;
-    this.updateFilteredClassrooms();
-  }
-  showFloor2Changed(c) {
-    this.showFloor2 = c;
-    this.updateFilteredClassrooms();
-  }
-  showFloor1Changed(c) {
-    this.showFloor1 = c;
-    this.updateFilteredClassrooms();
+    this.setState({
+      'showLaboratories': c
+    });
   }
   sortByChanged(c) {
-    this.sortBy = c;
-    this.updateFilteredClassrooms();
+    this.setState({
+      'sortBy': c
+    });
   }
 
   render() {
@@ -158,7 +141,7 @@ export default class Classrooms extends React.Component {
               <div className="filter-box selects position-relative">
                 <div className="row">
                   <div className="col-auto">
-                    <SelectField options={{'name': 'Nome', 'proximity': 'Vicinanza'}} onChange={(value) => console.log(value)} value={'name'}>
+                    <SelectField options={{'name': 'Nome', 'free': 'Libere', 'proximity': 'Vicinanza'}} onChange={this.sortByChanged} value={'name'}>
                       Ordina per:
                     </SelectField>
                   </div>
@@ -167,17 +150,6 @@ export default class Classrooms extends React.Component {
                   </div>
                   <div className="col-auto">
                     <CheckboxField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</CheckboxField>
-                  </div>
-                  <div className="col-auto">
-                    <CheckboxField checked={true} onChange={this.showFloor1Changed}>Piano terra</CheckboxField>
-                  </div>
-                  <div className="col-auto">
-                    <CheckboxField checked={true} onChange={this.showFloor2Changed}>Primo piano</CheckboxField>
-                  </div>
-                  <div className="col-auto">
-                    <SelectField options={{'name': 'Nome', 'free': 'Libere', 'proximity': 'Vicinanza'}} onChange={this.sortByChanged} value={'name'}>
-                      Ordina per:
-                    </SelectField>
                   </div>
                 </div>
                 <div className="column-guidelines" />
@@ -192,7 +164,7 @@ export default class Classrooms extends React.Component {
           </div>
           <div className="row position-relative classrooms-row">
             <div className="col-md-3 h-100">
-              <ClassroomList classrooms={this.state.filteredClassrooms} classroomActivities={this.state.classroomActivities}/>
+              <ClassroomList classrooms={this.getFilteredClassroom()} classroomActivities={this.state.classroomActivities}/>
               <div className="column-guidelines" style={{left: '15px', right: '15px', bottom: '-15px'}} />
             </div>
             <div className="col-md-9 h-100">

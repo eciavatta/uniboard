@@ -24,12 +24,14 @@ export default class MapMain extends React.Component {
     this.upperFloorClicked = this.upperFloorClicked.bind(this);
     this.lowerFloorClicked = this.lowerFloorClicked.bind(this);
     this.updateData = this.updateData.bind(this);
-
-    this.updateData();
   }
 
   componentWillUnmount() {
     this.keepUpdating = false;//or we get a memory leak
+  }
+
+  componentDidMount() {
+    this.updateData();
   }
 
   updateData() {
