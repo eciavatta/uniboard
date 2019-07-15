@@ -18,6 +18,7 @@ export default class extends React.Component {
     this.onSearchCourseSubmit = this.onSearchCourseSubmit.bind(this);
     this.doRemoveCourse = this.doRemoveCourse.bind(this);
     this.doAddCourse = this.doAddCourse.bind(this);
+    this.doLogout = this.doLogout.bind(this);
   }
 
   componentDidMount() {
@@ -114,6 +115,18 @@ export default class extends React.Component {
     }
   }
 
+  doLogout() {
+    axios.get('/api/logout').then(
+      res => {
+        this.props.history.push("/login");
+      },
+      err => {
+        console.log("Error while logging out");
+        console.log(err.response);
+      }
+    );
+  }
+
   render() {
     return (
       <SinglePage>
@@ -134,6 +147,8 @@ export default class extends React.Component {
   renderProfile() {
     if (this.state.user) {
       return <div>
+        <button onClick={this.doLogout}>Log out</button>
+
         <div>
           <div>Ciao {this.state.user.username}!</div>
         </div>
