@@ -6,6 +6,7 @@ import Main from "./pages/Main";
 import Classrooms from "./pages/Classrooms";
 import Authentication from "./pages/Authentication";
 import Lessons from "./pages/Lessons";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
@@ -47,6 +48,7 @@ class App extends React.Component {
                 <Route exact path="/" render={() => <Main classroomStaticData={this.state.classroomStaticData}/>}/>
                 <Route path="/classrooms" render={() => <Classrooms classroomStaticData={this.state.classroomStaticData}/>}/>
                 <Route path="/lessons" component={Lessons} />
+                <Route path="/profile" component={Profile} />
                 <Route path="/login" render={(props) => <Authentication isRegister={false} location={props.location} history={props.history}/>} />
                 <Route path="/register" render={(props) => <Authentication isRegister={true} location={props.location} history={props.history}/>} />
                 <Route component={NotFound} />

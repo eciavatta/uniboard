@@ -90,7 +90,7 @@ export default class Classrooms extends React.Component {
         }
         return false;
       }).filter(classroom => {
-        return classroom.name.includes(nameFilter !== undefined ? nameFilter : this.state.classroomNameFilter);
+        return classroom.name.toLowerCase().includes(nameFilter !== undefined ? nameFilter : this.state.classroomNameFilter);
       }).sort((c1, c2) => c1.name.localeCompare(c2.name));
     //we always sort by name first, so if two classrooms have the same value for the sort by they will be sorted by name as secondary value
 
@@ -118,8 +118,8 @@ export default class Classrooms extends React.Component {
     this.setState({'filteredClassrooms': filteredClassrooms});
   }
   classroomNameFilterChanged(c) {
-    this.setState({classroomNameFilter: c});
-    this.updateFilteredClassrooms(c);
+    this.setState({classroomNameFilter: c.toLowerCase()});
+    this.updateFilteredClassrooms(c.toLowerCase());
   }
   showClassroomsChanged(c) {
     this.showClassrooms = c;

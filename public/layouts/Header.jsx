@@ -22,6 +22,7 @@ export default class Header extends React.Component {
               <li className="list-inline-item"><NavLink exact to="/">Mappa</NavLink></li>
               <li className="list-inline-item"><NavLink exact to="/classrooms">Aule</NavLink></li>
               <li className="list-inline-item"><NavLink exact to="/lessons">Lezioni</NavLink></li>
+              <li className="list-inline-item"><NavLink exact to="/profile">Profilo</NavLink></li>
               <li className="list-inline-item"><NavLink exact to="/login">Accedi</NavLink></li>
             </ul>
           </nav>
