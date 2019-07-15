@@ -1,3 +1,7 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
 // Palette URL: http://paletton.com/#uid=35y100klsFfbsZvhwS5nEsEmCgi
 
 $color-primary-0: #F75168;	// Main Primary color */
@@ -49,20 +53,3 @@ $free-classroom-color : #37c861;
   opacity: $guidelines-opacity;
   z-index: -1;
 }
-
-.row-guidelines {
-  @include guidelines;
-  border-top: $guidelines-width solid;
-  border-bottom: $guidelines-width solid;
-}
-
-.column-guidelines {
-  @include guidelines;
-  border-left: $guidelines-width solid;
-  border-right: $guidelines-width solid;
-}
-
-input:focus {
-  outline: none;
-}
-

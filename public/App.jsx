@@ -4,14 +4,15 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 import Main from "./pages/Main";
 import Classrooms from "./pages/Classrooms";
+import Authentication from "./pages/Authentication";
 import Lessons from "./pages/Lessons";
 import NotFound from "./pages/NotFound";
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 import './App.scss'
-
 import ClassroomUtils from './helpers/classroomUtils'
 import axios from 'axios';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -46,6 +47,8 @@ class App extends React.Component {
                 <Route exact path="/" render={() => <Main classroomStaticData={this.state.classroomStaticData}/>}/>
                 <Route path="/classrooms" render={() => <Classrooms classroomStaticData={this.state.classroomStaticData}/>}/>
                 <Route path="/lessons" component={Lessons} />
+                <Route path="/login" render={() => <Authentication isRegister={false} />} />
+                <Route path="/register" render={() => <Authentication isRegister={true} />} />
                 <Route component={NotFound} />
               </Switch>
             </CSSTransition>

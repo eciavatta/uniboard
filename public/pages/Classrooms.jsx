@@ -6,11 +6,12 @@ import ClassroomList from "../components/classroom/ClassroomsList";
 import './Classrooms.scss';
 import ClassroomDetails from "../components/classroom/ClassroomDetails";
 import InputField from '../components/inputs/InputField'
-import SelectField from '../components/inputs/SelectField'
+import CheckboxField from '../components/inputs/CheckboxField'
 import axios from "axios";
 import ClassroomUtils from "../helpers/classroomUtils";
+import SelectField from "../components/inputs/SelectField";
 
-const REFRESH_TIMEOUT = 5 * 1000; //TODO solo durante testing, poi lo mettiamo a 1 minuto o più
+const REFRESH_TIMEOUT = 500 * 1000; //TODO solo durante testing, poi lo mettiamo a 1 minuto o più
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
 
 export default class Classrooms extends React.Component {
@@ -117,7 +118,7 @@ export default class Classrooms extends React.Component {
     let selectedClassroom = ClassroomUtils.findClassroomById(window.location.hash.substr(1), this.props.classroomStaticData);
     return (
       <SinglePage>
-        <div className="classrooms container-fluid p-lg-3 p-xl-5">
+        <div className="classrooms container-fluid">
           <div className="row position-relative">
             <div className="col-md-3">
               <div className="filter-box position-relative">
@@ -129,16 +130,21 @@ export default class Classrooms extends React.Component {
               <div className="filter-box selects position-relative">
                 <div className="row">
                   <div className="col-auto">
-                    <SelectField checked={true} onChange={this.showClassroomsChanged}>Aule</SelectField>
+                    <CheckboxField checked={true} onChange={this.showClassroomsChanged}>Aule</CheckboxField>
                   </div>
                   <div className="col-auto">
-                    <SelectField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</SelectField>
+                    <CheckboxField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</CheckboxField>
                   </div>
                   <div className="col-auto">
-                    <SelectField checked={true} onChange={this.showFloor1Changed}>Piano terra</SelectField>
+                    <CheckboxField checked={true} onChange={this.showFloor1Changed}>Piano terra</CheckboxField>
                   </div>
                   <div className="col-auto">
-                    <SelectField checked={true} onChange={this.showFloor2Changed}>Primo piano</SelectField>
+                    <CheckboxField checked={true} onChange={this.showFloor2Changed}>Primo piano</CheckboxField>
+                  </div>
+                  <div className="col-auto">
+                    <SelectField options={{'name': 'Nome', 'proximity': 'Vicinanza'}} onChange={(value) => console.log(value)} value={'name'}>
+                      Ordina per:
+                    </SelectField>
                   </div>
                 </div>
                 <div className="column-guidelines" />
@@ -146,13 +152,12 @@ export default class Classrooms extends React.Component {
             </div>
             <div className="col-md-auto">
               <div className="new-box">
-
-
+                Legenda
               </div>
             </div>
             <div className="row-guidelines" />
           </div>
-          <div className="row position-relative" style={{marginTop: '15px', height: 'calc(100% - 50px)'}}>
+          <div className="row position-relative classrooms-row">
             <div className="col-md-3 h-100">
               <ClassroomList classrooms={this.state.filteredClassrooms} classroomActivities={this.state.classroomActivities}/>
               <div className="column-guidelines" style={{left: '15px', right: '15px', bottom: '-15px'}} />

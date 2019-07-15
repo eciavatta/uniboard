@@ -53,9 +53,9 @@ export default class ClassroomDetails extends React.Component {
 
   render() {
     return (
-      <div className="classroom-details">
+      <div className="classroom-details scrollable h-100 position-relative">
         {this.props.classroom ? this.showInfo() : this.noInfo()}
-        <div className="column-guidelines" style={{left: '15px', right: '15px', bottom: '-15px'}} />
+        <div className="column-guidelines" style={{bottom: '-15px'}} />
       </div>
     );
   }

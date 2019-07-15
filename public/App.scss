@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700&display=swap');
+
 @import 'styles/scrollbars.scss';
 @import 'globals.scss';
 
@@ -45,3 +47,20 @@ body {
   width: 100%;
   transition: width 250ms ease-in;
 }
+
+.row-guidelines {
+  @include guidelines;
+  border-top: $guidelines-width solid;
+  border-bottom: $guidelines-width solid;
+}
+
+.column-guidelines {
+  @include guidelines;
+  border-left: $guidelines-width solid;
+  border-right: $guidelines-width solid;
+}
+
+input:focus {
+  outline: none;
+}
+
