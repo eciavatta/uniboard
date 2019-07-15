@@ -8,8 +8,9 @@ body {
   height: 100vh;
 
   @include squared-background;
-
   color: $color-text-0;
+  overflow: hidden;
+
 }
 
 .page-loader {
@@ -60,7 +61,6 @@ body {
   border-right: $guidelines-width solid;
 }
 
-input:focus {
+input:focus, button:focus, select:focus {
   outline: none;
 }
-

@@ -2,90 +2,186 @@
 
 .page-header {
 
-  position: relative;
-  height: 90px;
-  z-index: 0;
+  height: 75px;
+  margin-bottom: 25px;
 
-  .header-wrapper {
-    height: 80px;
-  }
+  border-bottom: 3px solid;
+  @include pencil-solid-border;
 
-  .bottom-border {
-    @include pencil-solid-border;
-    border-bottom: 3px solid;
-    opacity: 0.6;
-  }
+  .header-desktop {
 
-  .page-logo {
-    .logo-wrapper {
-      padding: 5px;
-    }
-
-    img {
-      height: 60px;
-      padding: 5px 15px;
-    }
-  }
-
-  .page-nav {
-    padding: 15px 25px;
-
-    li {
-      padding: 7px 0;
-
-      a {
-        color: #1F3356;
-        font-size: 18px;
-        padding: 4px 25px;
+    .page-logo {
+      .logo-wrapper {
+        padding: 5px;
       }
 
-      a:hover {
-        text-decoration: none;
+      img {
+        height: 62px;
+        padding: 5px 15px;
       }
 
-      a.active {
-        background-image: url(/static/vectors/nav-hover.svg);
-        background-size: 90px;
-        background-position: center;
-        background-repeat: no-repeat;
-        color: white;
+      .column-guidelines {
+        left: 19px;
+        width: 264px;
+        border-width: 3px;
+        @include pencil-dashed-border;
       }
+    }
 
+    .page-nav {
+      padding: 15px 25px;
 
+      li {
+        padding: 7px 0;
+
+        a {
+          color: $color-text-0;
+          font-size: 18px;
+          padding: 4px 25px;
+        }
+
+        a:hover {
+          text-decoration: none;
+        }
+
+        a.active {
+          background-image: url(/static/vectors/nav-item-bg.svg);
+          background-size: 90px;
+          background-position: center;
+          background-repeat: no-repeat;
+          color: white;
+        }
+      }
+    }
+
+    .row-guidelines {
+      top: 10px;
+      bottom: 10px;
+      border-width: 3px;
+      @include pencil-dashed-border;
+    }
+
+    @include media-breakpoint-down(sm) {
+      .column-guidelines, .row-guidelines {
+        display: none;
+      }
     }
   }
 
-  .horizontal-sketch {
-    position: absolute;
-    left: 0;
-    top: 10px;
-    bottom: 32px;
-    width: 100%;
-
-    border-top: 3px solid;
-    border-bottom: 3px solid;
-    @include pencil-dashed-border;
-    opacity: 0.4;
-    z-index: -1;
-  }
-
-  .vertical-logo-sketch {
-    position: absolute;
-    left: 35px;
-    top: 0;
-    bottom: 10px;
-    width: 252px;
-
-    border-left: 3px solid;
-    border-right: 3px solid;
-    @include pencil-dashed-border;
-    opacity: 0.4;
-    z-index: -1;
-  }
+  /* PAGE LOADER */
 
   .page-header-loader {
+    position: absolute;
+    top: 75px;
     height: 3px;
     background-color: $color-secondary-0;
+    left: 0;
+  }
+
+  /* MOBILE */
+
+  .header-mobile {
+    .row-guidelines {
+      top: 8px;
+      bottom: 10px;
+    }
+
+    .menu-button, .options-button {
+      width: fit-content;
+      margin: 8px 0;
+      border: 2px solid;
+      @include pencil-solid-border;
+
+      button {
+        width: 50px;
+        height: 50px;
+        background: none;
+        border: none;
+      }
+
+      svg {
+        fill: $color-text-0;
+      }
+
+      .column-guidelines {
+        left: -2px;
+        right: -2px;
+        top: -10px;
+        bottom: -12px;
+      }
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 26px;
+      padding-top: 20px;
+      padding-bottom: 13px;
+    }
+
+    @include media-breakpoint-up(md) {
+      .row-guidelines {
+        display: none;
+      }
+    }
+  }
+
+  /* MOBILE MENU */
+
+  .mobile-menu-container {
+    position: fixed;
+    top: 75px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 15px 20px;
+    z-index: 10;
+    background: #fff;
+    @include squared-background;
+  }
+
+  .mobile-menu {
+    position: relative;
+    padding: 30px 30px;
+
+    .menu-item {
+      border: 2px solid #000;
+      text-align: center;
+      padding: 20px;
+
+      svg {
+        width: 50px;
+        height: 50px;
+      }
+
+      span {
+        display: block;
+        margin-top: 10px;
+        color: $color-text-0;
+        font-size: 18px;
+      }
+
+      .row-guidelines {
+        top: 0;
+        bottom: 0;
+        left: -15px;
+        right: -15px;
+      }
+
+      .column-guidelines {
+        top: -20px;
+        bottom: -20px;
+        left: 15px;
+        right: 15px;
+      }
+    }
+
+    .row-guidelines {
+      left: -15px;
+      right: -15px;
+    }
+  }
+
+  .menu-closed {
     display: none;
   }
 

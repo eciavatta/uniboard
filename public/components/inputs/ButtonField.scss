@@ -1,0 +1,33 @@
+@import "../../globals.scss";
+
+.button-field-container {
+  width: auto;
+  border: 2px solid;
+  padding: 3px;
+  @include pencil-solid-border;
+
+  .row-guidelines {
+    left: -15px;
+    right: -15px;
+    top: -2px;
+    bottom: -2px;
+  }
+
+  .column-guidelines {
+    left: -2px;
+    right: -2px;
+    top: -15px;
+    bottom: -15px;
+  }
+}
+
+.button-field {
+  width: 100%;
+  padding: 5px 0;
+
+  border: 2px solid;
+  @include pencil-solid-border;
+
+  background: $color-secondary-0;
+  color: #fff;
+}
