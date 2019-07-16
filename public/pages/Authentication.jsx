@@ -67,31 +67,34 @@ export default class extends React.Component {
 
   onLoginSubmit(e) {
     if (!this.state.loginDisabled) {
-      console.log(this.state);
-      this.setState({
-        'loginDisabled': true,
-        'invalidLoginCredentials': false,
-        'loginError': false
-      });
-      axios.post('/api/login',{'username':this.state.loginId, 'password': this.state.loginPassword})
-        .then(response => {
-          window.isLogged = true;
-          this.doRedirect();
-        }, err => {
-          if (err.response.status === 401) {
-            this.setState({
-              'invalidLoginCredentials': true,
-              'loginDisabled': false
-            });
-          } else {
-            this.setState({
-              'loginError': true,
-              'loginDisabled': false
-            });
-          }
-        });
+      this.doLogin(this.state.loginId, this.state.loginPassword);
     }
     e.preventDefault();
+  }
+
+  doLogin(username, password) {
+    this.setState({
+      'loginDisabled': true,
+      'invalidLoginCredentials': false,
+      'loginError': false
+    });
+    axios.post('/api/login',{'username':username, 'password': password})
+      .then(response => {
+        window.isLogged = true;
+        this.doRedirect();
+      }, err => {
+        if (err.response.status === 401) {
+          this.setState({
+            'invalidLoginCredentials': true,
+            'loginDisabled': false
+          });
+        } else {
+          this.setState({
+            'loginError': true,
+            'loginDisabled': false
+          });
+        }
+      });
   }
 
   doRedirect() {
@@ -116,17 +119,17 @@ export default class extends React.Component {
           'duplicateRegisterEmail': false,
           'registerError': false
         });
+        const username = this.state.registerUsername;
+        const password = this.state.registerPassword;
         axios.post('/api/users', {
-          'username': this.state.registerUsername,
+          'username': username,
           'email': this.state.registerEmail,
-          'password': this.state.registerPassword
+          'password': password
         }).then(
           res => {
             //TODO alert
             alert("Registrato con successo");
-            this.setState({
-              'registerDisabled': false
-            });
+            this.doLogin(username, password);
           }, err => {
             if (err.response.status === 409 && err.response.data.duplicateFields) {
               let duplicateUsername = false;
