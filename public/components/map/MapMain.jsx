@@ -1,6 +1,5 @@
 import React from "react";
 import MapGraphics from "./MapGraphics";
-import Profile from "../profile/Profile";
 import axios from "axios";
 import ClassroomUtils from "../../helpers/classroomUtils";
 
@@ -78,7 +77,6 @@ export default class MapMain extends React.Component {
           selectedTime={ClassroomUtils.dateToHalfHoursTime(new Date())} //TODO slider
           classrooms={this.props.classroomStaticData}
           classroomActivities={this.state.classroomActivities}/>
-        <Profile/>
       </div>
     );
   }

@@ -8,7 +8,7 @@ import './Main.scss';
 export default class Main extends React.Component {
   render() {
     return (
-      <SinglePage pageTitle="Mappa">
+      <SinglePage isLogged={this.props.isLogged} pageTitle="Mappa">
         <MapMain classroomStaticData={this.props.classroomStaticData} initialFloor={1} />
       </SinglePage>
     );

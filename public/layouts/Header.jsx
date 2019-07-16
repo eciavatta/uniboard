@@ -3,6 +3,7 @@ import {NavLink, Link} from "react-router-dom";
 import SVG from '../helpers/SvgLoader'
 
 import './Header.scss';
+import axios from "axios";
 
 export default class Header extends React.Component {
 
@@ -12,10 +13,26 @@ export default class Header extends React.Component {
     this.state = {
       menuClosed: true,
       menuIcon: "menu-icon.svg",
-      optionsButtonVisible: props.optionsButtonVisible
+      optionsButtonVisible: props.optionsButtonVisible,
+      isLogged: props.isLogged !== undefined ? props.isLogged : window.isLogged
     };
 
     this.toggleMenu = this.toggleMenu.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.isLogged === undefined) {
+      axios.get('/api/users/self').then(
+        res => {
+          window.isLogged = true;
+          this.setState({isLogged: true});
+        },
+        err => {
+          window.isLogged = false;
+          this.setState({isLogged: false})
+        }
+      );
+    }
   }
 
   toggleMenu() {
@@ -61,8 +78,9 @@ export default class Header extends React.Component {
                 <li className="list-inline-item"><NavLink exact to="/">Mappa</NavLink></li>
                 <li className="list-inline-item"><NavLink exact to="/classrooms">Aule</NavLink></li>
                 <li className="list-inline-item"><NavLink exact to="/lessons">Lezioni</NavLink></li>
-                <li className="list-inline-item"><NavLink exact to="/profile">Profilo</NavLink></li>
-                <li className="list-inline-item"><NavLink exact to="/login">Accedi</NavLink></li>
+                {this.state.isLogged
+                  ? <li className="list-inline-item"><NavLink exact to="/profile">Profilo</NavLink></li>
+                  : <li className="list-inline-item"><NavLink exact to="/login">Accedi</NavLink></li>}
               </ul>
             </nav>
           </div>

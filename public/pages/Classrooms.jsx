@@ -15,6 +15,11 @@ import ButtonField from "../components/inputs/ButtonField";
 const REFRESH_TIMEOUT = 500 * 1000; //TODO solo durante testing, poi lo mettiamo a 1 minuto o più
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
 
+const SORT_BY_OPTIONS = {'name': "Nome", 'free': "Libere"};
+if (window.uniboardApp) {
+  SORT_BY_OPTIONS.proximity = "Vicinanza";
+}
+
 export default class Classrooms extends React.Component {
   constructor(props) {
     super(props);
@@ -97,8 +102,26 @@ export default class Classrooms extends React.Component {
       if (!window.uniboardApp) {
         //TODO alert
         alert("Scarica l'app di uniboard per poter usare questa funzionalità");
+        this.setState({'sortBy': 'name'});
       } else {
-        //TODO
+        const beacons = JSON.parse(window.uniboardApp.getBeacons());
+        if (Object.keys(beacons).length === 0) {
+          console.log("No beacon");
+          alert("Non è stato individuato alcun beacon, assicurati di aver attivato il bluethooth");
+          this.setState({'sortBy': 'name'});
+        } else {
+          //console.log(beacons);
+          //console.log(filteredClassrooms.filter(c => c.beaconUuid).map(c => c.beaconUuid));
+          const classToDist = (classroom) => {
+            if (!classroom.beaconUuid || !beacons[classroom.beaconUuid]) {
+              return 1000;
+            } else {
+              console.log("Beacon of " + classroom.name);
+              return beacons[classroom.beaconUuid];
+            }
+          };
+          filteredClassrooms.sort((c1, c2) => classToDist(c1) - classToDist(c2));
+        }
       }
     } else if (this.state.sortBy === 'free') {
       filteredClassrooms.sort((c1, c2) => {
@@ -132,6 +155,7 @@ export default class Classrooms extends React.Component {
     });
   }
   sortByChanged(c) {
+    console.log(c);
     this.setState({
       'sortBy': c
     });
@@ -155,7 +179,7 @@ export default class Classrooms extends React.Component {
     ) : '';
 
     return (
-      <SinglePage hasOptions={true} pageTitle="Aule" onOptionsToggle={this.onOptionsToggle}>
+      <SinglePage isLogged={this.props.isLogged} hasOptions={true} pageTitle="Aule" onOptionsToggle={this.onOptionsToggle}>
         <div className="classrooms container-fluid">
           { legend }
           { options }
@@ -196,7 +220,7 @@ export default class Classrooms extends React.Component {
           <div className="filter-box selects position-relative">
             <div className="row">
               <div className="col-auto">
-                <SelectField options={{'name': 'Nome', 'free': 'Libere', 'proximity': 'Vicinanza'}} onChange={this.sortByChanged} value={'name'}>
+                <SelectField options={SORT_BY_OPTIONS} onChange={this.sortByChanged} value={this.state.sortBy}>
                   Ordina per:
                 </SelectField>
               </div>
