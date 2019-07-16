@@ -25,7 +25,8 @@
     ],
     "roomType":"Laboratory",
     "floor":1,
-    "code":2007
+    "code":2007,
+    "beaconUuid": "e2c56db5-dffb-48d2-b060-d0f5a71096e0"
   },
   {
     "name":"Laboratorio Disegno 2.17",
@@ -277,7 +278,8 @@
     ],
     "roomType":"Classroom",
     "floor":1,
-    "code":2006
+    "code":2006,
+    "beaconUuid": "c388fcb3-5074-4e0d-89ec-f0a09b0bc581"
   },
   {
     "name":"Aula 2.1",

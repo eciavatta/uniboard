@@ -21,7 +21,6 @@ export default class Header extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Banana");
     if (this.props.isLogged === undefined) {
       axios.get('/api/users/self').then(
         res => {
