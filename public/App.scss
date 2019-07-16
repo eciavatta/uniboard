@@ -64,3 +64,17 @@ body {
 input:focus, button:focus, select:focus {
   outline: none;
 }
+
+@include media-breakpoint-down(xs) {
+  .mobile-fixed {
+    position: fixed !important;
+    top: 75px;
+    left: 0;
+    right: 0;
+    height: 100%;
+    padding: 10px 20px;
+    z-index: 10;
+    background: #fff;
+    @include squared-background;
+  }
+}

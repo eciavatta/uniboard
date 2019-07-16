@@ -41,7 +41,7 @@ export default class Lessons extends React.Component {
 
   render() {
     return (
-      <SinglePage>
+      <SinglePage pageTitle="Lezioni">
         {this.showTableOrOther()}
       </SinglePage>
     );

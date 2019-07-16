@@ -5,27 +5,40 @@
   max-height: calc(100vh - 90px);
   padding: 0;
 
-  .filter-box {
-    padding: 15px 25px;
+  .page-options {
+    position: relative;
 
-    .column-guidelines {
-      top: -15px;
-      bottom: -15px;
+    .filter-box {
+      padding: 15px 25px;
+
+      .column-guidelines {
+        top: -15px;
+        bottom: -15px;
+      }
+    }
+
+    .selects {
+      padding-top: 20px;
+      padding-bottom: 21px;
+    }
+
+    &.mobile-fixed {
+      padding: 30px;
     }
   }
 
-  .selects {
-    padding-top: 20px;
-    padding-bottom: 21px;
-  }
+
 
   @include media-breakpoint-up(lg) {
     padding: 20px 50px;
   }
 
   .classrooms-row {
-    margin-top: 15px;
-    height: calc(100% - 90px);
+    height: calc(100% - 35px);
+
+    > div {
+      margin-bottom: 25px;
+    }
   }
 }
 

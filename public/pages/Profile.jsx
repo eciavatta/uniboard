@@ -129,7 +129,7 @@ export default class extends React.Component {
 
   render() {
     return (
-      <SinglePage>
+      <SinglePage pageTitle="Profilo">
         {this.renderLoadingOrError()}
         {this.renderProfile()}
       </SinglePage>

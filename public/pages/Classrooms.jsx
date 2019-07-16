@@ -10,6 +10,7 @@ import CheckboxField from '../components/inputs/CheckboxField'
 import axios from "axios";
 import ClassroomUtils from "../helpers/classroomUtils";
 import SelectField from "../components/inputs/SelectField";
+import ButtonField from "../components/inputs/ButtonField";
 
 const REFRESH_TIMEOUT = 500 * 1000; //TODO solo durante testing, poi lo mettiamo a 1 minuto o più
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
@@ -18,29 +19,36 @@ export default class Classrooms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'classroomActivities': {},
-      'filteredClassrooms': this.props.classroomStaticData,
-      'classroomNameFilter': "",
-      'showClassrooms': true,
-      'showLaboratories': true,
-      'sortBy': 'name',
+      isMobile: true,
+      classroomActivities: {},
+      filteredClassrooms: this.props.classroomStaticData,
+      classroomNameFilter: "",
+      showClassrooms: true,
+      showLaboratories: true,
+      sortBy: 'name',
+      optionsClosed: true
     };
 
     this.keepUpdating = true;
 
     this.updateData = this.updateData.bind(this);
+    this.checkIfMobile = this.checkIfMobile.bind(this);
     this.showClassroomsChanged = this.showClassroomsChanged.bind(this);
     this.showLaboratoriesChanged = this.showLaboratoriesChanged.bind(this);
     this.classroomNameFilterChanged = this.classroomNameFilterChanged.bind(this);
     this.sortByChanged = this.sortByChanged.bind(this);
+    this.onOptionsToggle = this.onOptionsToggle.bind(this);
   }
 
   componentWillUnmount() {
-    this.keepUpdating = false;//or we get a memory leak
+    this.keepUpdating = false; //or we get a memory leak
+    window.removeEventListener('resize', this.checkIfMobile);
   }
 
   componentDidMount() {
     this.updateData();
+    this.checkIfMobile();
+    window.addEventListener('resize', this.checkIfMobile);
   }
 
   updateData() {
@@ -61,6 +69,10 @@ export default class Classrooms extends React.Component {
         }
       }
     );
+  }
+
+  checkIfMobile() {
+    this.setState({ isMobile: window.innerWidth < 768 });
   }
 
   getFilteredClassroom() {
@@ -125,43 +137,29 @@ export default class Classrooms extends React.Component {
     });
   }
 
+  onOptionsToggle(optionsVisible) {
+    this.setState({optionsClosed: !optionsVisible});
+  }
+
   render() {
     let selectedClassroom = ClassroomUtils.findClassroomById(window.location.hash.substr(1), this.props.classroomStaticData);
+    let options = '';
+    if (!this.state.isMobile || !this.state.optionsClosed) {
+      options = this.getOptions();
+    }
+
+    let legend = this.state.isMobile ? (
+      <div className="row">
+        { this.getLegend() }
+      </div>
+    ) : '';
+
     return (
-      <SinglePage>
+      <SinglePage hasOptions={true} pageTitle="Aule" onOptionsToggle={this.onOptionsToggle}>
         <div className="classrooms container-fluid">
-          <div className="row position-relative d-none d-lg-flex">
-            <div className="col-md-3">
-              <div className="filter-box position-relative">
-                <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} value={this.state.classroomNameFilter} />
-                <div className="column-guidelines" />
-              </div>
-            </div>
-            <div className="col-md">
-              <div className="filter-box selects position-relative">
-                <div className="row">
-                  <div className="col-auto">
-                    <SelectField options={{'name': 'Nome', 'free': 'Libere', 'proximity': 'Vicinanza'}} onChange={this.sortByChanged} value={'name'}>
-                      Ordina per:
-                    </SelectField>
-                  </div>
-                  <div className="col-auto">
-                    <CheckboxField checked={true} onChange={this.showClassroomsChanged}>Aule</CheckboxField>
-                  </div>
-                  <div className="col-auto">
-                    <CheckboxField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</CheckboxField>
-                  </div>
-                </div>
-                <div className="column-guidelines" />
-              </div>
-            </div>
-            <div className="col-md-auto">
-              <div className="new-box">
-                Legenda
-              </div>
-            </div>
-            <div className="row-guidelines" />
-          </div>
+          { legend }
+          { options }
+
           <div className="row position-relative classrooms-row">
             <div className="col-md-3 h-100">
               <ClassroomList classrooms={this.getFilteredClassroom()} classroomActivities={this.state.classroomActivities}/>
@@ -177,6 +175,59 @@ export default class Classrooms extends React.Component {
         </div>
       </SinglePage>
     );
+  }
+
+  getOptions() {
+    let closeButton = this.state.isMobile ? (
+      <div className="col-auto">
+        <ButtonField text="Salva" onClick={() => this.setState({optionsClosed: true})} />
+      </div>
+    ) : '';
+
+    return (
+      <div className="row page-options mobile-fixed align-items-start">
+        <div className="col-md-3">
+          <div className="filter-box position-relative">
+            <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} value={this.state.classroomNameFilter} />
+            <div className="column-guidelines" />
+          </div>
+        </div>
+        <div className="col-md">
+          <div className="filter-box selects position-relative">
+            <div className="row">
+              <div className="col-auto">
+                <SelectField options={{'name': 'Nome', 'free': 'Libere', 'proximity': 'Vicinanza'}} onChange={this.sortByChanged} value={'name'}>
+                  Ordina per:
+                </SelectField>
+              </div>
+              <div className="col-auto">
+                <CheckboxField checked={true} onChange={this.showClassroomsChanged}>Aule</CheckboxField>
+              </div>
+              <div className="col-auto">
+                <CheckboxField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</CheckboxField>
+              </div>
+
+              { closeButton }
+            </div>
+            <div className="column-guidelines" />
+          </div>
+        </div>
+
+        { this.state.isMobile ? '' : this.getLegend() }
+
+        <div className="row-guidelines" />
+      </div>
+    )
+  }
+
+  getLegend() {
+    return (
+      <div className="col-md-auto">
+        <div className="new-box">
+          Legenda
+        </div>
+      </div>
+    )
   }
 
 }

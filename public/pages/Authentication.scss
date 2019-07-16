@@ -2,14 +2,14 @@
 
 .login {
 
-  height: calc(100vh - 90px); // minus header size
+  height: calc(100vh - 100px); // minus header size
+
+  .scrollable {
+    padding-bottom: 20px;
+  }
 
   .login-form, .register-form  {
     padding: 20px 30px;
-  }
-
-  .register-form {
-
   }
 
   .form-title {

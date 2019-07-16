@@ -6,6 +6,7 @@ import CheckboxField from "../components/inputs/CheckboxField";
 import SinglePage from "../layouts/SinglePage";
 import {Link, Redirect} from "react-router-dom";
 import axios from "axios";
+import ButtonField from "../components/inputs/ButtonField";
 
 function validateUsername(username) {
   return username.length >= 4;
@@ -197,9 +198,9 @@ export default class extends React.Component {
       return <SinglePage><p>Caricando...</p></SinglePage>
     }
     return (
-      <SinglePage>
+      <SinglePage pageTitle={this.props.isRegister ? 'Registrati' : 'Accedi'}>
         <div className="login container">
-          <div className="row h-100">
+          <div className="row scrollable h-100">
             <div className={'col-md-6 align-self-center d-md-block' + (this.props.isRegister ? ' d-none' : '')}>
               <div className="login-form position-relative">
                 <div className="form-title position-relative">
@@ -233,7 +234,7 @@ export default class extends React.Component {
 
                   <div className="row align-self-center">
                     <div className="col-auto">
-                      <button disabled={this.state.loginDisabled} type="submit" className="btn btn-primary">Accedi</button>
+                      <ButtonField disabled={this.state.loginDisabled} isSubmit={true} text="Accedi" />
                     </div>
                     <div className="col-auto d-md-none">
                       oppure <Link to="/register">registrati</Link>
@@ -301,7 +302,7 @@ export default class extends React.Component {
 
                   <div className="row align-self-center">
                     <div className="col-auto">
-                      <button disabled={this.state.registerDisabled} type="submit" className="btn btn-primary">Registrati</button>
+                      <ButtonField disabled={this.state.registerDisabled} isSubmit={true} text="Registrati" />
                     </div>
                     <div className="col-auto d-md-none">
                       <div className="auth-alternatives">

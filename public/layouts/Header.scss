@@ -82,19 +82,19 @@
 
   .header-mobile {
     .row-guidelines {
-      top: 8px;
-      bottom: 10px;
+      top: 13px;
+      bottom: 14px;
     }
 
     .menu-button, .options-button {
       width: fit-content;
-      margin: 8px 0;
+      margin: 13px 0;
       border: 2px solid;
       @include pencil-solid-border;
 
       button {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         background: none;
         border: none;
       }
@@ -106,15 +106,14 @@
       .column-guidelines {
         left: -2px;
         right: -2px;
-        top: -10px;
-        bottom: -12px;
+        top: -15px;
+        bottom: -18px;
       }
     }
 
     .page-title {
-      text-align: center;
-      font-size: 26px;
-      padding-top: 20px;
+      font-size: 22px;
+      padding-top: 25px;
       padding-bottom: 13px;
     }
 
@@ -127,18 +126,6 @@
 
   /* MOBILE MENU */
 
-  .mobile-menu-container {
-    position: fixed;
-    top: 75px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 15px 20px;
-    z-index: 10;
-    background: #fff;
-    @include squared-background;
-  }
-
   .mobile-menu {
     position: relative;
     padding: 30px 30px;
@@ -146,11 +133,11 @@
     .menu-item {
       border: 2px solid #000;
       text-align: center;
-      padding: 20px;
+      padding: 15px;
 
       svg {
-        width: 50px;
-        height: 50px;
+        width: 35px;
+        height: 35px;
       }
 
       span {
@@ -158,6 +145,10 @@
         margin-top: 10px;
         color: $color-text-0;
         font-size: 18px;
+      }
+
+      span:focus {
+        text-decoration: none;
       }
 
       .row-guidelines {

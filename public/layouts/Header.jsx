@@ -11,7 +11,8 @@ export default class Header extends React.Component {
 
     this.state = {
       menuClosed: true,
-      menuIcon: "menu-icon.svg"
+      menuIcon: "menu-icon.svg",
+      optionsButtonVisible: props.optionsButtonVisible
     };
 
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -19,6 +20,10 @@ export default class Header extends React.Component {
 
   toggleMenu() {
     if (this.state.menuClosed) {
+      if (this.props.onOptionsToggle) {
+        this.props.onOptionsToggle(false);
+      }
+
       this.setState({ menuClosed: false, menuIcon: "menu-icon-close.svg" })
     } else {
       this.setState({ menuClosed: true, menuIcon: "menu-icon.svg" })
@@ -26,6 +31,17 @@ export default class Header extends React.Component {
   }
 
   render() {
+    let optionsButton = '';
+    if (this.props.hasOptions) {
+      optionsButton = <div className="col-auto">
+        <div className="options-button position-relative">
+          <button onClick={() => this.props.onOptionsToggle(true)}><SVG name="options-icon.svg" /></button>
+
+          <div className="column-guidelines" />
+        </div>
+      </div>
+    }
+
     return (
       <header className="page-header container-fluid position-relative">
         <div className="header-desktop">
@@ -63,22 +79,18 @@ export default class Header extends React.Component {
               </div>
             </div>
 
-            <div className="col align-content-center">
-              <h1 className="page-title">Lezioni</h1>
+            <div className="col">
+              <h1 className={"page-title text-" + (this.props.hasOptions ? 'center' : 'right') }>
+                {this.props.pageTitle}
+              </h1>
             </div>
 
-            <div className="col-auto">
-              <div className="options-button position-relative">
-                <button><SVG name="options-icon.svg" /></button>
-
-                <div className="column-guidelines" />
-              </div>
-            </div>
+            { optionsButton }
           </div>
 
           <div className="row-guidelines" />
 
-          <div className={"mobile-menu-container d-md-none" + (this.state.menuClosed ?
+          <div className={"mobile-fixed d-md-none" + (this.state.menuClosed ?
             ' menu-closed' : '')}>
             <div className="mobile-menu position-relative">
               <div className="row" style={{marginBottom: '20px'}}>

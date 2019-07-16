@@ -8,7 +8,7 @@ export default class NotFound extends React.Component {
 
   render() {
     return (
-      <SinglePage>
+      <SinglePage pageTitle="Errore 404">
         Pagina non trovata
       </SinglePage>
     );
