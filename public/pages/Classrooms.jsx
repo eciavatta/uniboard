@@ -161,7 +161,7 @@ export default class Classrooms extends React.Component {
     ) : '';
 
     return (
-      <SinglePage hasOptions={true} pageTitle="Aule" onOptionsToggle={this.onOptionsToggle}>
+      <SinglePage isLogged={this.props.isLogged} hasOptions={true} pageTitle="Aule" onOptionsToggle={this.onOptionsToggle}>
         <div className="classrooms container-fluid">
           { legend }
           { options }

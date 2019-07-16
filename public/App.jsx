@@ -19,7 +19,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {classroomStaticData: []};
+    this.state = {classroomStaticData: [], isLogged: false};
 
     this.getClassroomData = this.getClassroomData.bind(this);
 

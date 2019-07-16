@@ -118,6 +118,7 @@ export default class extends React.Component {
   doLogout() {
     axios.get('/api/logout').then(
       res => {
+        window.isLogged = false;
         this.props.history.push("/login");
       },
       err => {
@@ -129,7 +130,7 @@ export default class extends React.Component {
 
   render() {
     return (
-      <SinglePage pageTitle="Profilo">
+      <SinglePage isLogged={true} pageTitle="Profilo">
         {this.renderLoadingOrError()}
         {this.renderProfile()}
       </SinglePage>

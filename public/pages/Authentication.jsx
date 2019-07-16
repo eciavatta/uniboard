@@ -75,6 +75,7 @@ export default class extends React.Component {
       });
       axios.post('/api/login',{'username':this.state.loginId, 'password': this.state.loginPassword})
         .then(response => {
+          window.isLogged = true;
           this.doRedirect();
         }, err => {
           if (err.response.status === 401) {
@@ -198,7 +199,7 @@ export default class extends React.Component {
       return <SinglePage><p>Caricando...</p></SinglePage>
     }
     return (
-      <SinglePage pageTitle={this.props.isRegister ? 'Registrati' : 'Accedi'}>
+      <SinglePage pageTitle={this.props.isRegister ? 'Registrati' : 'Accedi'} isLogged={false}>
         <div className="login container">
           <div className="row scrollable h-100">
             <div className={'col-md-6 align-self-center d-md-block' + (this.props.isRegister ? ' d-none' : '')}>
