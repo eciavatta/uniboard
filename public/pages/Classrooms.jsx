@@ -15,6 +15,11 @@ import ButtonField from "../components/inputs/ButtonField";
 const REFRESH_TIMEOUT = 500 * 1000; //TODO solo durante testing, poi lo mettiamo a 1 minuto o più
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
 
+const SORT_BY_OPTIONS = {'name': "Nome", 'free': "Libere"};
+if (window.uniboardApp) {
+  SORT_BY_OPTIONS.proximity = "Vicinanza";
+}
+
 export default class Classrooms extends React.Component {
   constructor(props) {
     super(props);
@@ -95,8 +100,8 @@ export default class Classrooms extends React.Component {
 
     if (this.state.sortBy === 'proximity') {
       if (!window.uniboardApp) {
-        //TODO alert
         alert("Scarica l'app di uniboard per poter usare questa funzionalità");
+        this.setState({'sortBy': 'name'});
       } else {
         //TODO
       }
@@ -132,6 +137,7 @@ export default class Classrooms extends React.Component {
     });
   }
   sortByChanged(c) {
+    console.log(c);
     this.setState({
       'sortBy': c
     });
@@ -196,7 +202,7 @@ export default class Classrooms extends React.Component {
           <div className="filter-box selects position-relative">
             <div className="row">
               <div className="col-auto">
-                <SelectField options={{'name': 'Nome', 'free': 'Libere', 'proximity': 'Vicinanza'}} onChange={this.sortByChanged} value={'name'}>
+                <SelectField options={SORT_BY_OPTIONS} onChange={this.sortByChanged} value={this.state.sortBy}>
                   Ordina per:
                 </SelectField>
               </div>
