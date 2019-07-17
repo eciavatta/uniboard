@@ -93,7 +93,7 @@ export default class MapGraphics extends React.Component {
     this.inputTarget = null;
   }
   registerInputEnd() {
-    if (this.inputTarget && this.inputTarget.classList.contains("clickableMapClassroom")) {
+    if (this.inputTarget && this.inputTarget.classList.contains("clickable-map-classroom")) {
       this.props.history.push("/classrooms#" + this.inputTarget.id);
     }
   }
@@ -146,13 +146,13 @@ export default class MapGraphics extends React.Component {
     return (
       <polygon
         key={classroom._id}
-        style={{"pointerEvents": "auto"}}
+        style={{"pointerEvents": "auto", "cursor":""}}
         points={classroom.mapCoordinates}
         fill={statusToColor[ClassroomUtils.getStateOfClassroom(classroom, this.props.classroomActivities, this.props.selectedTime).code]}
         strokeWidth={4}
         stroke={this.props.location.hash.substring(1) === classroom._id ? "#483737" : "#fff"}
         id={classroom._id}
-        className="clickableMapClassroom"
+        className="clickable-map-classroom"
     />);
   }
 }
