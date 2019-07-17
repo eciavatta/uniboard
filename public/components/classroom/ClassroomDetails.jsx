@@ -89,8 +89,8 @@ export default class ClassroomDetails extends React.Component {
                              text="Effettua segnalazione" />
               </div>
               <div className="col">
-                <ButtonField onClick={() => alert(/*TODO*/"TODO")} text="Mostra su mappa" />
-              </div>
+                <ButtonField onClick={() => this.props.history.push("/#" + this.props.classroom._id)} text="Mostra su mappa" />
+            </div>
             </div>
           </div>
         </div>

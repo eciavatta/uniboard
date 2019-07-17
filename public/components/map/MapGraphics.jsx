@@ -2,7 +2,7 @@ import React from "react";
 import "./MapGraphics.scss";
 import ClassroomUtils from "../../helpers/classroomUtils";
 import {AutoSizer} from 'react-virtualized';
-import {UncontrolledReactSVGPanZoom, fitToViewer} from 'react-svg-pan-zoom';
+import {UncontrolledReactSVGPanZoom} from 'react-svg-pan-zoom';
 import Definitions from './parts/definitions';
 import Outside from './parts/outside'
 import FirstFloor from './parts/firstFloor'
@@ -19,6 +19,14 @@ function eventFire(el, etype){
   }
 }
 
+const statusToColor = [
+  "#ff8080",
+  "#ffe680",
+  "#87deaa",
+  "#87aade",
+  "none"
+];
+
 export default class MapGraphics extends React.Component {
   constructor(props) {
     super(props);
@@ -34,19 +42,29 @@ export default class MapGraphics extends React.Component {
     this.registerMouseUp = this.registerMouseUp.bind(this);
     this.renderClassroom = this.renderClassroom.bind(this);
     this.viewer = null;
+    this.prevHash = "";
   }
 
   componentDidMount() {
-    this.tryDoFit()
+    this.tryDoFit();
+    this.checkHashChanged();
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    this.tryDoFit()
+    this.tryDoFit();
+    this.checkHashChanged();
   }
 
   tryDoFit() {
     if (!this.doneFit && this.viewer) {
       this.doneFit = true;
       this.viewer.fitToViewer("center", "center");
+    }
+  }
+
+  checkHashChanged() {
+    if (this.prevHash !== this.props.location.hash && this.viewer) {
+      this.prevHash = this.props.location.hash;
+      setTimeout(() => this.viewer.fitToViewer("center", "center"), 600);
     }
   }
 
@@ -75,8 +93,8 @@ export default class MapGraphics extends React.Component {
     this.inputTarget = null;
   }
   registerInputEnd() {
-    if (this.inputTarget && this.inputTarget.className.baseVal === "clickableMapClassroom") {
-      alert(this.inputTarget.id);
+    if (this.inputTarget && this.inputTarget.classList.contains("clickableMapClassroom")) {
+      this.props.history.push("/classrooms#" + this.inputTarget.id);
     }
   }
 
@@ -125,16 +143,14 @@ export default class MapGraphics extends React.Component {
   }
 
   renderClassroom(classroom) {
-    /*
-    *         fill: "#87deaa",
-        strokeWidth: 4,
-        stroke: "#fff"*/
     return (
       <polygon
         key={classroom._id}
         style={{"pointerEvents": "auto"}}
         points={classroom.mapCoordinates}
-        fill="#ff0000"
+        fill={statusToColor[ClassroomUtils.getStateOfClassroom(classroom, this.props.classroomActivities, this.props.selectedTime).code]}
+        strokeWidth={4}
+        stroke={this.props.location.hash.substring(1) === classroom._id ? "#483737" : "#fff"}
         id={classroom._id}
         className="clickableMapClassroom"
     />);

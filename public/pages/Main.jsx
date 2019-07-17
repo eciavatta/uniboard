@@ -21,6 +21,7 @@ export default class MapMain extends React.Component {
     };
 
     this.keepUpdating = true;
+    this.prevHash = "";
 
     this.changeFloor = this.changeFloor.bind(this);
     this.upperFloorClicked = this.upperFloorClicked.bind(this);
@@ -34,6 +35,21 @@ export default class MapMain extends React.Component {
 
   componentDidMount() {
     this.updateData();
+    this.checkHashChanged();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.checkHashChanged();
+  }
+
+  checkHashChanged() {
+    if (this.prevHash !== this.props.location.hash) {
+      this.prevHash = this.props.location.hash;
+      const hashClassroom = ClassroomUtils.findClassroomById(this.props.location.hash.substring(1),this.props.classroomStaticData);
+      if (hashClassroom) {
+        this.changeFloor(hashClassroom.floor);
+      }
+    }
   }
 
   updateData() {
@@ -76,6 +92,8 @@ export default class MapMain extends React.Component {
         <div className="map-container">
 
         <MapGraphics
+          location={this.props.location}
+          history={this.props.history}
           floor={this.state.floor}
           selectedTime={ClassroomUtils.dateToHalfHoursTime(new Date())} //TODO slider
           classrooms={this.props.classroomStaticData}
