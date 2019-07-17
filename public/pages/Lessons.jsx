@@ -20,6 +20,7 @@ export default class Lessons extends React.Component {
     super(props);
 
     this.state = {
+      'isMobile': true,
       'status': Status.LOADING,
       'weekChangeDisabled': false,
       'selectedDay': Math.min(Math.max(new Date().getDay(), 1), 5)
@@ -37,6 +38,11 @@ export default class Lessons extends React.Component {
 
   componentDidMount() {
     this.loadWeekData(0);
+    this.checkIfMobile();
+  }
+
+  checkIfMobile() {
+    this.setState({ isMobile: window.innerWidth < 768 });
   }
 
   render() {
@@ -70,6 +76,7 @@ export default class Lessons extends React.Component {
           <div>
             <ActivitiesTable activities={this.state.weekActivities}
                              currWeek={this.state.currWeek}
+                             isMobile={this.state.isMobile}
                              selectedDay={this.state.selectedDay}/>
             <button disabled={this.state.weekChangeDisabled} onClick={this.prevWeek}>Settimana precedente</button>
             <button disabled={this.state.weekChangeDisabled} onClick={this.prevDay}>Giorno precedente</button>

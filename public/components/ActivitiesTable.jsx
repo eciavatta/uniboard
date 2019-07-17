@@ -30,7 +30,10 @@ export default class ActivitiesTable extends React.Component {
     for (let i = dayStart; i < dayEnd; i++) {
       rows.push(i);
     }
-    const days = [0,1,2,3,4];
+    let days = [0,1,2,3,4];
+    if (this.props.isMobile) {
+      days = [this.props.selectedDay - 1];
+    }
     const dayColumns = Array(5);
     days.forEach(day => {
       const numberOfActivities = timeTable[day].map(set => set.size).filter(x => x > 0);
@@ -52,11 +55,11 @@ export default class ActivitiesTable extends React.Component {
           <thead>
           <tr>
             <th scope="col" />
-            <th className={this.getClassOfDayCell(1)} colSpan={dayColumns[0]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(1))}</th>
-            <th className={this.getClassOfDayCell(2)} colSpan={dayColumns[1]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(2))}</th>
-            <th className={this.getClassOfDayCell(3)} colSpan={dayColumns[2]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(3))}</th>
-            <th className={this.getClassOfDayCell(4)} colSpan={dayColumns[3]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(4))}</th>
-            <th className={this.getClassOfDayCell(5)} colSpan={dayColumns[4]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(5))}</th>
+            {(!this.props.isMobile || this.props.selectedDay === 1) && <th className={this.getClassOfDayCell(1)} colSpan={dayColumns[0]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(1))}</th>}
+            {(!this.props.isMobile || this.props.selectedDay === 2) && <th className={this.getClassOfDayCell(2)} colSpan={dayColumns[1]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(2))}</th>}
+            {(!this.props.isMobile || this.props.selectedDay === 3) && <th className={this.getClassOfDayCell(3)} colSpan={dayColumns[2]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(3))}</th>}
+            {(!this.props.isMobile || this.props.selectedDay === 4) && <th className={this.getClassOfDayCell(4)} colSpan={dayColumns[3]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(4))}</th>}
+            {(!this.props.isMobile || this.props.selectedDay === 5) && <th className={this.getClassOfDayCell(5)} colSpan={dayColumns[4]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(5))}</th>}
           </tr>
           </thead>
           <tbody>
@@ -136,10 +139,10 @@ export default class ActivitiesTable extends React.Component {
   }
 
   getClassOfDayCell(day) {
-    if (this.props.selectedDay === day) {
-      return "selectedColumn";
+    if (this.props.selectedDay !== day || this.props.isMobile) {
+      return "";
     }
-    return "";
+    return "selectedColumn";
   }
 
   getDayOfWeekDate(i) {

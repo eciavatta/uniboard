@@ -191,6 +191,7 @@ export default class Classrooms extends React.Component {
             </div>
             <div className="col-md-9 h-100">
               <ClassroomDetails
+                isMobile={this.state.isMobile}
                 classroom={selectedClassroom}
                 classroomActivities={this.state.classroomActivities}/>
             </div>
