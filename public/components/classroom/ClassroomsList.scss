@@ -1,7 +1,6 @@
 @import "../../globals.scss";
 
 .classrooms-list {
-
   margin: 0;
   padding: 0;
 
@@ -21,6 +20,12 @@
       left: -15px;
       right: -15px;
     }
+
+    @include media-breakpoint-down(sm) {
+      .item-details {
+        margin-top: 10px;
+      }
+    }
   }
 
   .item-content {
@@ -32,10 +37,10 @@
 
   .classroom-state-svg-container {
     $statuses:
-      0 #f00,
-      1 #ff0,
+      0 $occupied-classroom-color,
+      1 $almost-free-classroom-color,
       2 $free-classroom-color,
-      3 #00f,
+      3 $lesson-classroom-color,
       4 none;
 
     @each $statusCode, $color in $statuses {
@@ -67,6 +72,10 @@
     right: 0;
     width: 15px;
     border-left: 2px solid;
+
+    svg {
+      fill: #6f8a91;
+    }
   }
 
   .classroom-name {

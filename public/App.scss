@@ -73,7 +73,7 @@ input:focus, button:focus, select:focus {
     right: 0;
     height: 100%;
     padding: 10px 20px;
-    z-index: 10;
+    z-index: 10 !important;
     background: #fff;
     @include squared-background;
   }

@@ -179,23 +179,35 @@ export default class Classrooms extends React.Component {
       </div>
     ) : '';
 
+    let classroomsDetails = <ClassroomDetails
+      isMobile={this.state.isMobile}
+      classroom={selectedClassroom}
+      classroomActivities={this.state.classroomActivities}/>;
+
+
+
     return (
       <SinglePage isLogged={this.props.isLogged} hasOptions={true} pageTitle="Aule" onOptionsToggle={this.onOptionsToggle}>
         <div className="classrooms container-fluid">
           { legend }
           { options }
 
-          <div className="row position-relative classrooms-row">
+          <div className="classrooms-row row">
             <div className="col-md-3 h-100">
-              <ClassroomList classrooms={this.getFilteredClassroom()} classroomActivities={this.state.classroomActivities}/>
-              <div className="column-guidelines" style={{left: '15px', right: '15px', bottom: '-15px'}} />
+              <ClassroomList
+                classrooms={this.getFilteredClassroom()}
+                classroomActivities={this.state.classroomActivities}
+                selectedClassroom={selectedClassroom}
+                classroomDetails={this.state.isMobile ? classroomsDetails : null} />
+
+              <div className="column-guidelines" />
             </div>
             <div className="col-md-9 h-100">
-              <ClassroomDetails
-                isMobile={this.state.isMobile}
-                classroom={selectedClassroom}
-                classroomActivities={this.state.classroomActivities}/>
+              { !this.state.isMobile ? classroomsDetails : null }
+
+              <div className="column-guidelines" />
             </div>
+
             <div className="row-guidelines" />
           </div>
         </div>

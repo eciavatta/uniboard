@@ -5,6 +5,25 @@
   max-height: calc(100vh - 75px);
   padding: 20px 0;
 
+  .classrooms-row {
+    position: relative;
+    height: calc(100% - 35px);
+
+    > div > .column-guidelines {
+      left: 15px;
+      right: 15px;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    padding: 50px;
+
+    .classrooms-row {
+      margin-top: 30px;
+      height: calc(100% - 70px);
+    }
+  }
+
   .page-options {
     padding: 50px;
 
@@ -36,25 +55,13 @@
       > .row-guidelines {
         top: -20px;
         bottom: 0;
-        left: -20px;
-        right: -20px;
+        left: -15px;
+        right: -15px;
       }
 
       > .column-guidelines {
         display: none;
       }
-    }
-  }
-
-  @include media-breakpoint-up(md) {
-    padding: 50px;
-  }
-
-  .classrooms-row {
-    height: calc(100% - 35px);
-
-    > div {
-      margin-bottom: 25px;
     }
   }
 

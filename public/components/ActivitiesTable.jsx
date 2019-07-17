@@ -49,19 +49,23 @@ export default class ActivitiesTable extends React.Component {
       activitiesSize.push(new Array(timePerDay).fill(0));
     }
 
+    let thead = (
+      <thead>
+        <tr>
+          <th scope="col" />
+          {(!this.props.isMobile || this.props.selectedDay === 1) && <th className={this.getClassOfDayCell(1)} colSpan={dayColumns[0]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(1))}</th>}
+          {(!this.props.isMobile || this.props.selectedDay === 2) && <th className={this.getClassOfDayCell(2)} colSpan={dayColumns[1]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(2))}</th>}
+          {(!this.props.isMobile || this.props.selectedDay === 3) && <th className={this.getClassOfDayCell(3)} colSpan={dayColumns[2]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(3))}</th>}
+          {(!this.props.isMobile || this.props.selectedDay === 4) && <th className={this.getClassOfDayCell(4)} colSpan={dayColumns[3]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(4))}</th>}
+          {(!this.props.isMobile || this.props.selectedDay === 5) && <th className={this.getClassOfDayCell(5)} colSpan={dayColumns[4]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(5))}</th>}
+        </tr>
+      </thead>
+    );
+
     return (
       <div className="activities-table timetables">
         <table className="table">
-          <thead>
-          <tr>
-            <th scope="col" />
-            {(!this.props.isMobile || this.props.selectedDay === 1) && <th className={this.getClassOfDayCell(1)} colSpan={dayColumns[0]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(1))}</th>}
-            {(!this.props.isMobile || this.props.selectedDay === 2) && <th className={this.getClassOfDayCell(2)} colSpan={dayColumns[1]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(2))}</th>}
-            {(!this.props.isMobile || this.props.selectedDay === 3) && <th className={this.getClassOfDayCell(3)} colSpan={dayColumns[2]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(3))}</th>}
-            {(!this.props.isMobile || this.props.selectedDay === 4) && <th className={this.getClassOfDayCell(4)} colSpan={dayColumns[3]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(4))}</th>}
-            {(!this.props.isMobile || this.props.selectedDay === 5) && <th className={this.getClassOfDayCell(5)} colSpan={dayColumns[4]} scope="col">{ActivitiesTable.dateToString(this.getDayOfWeekDate(5))}</th>}
-          </tr>
-          </thead>
+          { !this.props.isMobile ? thead : null }
           <tbody>
           {rows.map(rowTimeIndex => {
             return (

@@ -102,25 +102,25 @@ export default class ClassroomDetails extends React.Component {
                              isMobile={this.props.isMobile}/>
           : this.noWeekInfo()}
 
-        <div className="column-guidelines" style={{bottom: '-15px'}} />
+        <div className="column-guidelines" />
       </div>
     );
   }
 
   noInfo() {
     return (
-      <div className="classroom-details scrollable h-100 position-relative">
-        <p>Nessuna aula selezionata</p>
-
-        <div className="column-guidelines" style={{bottom: '-15px'}} />
+      <div className="classroom-details h-100 position-relative">
+        <span>Nessuna aula selezionata</span>
       </div>
     )
   }
 
   noWeekInfo() {
     return (
-      <p>Caricando le informazioni delle attività...</p>
-    )
+      <div className="classroom-details h-100 position-relative">
+        <span>Caricando le informazioni delle attività...</span>
+      </div>
+    );
   }
 
   loadWeekData() {
