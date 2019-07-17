@@ -1,12 +1,9 @@
 @import "../globals.scss";
 
 .login {
-
-  height: calc(100vh - 100px); // minus header size
-
-  .scrollable {
-    padding-bottom: 20px;
-  }
+  height: calc(100vh - 140px); // minus header size
+  margin-top: 40px;
+  margin-bottom: 40px;
 
   .login-form, .register-form  {
     padding: 20px 30px;
@@ -35,6 +32,18 @@
 
   .form-group label {
     margin-left: 10px;
+  }
+
+  .buttons-box {
+    margin-top: 40px;
+
+    input {
+      width: 120px;
+    }
+
+    .auth-alternatives {
+      margin-top: 10px;
+    }
   }
 
 }

@@ -109,8 +109,12 @@ export default class ClassroomDetails extends React.Component {
 
   noInfo() {
     return (
-      <div className="classroom-details h-100 position-relative">
-        <span>Nessuna aula selezionata</span>
+      <div className="classroom-details h-100 position-relative d-flex">
+        <div className="details-message row justify-content-center align-self-center w-100">
+          <span>Nessuna aula selezionata</span>
+        </div>
+
+        <div className="column-guidelines" />
       </div>
     )
   }
@@ -118,7 +122,11 @@ export default class ClassroomDetails extends React.Component {
   noWeekInfo() {
     return (
       <div className="classroom-details h-100 position-relative">
-        <span>Caricando le informazioni delle attività...</span>
+        <div className="details-message row justify-content-center align-self-center w-100">
+          <span>Caricando le informazioni delle attività...</span>
+        </div>
+
+        <div className="column-guidelines" />
       </div>
     );
   }

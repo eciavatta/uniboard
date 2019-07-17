@@ -207,7 +207,7 @@ export default class extends React.Component {
           <div className="row scrollable h-100">
             <div className={'col-md-6 align-self-center d-md-block' + (this.props.isRegister ? ' d-none' : '')}>
               <div className="login-form position-relative">
-                <div className="form-title position-relative">
+                <div className="form-title position-relative d-none d-md-block">
                   <h2>Accedi</h2>
                   <div className="row-guidelines" />
                 </div>
@@ -236,12 +236,14 @@ export default class extends React.Component {
                     {this.state.loginError && <p>C'è stato un errore durante il login, riprova più tardi</p>}
                   </div>
 
-                  <div className="row align-self-center">
+                  <div className="row buttons-box">
                     <div className="col-auto">
                       <ButtonField disabled={this.state.loginDisabled} isSubmit={true} text="Accedi" />
                     </div>
                     <div className="col-auto d-md-none">
-                      oppure <Link to="/register">registrati</Link>
+                      <div className="auth-alternatives">
+                        oppure <Link to="/register">registrati</Link>
+                      </div>
                     </div>
                   </div>
                 </form>
@@ -253,7 +255,7 @@ export default class extends React.Component {
 
             <div className={'col-md-6 align-self-center d-md-block' + (!this.props.isRegister ? ' d-none' : '')}>
               <div className="register-form position-relative">
-                <div className="form-title position-relative">
+                <div className="form-title position-relative d-none d-md-block">
                   <h2>Registrati</h2>
                   <div className="row-guidelines" />
                 </div>
@@ -304,7 +306,7 @@ export default class extends React.Component {
                     {this.state.showRegisterErrors && this.state.registerError && <p>C'è stato un errore nell'effettuare la registrazione, riprova più tardi.</p>}
                   </div>
 
-                  <div className="row align-self-center">
+                  <div className="row buttons-box">
                     <div className="col-auto">
                       <ButtonField disabled={this.state.registerDisabled} isSubmit={true} text="Registrati" />
                     </div>

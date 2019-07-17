@@ -180,11 +180,10 @@ export default class Classrooms extends React.Component {
     ) : '';
 
     let classroomsDetails = <ClassroomDetails
+      history={this.props.history}
       isMobile={this.state.isMobile}
       classroom={selectedClassroom}
       classroomActivities={this.state.classroomActivities}/>;
-
-
 
     return (
       <SinglePage isLogged={this.props.isLogged} hasOptions={true} pageTitle="Aule" onOptionsToggle={this.onOptionsToggle}>
