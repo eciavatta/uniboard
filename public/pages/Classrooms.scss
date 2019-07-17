@@ -1,36 +1,53 @@
 @import "../globals.scss";
 
 .classrooms {
-  height: calc(100vh - 90px); // minus header size
-  max-height: calc(100vh - 90px);
-  padding: 0;
+  height: calc(100vh - 75px); // minus header size
+  max-height: calc(100vh - 75px);
+  padding: 20px 0;
 
   .page-options {
-    position: relative;
+    padding: 50px;
 
-    .filter-box {
-      padding: 15px 25px;
+    > .row-guidelines {
+      top: 20px;
+      bottom: 20px;
+    }
 
-      .column-guidelines {
-        top: -15px;
-        bottom: -15px;
+    > .column-guidelines {
+      left: 20px;
+      right: 20px;
+    }
+
+    @include media-breakpoint-down(sm) {
+      .filter2-box {
+        .row > div {
+          margin-top: 40px;
+        }
       }
     }
 
-    .selects {
-      padding-top: 20px;
-      padding-bottom: 21px;
-    }
+    @include media-breakpoint-up(md) {
+      padding: 0;
 
-    &.mobile-fixed {
-      padding: 30px;
+      .filter2-box {
+        margin-top: 5px;
+      }
+
+      > .row-guidelines {
+        top: -20px;
+        bottom: 0;
+        left: -20px;
+        right: -20px;
+      }
+
+      > .column-guidelines {
+        display: none;
+      }
     }
   }
 
-
-
-  @include media-breakpoint-up(lg) {
-    padding: 20px 50px;
+  @include media-breakpoint-up(md) {
+    padding: 50px;
   }
 
   .classrooms-row {
@@ -40,13 +57,36 @@
       margin-bottom: 25px;
     }
   }
+
+  .legend {
+    text-align: center;
+
+    .legend-item {
+      display: inline-block;
+      overflow: hidden;
+      margin-left: 5px;
+
+      svg {
+        margin-top: -10px;
+        width: 100px;
+      }
+    }
+
+    .legend-occupied {
+      width: 75px;
+      fill: $occupied-classroom-color;
+    }
+    .legend-free {
+      width: 60px;
+      fill: $free-classroom-color;
+    }
+    .legend-almost-free {
+      width: 100px;
+      fill: $almost-free-classroom-color;
+    }
+    .legend-lesson {
+      width: 65px;
+      fill: $lesson-classroom-color;
+    }
+  }
 }
-
-.new-box {
-  background: #a2bbdd33;
-  padding: 15px 25px;
-}
-
-
-
-

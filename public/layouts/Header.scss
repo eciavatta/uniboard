@@ -1,15 +1,12 @@
 @import "../globals.scss";
 
 .page-header {
-
   height: 75px;
-  margin-bottom: 25px;
 
   border-bottom: 3px solid;
   @include pencil-solid-border;
 
   .header-desktop {
-
     .page-logo {
       .logo-wrapper {
         padding: 5px;

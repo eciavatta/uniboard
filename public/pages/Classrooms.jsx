@@ -11,6 +11,7 @@ import axios from "axios";
 import ClassroomUtils from "../helpers/classroomUtils";
 import SelectField from "../components/inputs/SelectField";
 import ButtonField from "../components/inputs/ButtonField";
+import SvgLoader from "../helpers/SvgLoader";
 
 const REFRESH_TIMEOUT = 500 * 1000; //TODO solo durante testing, poi lo mettiamo a 1 minuto o più
 const ON_ERROR_REFRESH_TIMEOUT = 10 * 1000;
@@ -204,43 +205,46 @@ export default class Classrooms extends React.Component {
 
   getOptions() {
     let closeButton = this.state.isMobile ? (
-      <div className="col-auto">
+      <div className="col-md-auto">
         <ButtonField text="Salva" onClick={() => this.setState({optionsClosed: true})} />
       </div>
     ) : '';
 
     return (
-      <div className="row page-options mobile-fixed align-items-start">
-        <div className="col-md-3">
-          <div className="filter-box position-relative">
-            <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} value={this.state.classroomNameFilter} />
-            <div className="column-guidelines" />
-          </div>
-        </div>
-        <div className="col-md">
-          <div className="filter-box selects position-relative">
-            <div className="row">
-              <div className="col-auto">
-                <SelectField options={SORT_BY_OPTIONS} onChange={this.sortByChanged} value={this.state.sortBy}>
-                  Ordina per:
-                </SelectField>
+      <div className="mobile-fixed">
+        <div className="page-options position-relative">
+          <div className="row">
+            <div className="col-md-3">
+              <div className="filter1-box position-relative">
+                <InputField placeholder="Filtra aule" onChange={this.classroomNameFilterChanged} value={this.state.classroomNameFilter} />
               </div>
-              <div className="col-auto">
-                <CheckboxField checked={true} onChange={this.showClassroomsChanged}>Aule</CheckboxField>
-              </div>
-              <div className="col-auto">
-                <CheckboxField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</CheckboxField>
-              </div>
-
-              { closeButton }
             </div>
-            <div className="column-guidelines" />
+            <div className="col-md">
+              <div className="filter2-box position-relative">
+                <div className="row">
+                  <div className="col-md-auto">
+                    <SelectField options={SORT_BY_OPTIONS} onChange={this.sortByChanged} value={this.state.sortBy}>
+                      Ordina per:
+                    </SelectField>
+                  </div>
+                  <div className="col-auto d-md-none d-lg-flex">
+                    <CheckboxField checked={true} onChange={this.showClassroomsChanged}>Aule</CheckboxField>
+                  </div>
+                  <div className="col-auto d-md-none d-lg-flex">
+                    <CheckboxField checked={true} onChange={this.showLaboratoriesChanged}>Laboratori</CheckboxField>
+                  </div>
+
+                  { closeButton }
+                </div>
+              </div>
+            </div>
+
+            { this.state.isMobile ? '' : this.getLegend() }
           </div>
+
+          <div className="row-guidelines" />
+          <div className="column-guidelines" />
         </div>
-
-        { this.state.isMobile ? '' : this.getLegend() }
-
-        <div className="row-guidelines" />
       </div>
     )
   }
@@ -248,8 +252,23 @@ export default class Classrooms extends React.Component {
   getLegend() {
     return (
       <div className="col-md-auto">
-        <div className="new-box">
-          Legenda
+        <div className="legend">
+          <div className="legend-item legend-occupied">
+            <span>Occupata</span>
+            <SvgLoader name="legend-underline.svg" />
+          </div>
+          <div className="legend-item legend-free">
+            <span>Libera</span>
+            <SvgLoader name="legend-underline.svg" />
+          </div>
+          <div className="legend-item legend-almost-free">
+            <span>Quasi libera</span>
+            <SvgLoader name="legend-underline.svg" />
+          </div>
+          <div className="legend-item legend-lesson">
+            <span>Lezione</span>
+            <SvgLoader name="legend-underline.svg" />
+          </div>
         </div>
       </div>
     )
