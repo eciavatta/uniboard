@@ -45,8 +45,8 @@ class App extends React.Component {
           <TransitionGroup>
             <CSSTransition timeout={500} classNames='fade' key={location.key}>
               <Switch location={location}>
-                <Route exact path="/" render={() => <Main classroomStaticData={this.state.classroomStaticData}/>}/>
-                <Route path="/classrooms" render={() => <Classrooms classroomStaticData={this.state.classroomStaticData}/>}/>
+                <Route exact path="/" render={(props) => <Main classroomStaticData={this.state.classroomStaticData} location={props.location} history={props.history}/>}/>
+                <Route path="/classrooms" render={(props) => <Classrooms classroomStaticData={this.state.classroomStaticData} history={props.history} location={props.location}/>}/>
                 <Route path="/lessons" component={Lessons} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/login" render={(props) => <Authentication isRegister={false} location={props.location} history={props.history}/>} />

@@ -167,7 +167,7 @@ export default class Classrooms extends React.Component {
   }
 
   render() {
-    let selectedClassroom = ClassroomUtils.findClassroomById(window.location.hash.substr(1), this.props.classroomStaticData);
+    let selectedClassroom = ClassroomUtils.findClassroomById(this.props.location.hash.substr(1), this.props.classroomStaticData);
     let options = '';
     if (!this.state.isMobile || !this.state.optionsClosed) {
       options = this.getOptions();
@@ -203,9 +203,11 @@ export default class Classrooms extends React.Component {
               <div className="column-guidelines" />
             </div>
             <div className="col-md-9 h-100">
-              { !this.state.isMobile ? classroomsDetails : null }
-
-              <div className="column-guidelines" />
+              <ClassroomDetails
+                history={this.props.history}
+                isMobile={this.state.isMobile}
+                classroom={selectedClassroom}
+                classroomActivities={this.state.classroomActivities}/>
             </div>
 
             <div className="row-guidelines" />
