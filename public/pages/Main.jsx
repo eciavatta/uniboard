@@ -115,7 +115,7 @@ export default class MapMain extends React.Component {
           location={this.props.location}
           history={this.props.history}
           floor={this.state.floor}
-          selectedTime={this.state.selectedTime}
+          selectedTime={parseInt(this.state.selectedTime)}
           classrooms={this.props.classroomStaticData}
           classroomActivities={this.state.classroomActivities}/>
 
