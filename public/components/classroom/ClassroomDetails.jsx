@@ -99,7 +99,8 @@ export default class ClassroomDetails extends React.Component {
           ? <ActivitiesTable activities={this.state.weekActivities}
                              currWeek={this.state.weekStart}
                              selectedDay={Math.min(Math.max(new Date().getDay(), 1), 5)}
-                             isMobile={this.props.isMobile}/>
+                             isMobile={this.props.isMobile}
+                             hideHeaderOnMobile={true} />
           : this.noWeekInfo()}
 
         <div className="column-guidelines" />

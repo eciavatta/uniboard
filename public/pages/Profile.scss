@@ -1,0 +1,127 @@
+@import '../globals.scss';
+
+.profile {
+  height: calc(100vh - 140px); // minus header size
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 0 0 0 15px;
+
+  .profile-wrapper {
+    padding: 15px 0;
+  }
+
+  .profile-header {
+    margin-bottom: 20px;
+    padding-top: 12px;
+    padding-bottom: 10px;
+
+    h2 {
+      font-size: 24px;
+    }
+  }
+
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .trophies {
+    padding: 0 20px;
+    margin-bottom: 30px;
+
+    .user-position {
+      width: 70px;
+      height: 70px;
+      text-align: center;
+      border: 2px solid $color-text-1;
+      border-radius: 70px;
+      padding-top: 8px;
+      margin: 0 auto;
+      font-size: 32px;
+
+
+      color: #fff;
+      background-color: $color-secondary-0;
+    }
+
+    .user-score {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .user-position-description {
+      padding-top: 10px;
+
+      span {
+        display: block;
+      }
+    }
+  }
+
+  .manage-classrooms {
+    padding-top: 10px;
+
+  }
+
+  .manage-classrooms {
+    padding-bottom: 20px;
+
+    .box-title {
+      margin-bottom: 25px;
+      font-size: 18px;
+      padding: 10px 0;
+
+      .row-guidelines {
+        left: -15px;
+        right: -15px;
+      }
+    }
+
+    .box-inputs {
+      margin: 0 10px;
+      height: 60px;
+    }
+
+    .box-results {
+      margin: 0 10px;
+      padding: 5px 0;
+
+      .result-name {
+        padding-top: 2px;
+      }
+
+      .result-button {
+        margin: -2px;
+        padding: 0;
+      }
+
+      .result-item {
+        margin: 10px 0;
+        border: 2px solid;
+        @include pencil-solid-border;
+      }
+
+      span {
+        display: block;
+        padding: 10px 15px;
+      }
+    }
+
+    @include media-breakpoint-down(sm) {
+      .remove-box {
+        margin-top: 25px;
+      }
+    }
+
+
+  }
+
+  .mini-button {
+    padding: 2px 10px;
+    border: 2px solid;
+    @include pencil-solid-border;
+    background: $color-primary-0;
+    color: #fff;
+  }
+}
+

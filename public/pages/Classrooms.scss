@@ -71,7 +71,7 @@
     .legend-item {
       display: inline-block;
       overflow: hidden;
-      margin-left: 5px;
+      margin-left: 10px;
 
       svg {
         margin-top: -10px;
@@ -88,7 +88,7 @@
       fill: $free-classroom-color;
     }
     .legend-almost-free {
-      width: 100px;
+      width: 80px;
       fill: $almost-free-classroom-color;
     }
     .legend-lesson {

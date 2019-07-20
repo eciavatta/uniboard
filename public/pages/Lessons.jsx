@@ -3,7 +3,7 @@ import React from 'react';
 import SinglePage from '../layouts/SinglePage';
 import ActivitiesTable from '../components/ActivitiesTable';
 
-//import './Lessons.scss';
+import './Lessons.scss';
 
 import axios from 'axios';
 
@@ -34,11 +34,17 @@ export default class Lessons extends React.Component {
     this.prevDay = this.prevDay.bind(this);
     this.loadWeekData = this.loadWeekData.bind(this);
     this.showTableOrOther = this.showTableOrOther.bind(this);
+    this.checkIfMobile = this.checkIfMobile.bind(this);
   }
 
   componentDidMount() {
     this.loadWeekData(0);
     this.checkIfMobile();
+    window.addEventListener('resize', this.checkIfMobile);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.checkIfMobile);
   }
 
   checkIfMobile() {
@@ -48,7 +54,11 @@ export default class Lessons extends React.Component {
   render() {
     return (
       <SinglePage isLogged={true} pageTitle="Lezioni">
-        {this.showTableOrOther()}
+        <div className="lessons container">
+          <div className="scrollable h-100">
+            {this.showTableOrOther()}
+          </div>
+        </div>
       </SinglePage>
     );
   }
@@ -73,15 +83,18 @@ export default class Lessons extends React.Component {
         );
       case Status.OK:
         return (
-          <div>
+          <div className="lessons-wrapper">
+            <div className="date-buttons">
+              <button className="d-none d-md-inline" disabled={this.state.weekChangeDisabled} onClick={this.prevWeek}>Settimana prima</button>
+              <button className="d-none d-md-inline" disabled={this.state.weekChangeDisabled} onClick={this.nextWeek}>Settimana dopo</button>
+              <button className="d-md-none" disabled={this.state.weekChangeDisabled} onClick={this.prevDay}>Giorno prima</button>
+              <button className="d-md-none" disabled={this.state.weekChangeDisabled} onClick={this.nextDay}>Giorno dopo</button>
+
+            </div>
             <ActivitiesTable activities={this.state.weekActivities}
                              currWeek={this.state.currWeek}
                              isMobile={this.state.isMobile}
-                             selectedDay={this.state.selectedDay}/>
-            <button disabled={this.state.weekChangeDisabled} onClick={this.prevWeek}>Settimana precedente</button>
-            <button disabled={this.state.weekChangeDisabled} onClick={this.prevDay}>Giorno precedente</button>
-            <button disabled={this.state.weekChangeDisabled} onClick={this.nextDay}>Giorno successivo</button>
-            <button disabled={this.state.weekChangeDisabled} onClick={this.nextWeek}>Settimana successiva</button>
+                             selectedDay={this.state.selectedDay} />
           </div>
         )
     }

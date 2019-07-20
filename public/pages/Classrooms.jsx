@@ -275,7 +275,7 @@ export default class Classrooms extends React.Component {
             <SvgLoader name="legend-underline.svg" />
           </div>
           <div className="legend-item legend-almost-free">
-            <span>Quasi libera</span>
+            <span>Per poco</span>
             <SvgLoader name="legend-underline.svg" />
           </div>
           <div className="legend-item legend-lesson">

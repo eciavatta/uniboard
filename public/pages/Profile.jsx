@@ -3,19 +3,19 @@ import SinglePage from '../layouts/SinglePage';
 import InputField from '../components/inputs/InputField';
 import axios from 'axios';
 
+import './Profile.scss'
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      'addingCourse': false,
+      'searchResult': null,
       'courseSearchValue': "",
       'courseButtonsDisabled': false
     };
 
-    this.changeAddCourseVisibility = this.changeAddCourseVisibility.bind(this);
-    this.searchCourseChanged = this.searchCourseChanged.bind(this);
-    this.onSearchCourseSubmit = this.onSearchCourseSubmit.bind(this);
+    this.onSearchCourses = this.onSearchCourses.bind(this);
     this.doRemoveCourse = this.doRemoveCourse.bind(this);
     this.doAddCourse = this.doAddCourse.bind(this);
     this.doLogout = this.doLogout.bind(this);
@@ -46,28 +46,20 @@ export default class extends React.Component {
     )
   }
 
-  changeAddCourseVisibility() {
-    this.setState((state, props) => ({
-      'addingCourse': !state.addingCourse
-    }));
-  }
+  onSearchCourses(e) {
+    if (e.length < 3) {
+      this.setState({
+        'searchResult': null,
+        'searchError': false
+      });
 
-  searchCourseChanged(c) {
-    this.setState({
-      'courseSearchValue': c
-    });
-  }
+      return;
+    }
 
-  onSearchCourseSubmit(e) {
-    this.setState({
-      'searchResult': null,
-      'searchError': false
-    });
-    axios.get('api/courses?nameContains=' + encodeURIComponent(this.state.courseSearchValue)).then(
+    axios.get('api/courses?nameContains=' + encodeURIComponent(e)).then(
       res => this.setState({'searchResult': res.data}),
       err => this.setState({'searchError':true})
     );
-    e.preventDefault();
   }
 
   doAddCourse(course) {
@@ -131,8 +123,12 @@ export default class extends React.Component {
   render() {
     return (
       <SinglePage isLogged={true} pageTitle="Profilo">
-        {this.renderLoadingOrError()}
-        {this.renderProfile()}
+        <div className="profile container">
+          <div className="scrollable h-100">
+            {this.renderLoadingOrError()}
+            {this.renderProfile()}
+          </div>
+        </div>
       </SinglePage>
     );
   }
@@ -147,73 +143,114 @@ export default class extends React.Component {
 
   renderProfile() {
     if (this.state.user) {
-      return <div>
-        <button onClick={this.doLogout}>Log out</button>
+      return (
+        <div className="profile-wrapper position-relative">
+          <div className="profile-header position-relative">
+            <div className="row">
+              <div className="col">
+                <h2>Ciao {this.state.user.username}!</h2>
+              </div>
+              <div className="col-auto">
+                <button onClick={this.doLogout} className="mini-button">Disconnetti</button>
+              </div>
+            </div>
 
-        <div>
-          <div>Ciao {this.state.user.username}!</div>
-        </div>
-
-        <div>
-          <div>
-            {/*TODO sfondo medaglia, posizione in grande*/}
-            {this.state.userScore.score > 0 &&
-              <div>{this.state.userScore.position}</div>}
+            <div className="row-guidelines" />
           </div>
-          <div>Punteggio: {this.state.userScore.score}</div>
-          <div>Congratulazioni! Sei il {this.state.userScore.position}&#176; utente con più punti!</div>
-          {this.state.userScore.toNext > 0
-            ? <div>Ti mancano solo {this.state.userScore.toNext} punti per raggiungere il prossimo utente! Continua a fare
-              segnalazioni per scalare la classifica!</div>
-            : <div>Non c'è nessuno con più punti di te, ma dovrai continuare a fare segnalazioni per mantenere la tua
-              posizione!</div>}
-        </div>
 
-        <div>
-          <button onClick={this.changeAddCourseVisibility}>Mostra/nascondi aggiunta corso</button>
-          {this.showAddCourse()}
-          <div>
-            {this.state.userCourses.length > 0
-              ? this.state.userCourses.map((course) => this.showCourse(course, true))
-              : <div>Non hai ancora aggiunto nessun corso. Aggiungi dei corsi per poterli visualizzare negli orari</div>}
+          <div className="row trophies">
+            <div className="col-md-auto">
+              {/* this.state.userScore.score > 0 && */}
+              <div className="user-position">{this.state.userScore.position}</div>
+              <div className="user-score">{this.state.userScore.score} punti</div>
+            </div>
+            <div className="col-md">
+              <div className="user-position-description">
+                <span>Congratulazioni! Sei il {this.state.userScore.position}&#176; utente con più punti!</span>
+                {this.state.userScore.toNext > 0
+                  ? <span>Ti mancano solo {this.state.userScore.toNext} punti per raggiungere il prossimo utente! Continua a fare
+                    segnalazioni per scalare la classifica!</span>
+                  : <span>Non c'è nessuno con più punti di te, ma dovrai continuare a fare segnalazioni per mantenere la tua
+                    posizione!</span>}
+              </div>
+            </div>
           </div>
+
+          <div className="manage-classrooms position-relative">
+            <div className="row">
+              <div className="col-md-6 add-box">
+                <div className="box-title position-relative">
+                  Aggiungi nuovi corsi
+
+                  <div className="row-guidelines" />
+                </div>
+
+                <div className="box-inputs">
+                  <InputField placeholder="Nome corso" onChange={this.onSearchCourses}/>
+                </div>
+
+                <div className="box-results position-relative">
+                  {this.showSearchResult()}
+
+                  <div className="row-guidelines" />
+                  <div className="column-guidelines" />
+                </div>
+              </div>
+
+              <div className="col-md-6 remove-box">
+                <div className="box-title position-relative">
+                  Rimuovi corsi già selezionati
+
+                  <div className="row-guidelines" />
+                </div>
+
+                <div className="box-inputs text-right d-none d-md-block">
+                  <button className="mini-button">Rimuovi tutti</button>
+                </div>
+
+                <div className="box-results position-relative">
+                  {this.state.userCourses.length > 0
+                    ? this.state.userCourses.map((course) => this.showCourse(course, true))
+                    : <span>Non hai ancora aggiunto nessun corso. Aggiungi dei corsi per poterli visualizzare negli orari</span>}
+
+                  <div className="row-guidelines" />
+                  <div className="column-guidelines" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="row-guidelines" />
+          <div className="column-guidelines" />
         </div>
-      </div>
+      )
     }
   }
 
   showCourse(course, isOfUser) {
-    return <div key={course._id}>
-      {course.name} A.A. {course.year}-{course.year + 1}
-      {isOfUser
-        ? <button disabled={this.state.courseButtonsDisabled} onClick={(e) => this.doRemoveCourse(course)}>Rimuovi</button>
-        : <button disabled={this.state.courseButtonsDisabled} onClick={(e) => this.doAddCourse(course)}>Aggiungi</button>}
-    </div>
-  }
-
-  showAddCourse() {
-    if (this.state.addingCourse) {
-      return <div>
-        <form onSubmit={this.onSearchCourseSubmit}>
-          <InputField placeholder="Nome corso" value={this.state.courseSearchValue} onChange={this.searchCourseChanged}/>
-          <button type="submit">Cerca</button>
-        </form>
-        <div>
-          {this.showSearchResult()}
+    return (
+      <div key={course._id} className="row result-item">
+        <div className="col result-name">
+          {course.name} A.A. {course.year}-{course.year + 1}
+        </div>
+        <div className="col-auto result-button">
+          {isOfUser
+            ? <button disabled={this.state.courseButtonsDisabled} onClick={(e) => this.doRemoveCourse(course)} className="mini-button">Rimuovi</button>
+            : <button disabled={this.state.courseButtonsDisabled} onClick={(e) => this.doAddCourse(course)} className="mini-button">Aggiungi</button>}
         </div>
       </div>
-    }
+    )
   }
 
   showSearchResult() {
     if (this.state.searchError) {
-      return <div>C'è stato un errore nell'effettuare la ricerca, riprova più tardi</div>
+      return <span>C'è stato un errore nell'effettuare la ricerca, riprova più tardi</span>
     } else if (this.state.searchResult === null) {
-      return <div>Cercando...</div>;
+      return <span>Digita per cercare</span>;
     } else if (this.state.searchResult) {
       const noUserResults = this.state.searchResult.filter(course => !this.state.userCourses.map(userCourse => userCourse._id).includes(course._id));
       if (noUserResults.length === 0) {
-        return <div>Nessun risultato</div>;
+        return <span>Nessun risultato</span>;
       } else {
         return noUserResults.map(course => this.showCourse(course, this.state.userCourses.map(userCourse => userCourse._id).includes(course._id)));
       }

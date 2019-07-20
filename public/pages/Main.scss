@@ -5,7 +5,7 @@
 }
 
 .floor-button {
-  width: 80%;
+  width: 40px;
 }
 
 .clickable {
@@ -14,9 +14,9 @@
 }
 
 .floor-buttons-container {
-  width: 100%;
+  top: 20px;
+  right: 0;
   position: absolute;
-  top: 0;
   pointer-events: none;
   text-align: right;
 }

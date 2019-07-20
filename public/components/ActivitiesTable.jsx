@@ -65,7 +65,7 @@ export default class ActivitiesTable extends React.Component {
     return (
       <div className="activities-table timetables">
         <table className="table">
-          { !this.props.isMobile ? thead : null }
+          { !this.props.isMobile || !this.props.hideHeaderOnMobile ? thead : null }
           <tbody>
           {rows.map(rowTimeIndex => {
             return (

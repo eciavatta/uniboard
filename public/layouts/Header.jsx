@@ -115,7 +115,7 @@ export default class Header extends React.Component {
                 <div className="col-6">
                   <NavLink exact to="/">
                     <div className="menu-item">
-                      <SVG name="menu-icon.svg" />
+                      <SVG name="icons/map.svg" />
                       <span>Mappa</span>
 
                       <div className="row-guidelines" />
@@ -126,7 +126,7 @@ export default class Header extends React.Component {
                 <div className="col-6">
                   <NavLink exact to="/classrooms">
                     <div className="menu-item">
-                      <SVG name="menu-icon.svg" />
+                      <SVG name="icons/classrooms.svg" />
                       <span>Aule</span>
 
                       <div className="row-guidelines" />
@@ -139,7 +139,7 @@ export default class Header extends React.Component {
                 <div className="col-6">
                   <NavLink exact to="/">
                     <div className="menu-item">
-                      <SVG name="menu-icon.svg" />
+                      <SVG name="icons/hours.svg" />
                       <span>Orari</span>
 
                       <div className="row-guidelines" />
@@ -150,7 +150,7 @@ export default class Header extends React.Component {
                 <div className="col-6">
                   <NavLink exact to="/lessons">
                     <div className="menu-item">
-                      <SVG name="menu-icon.svg" />
+                      <SVG name="icons/lessons.svg" />
                       <span>Lezioni</span>
 
                       <div className="row-guidelines" />
@@ -163,7 +163,7 @@ export default class Header extends React.Component {
                 <div className="col-6">
                   <NavLink exact to="/">
                     <div className="menu-item">
-                      <SVG name="menu-icon.svg" />
+                      <SVG name="icons/credits.svg" />
                       <span>Crediti</span>
 
                       <div className="row-guidelines" />
@@ -172,10 +172,10 @@ export default class Header extends React.Component {
                   </NavLink>
                 </div>
                 <div className="col-6">
-                  <NavLink exact to="/login">
+                  <NavLink exact to={this.state.isLogged ? '/profile' : '/login'}>
                     <div className="menu-item">
-                      <SVG name="menu-icon.svg" />
-                      <span>Accedi</span>
+                      <SVG name="icons/profile.svg" />
+                      <span>{this.state.isLogged ? 'Profilo' : 'Accedi'}</span>
 
                       <div className="row-guidelines" />
                       <div className="column-guidelines" />

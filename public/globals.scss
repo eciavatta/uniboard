@@ -29,9 +29,9 @@ $guidelines-opacity: 0.4;
 $guidelines-width: 2px;
 
 $free-classroom-color : #87deaa;
-$lesson-classroom-color: #ff8080;
+$lesson-classroom-color: #87aade;
 $almost-free-classroom-color: #ffe680;
-$occupied-classroom-color: #87aade;
+$occupied-classroom-color: #ff8080;
 
 @mixin squared-background {
   background-image: url(/static/vectors/squared1-bg.svg);
