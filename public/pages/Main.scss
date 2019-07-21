@@ -43,22 +43,22 @@
   background: #aaaaaa;
   outline: none;
   top: -20px;
-}
 
-@mixin time-slider-thumb {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: #4E78C5;
-  cursor: pointer;
-}
+  @mixin thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #4E78C5;
+    cursor: pointer;
+  }
 
-.time-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  @include time-slider-thumb
-}
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    @include thumb;
+  }
 
-.time-slider::-moz-range-thumb {
-  @include time-slider-thumb
+  &::-moz-range-thumb {
+    @include thumb;
+  }
 }
