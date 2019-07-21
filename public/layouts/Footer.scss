@@ -1,0 +1,15 @@
+@import "../globals.scss";
+
+.page-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .footer-info {
+    position: absolute;
+    background: green;
+    display: none;
+  }
+
+}

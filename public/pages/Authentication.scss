@@ -1,0 +1,49 @@
+@import "../globals.scss";
+
+.login {
+  height: calc(100vh - 140px); // minus header size
+  margin-top: 40px;
+  margin-bottom: 40px;
+
+  .login-form, .register-form  {
+    padding: 20px 30px;
+  }
+
+  .form-title {
+    padding-top: 10px;
+    padding-bottom: 1px;
+    margin-bottom: 20px;
+
+    h2 {
+      text-align: right;
+    }
+
+    .row-guidelines {
+      left: -30px;
+      right: -30px;
+    }
+  }
+
+  .checkbox-field {
+    margin-left: -18px;
+    margin-top: 40px;
+    margin-right: 2px;
+  }
+
+  .form-group label {
+    margin-left: 10px;
+  }
+
+  .buttons-box {
+    margin-top: 40px;
+
+    input {
+      width: 120px;
+    }
+
+    .auth-alternatives {
+      margin-top: 10px;
+    }
+  }
+
+}

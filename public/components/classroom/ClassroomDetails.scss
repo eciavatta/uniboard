@@ -1,0 +1,56 @@
+@import "../../globals.scss";
+
+.classroom-details {
+
+  thead th, tr, td {
+    border: 2px solid #BDBABA;
+  }
+
+  thead th, tr:first-child {
+    border-top: none;
+  }
+
+  thead th:last-child, td:last-child, tr {
+    border-right: none;
+  }
+
+  thead th, td:first-child, tr {
+    border-left: none;
+  }
+
+  tr:last-child {
+    border-bottom: none;
+
+    td {
+      border-bottom: none;
+    }
+  }
+
+  .info-table {
+    border: 2px solid;
+    @include pencil-solid-border;
+
+    table {
+      margin-bottom: 0;
+    }
+  }
+
+  .details {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .buttons-box {
+    padding: 25px 30px 0;
+
+    div.col {
+      margin-bottom: 25px;
+    }
+  }
+
+  .details-message {
+    font-size: 24px;
+    opacity: 0.6;
+  }
+}

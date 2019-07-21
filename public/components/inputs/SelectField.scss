@@ -1,0 +1,57 @@
+@import "../../globals.scss";
+
+.select-field {
+
+  height: 23px;
+
+  label {
+    display: block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding-left: 35px;
+    margin-bottom: 12px;
+  }
+
+  input {
+    height: 0;
+    width: 0;
+    opacity: 0;
+  }
+
+  .checkbox-mark {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    height: 25px;
+    width: 25px;
+
+    border: 2px solid;
+    @include pencil-solid-border;
+  }
+
+  input:checked ~ .checkbox-mark {
+    background-color: $color-secondary-0;
+  }
+
+  .checkbox-text {
+    margin-left: 4px;
+    margin-right: 10px;
+  }
+
+  .row-guidelines {
+    left: -15px;
+    right: -15px;
+    top: -2px;
+    bottom: -2px;
+  }
+
+  .column-guidelines {
+    left: -2px;
+    right: -2px;
+    top: -15px;
+    bottom: -15px;
+  }
+}

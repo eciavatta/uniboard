@@ -1,16 +1,53 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const app = express();
+const passport = require('passport');
+const bodyParser = require('body-parser');
 
-var indexRouter = require('./routes/index');
+const isProduction = process.env.NODE_ENV === 'production';
 
-var app = express();
+require('./models/classroomsModel');
+require('./models/activitiesModel');
+require('./models/coursesModel');
+require('./models/userPasswordsModel');
+require('./models/usersModel');
+require('./models/userReportsModel');
 
+//middleware init
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'static')));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(require('express-session')({secret: 'WnpHBAdguCYEN9XHnsGyfXR6OdWf9KrjAS', saveUninitialized: false, resave: true}));
+app.use(passport.initialize());
+app.use(passport.session());
+require('./passportStrategyInit');
 
-app.use('/', indexRouter);
+require('./routes/users')(app);
+require('./routes/authentication')(app);
+require('./routes/classrooms')(app);
+require('./routes/courses')(app);
+
+if (isProduction) {
+  app.route(/^\/[^\/]*$/).get((req, res) => res.sendFile(path.resolve('dist/index.html')));
+
+  app.use('/dist', express.static(path.resolve('dist/static/')));
+} else {
+  let configDev = require('../build/webpack.dev.babel');
+  let webpack = require('webpack');
+  let compiler = webpack(configDev);
+
+  app.use(require('connect-history-api-fallback')());
+
+  app.use(require('webpack-dev-middleware')(compiler, {
+    publicPath: configDev.output.publicPath,
+  }));
+
+  app.use(require('webpack-hot-middleware')(compiler));
+}
+
+app.use('/static', express.static(path.resolve('static/')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -28,5 +65,7 @@ app.use(function(err, req, res, next) {
     error: err
   });
 });
+
+setTimeout(() => require('./db/connection'), 3000);
 
 module.exports = app;

@@ -1,0 +1,64 @@
+@import "../globals.scss";
+
+.map-container {
+  height: calc(100vh - 75px); // minus header size
+}
+
+.floor-button {
+  width: 40px;
+}
+
+.clickable {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.floor-buttons-container {
+  top: 20px;
+  right: 0;
+  position: absolute;
+  pointer-events: none;
+  text-align: right;
+}
+
+.outer-slider-container {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  margin-left: 8px;
+  margin-bottom: 8px;
+}
+
+.time-slider-value {
+  text-align: right;
+  margin-top: 2px;
+}
+
+.time-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: #aaaaaa;
+  outline: none;
+  top: -20px;
+
+  @mixin thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #4E78C5;
+    cursor: pointer;
+  }
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    @include thumb;
+  }
+
+  &::-moz-range-thumb {
+    @include thumb;
+  }
+}

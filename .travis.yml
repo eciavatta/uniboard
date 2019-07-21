@@ -1,0 +1,35 @@
+language: node_js
+
+node_js:
+  - '10'
+
+env:
+  global:
+    - MONGODB_USERNAME=uniboard
+    - MONGODB_PASSWORD=uniboard
+    - MONGODB_DATABASE=uniboardDB
+
+services:
+  - docker
+
+before_install:
+  - docker run -d --name mongodb -p 27017:27017 -v "$PWD/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro" -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=toor -e MONGO_INITDB_DATABASE=uniboardDB mongo:4
+
+before_script:
+  - yarn install
+
+script:
+  - yarn build
+
+after_script:
+  - docker stop mongodb
+  - docker rm mongodb
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: "k14oF/17XTyYl/ySERxwZasaxHf2YXKITreQakzDp2jZwkC6JvqdSa7wpacmG6lS/VjuzrBPwKt0tHU4BOi7n5v1bVhhjWb2RY6I+/tVt6rHIBVvlmASGtXpxohYRe5NS6z0B2OtSccmEDhomOallmhG+kH2MPZ1uOZ1VG6RJSaTi+3P0sVDtcJBxTACY5x8Mu5T8sEinpjpAilsopHRbxLtJ9mCu7Ba1GCRXw3dceycj9SJRkxn73Qsmv8EbPhTolJtyJE34o380oPPKgLUEh3u3m1PlYwPQHEXH2Mr5qJmwgMgSE5bZ/n7NZ4GPQi3P0LIsCngZISec88ac+Avsjy/LOxk+iWklRCAJ55tisyn4bVNvOQVQ40Ju4TKuK2AlP0MS1MFdcAySzXpHlY7rFGJjw2YSp0/yQCM2VGLoL1ImuzZ9lQh7PH4PxkwqunOUh6g7NzQSUJ4yZ36hfxIMqzvYiFQedFfnIAPVZNnAf3T9YJzrEi7YQFk4Ps4tPo/0GWUSyrncddRC+yhIkxdCpBkW/OEx4MQUzGYgrBrYYtRHfumJtdjIcxwmtLK+/9dZKYbGv/iajZMOdBF1TRgniAymPsI2DkQvjfBaYM9z71FGoWqEq5FCsYsGq2HonBQLoqnr/Isnsv1/GpbA/JYKH5ksrjJDh/GORb/qaHnRTo="
+  app: uniboard-dev
+  on:
+    branch: develop
+  skip_cleanup: true

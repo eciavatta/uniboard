@@ -1,0 +1,99 @@
+@import "../globals.scss";
+
+.classrooms {
+  height: calc(100vh - 75px); // minus header size
+  max-height: calc(100vh - 75px);
+  padding: 20px 0;
+
+  .classrooms-row {
+    position: relative;
+    height: calc(100% - 35px);
+
+    > div > .column-guidelines {
+      left: 15px;
+      right: 15px;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    padding: 50px;
+
+    .classrooms-row {
+      margin-top: 30px;
+      height: calc(100% - 70px);
+    }
+  }
+
+  .page-options {
+    padding: 50px;
+
+    > .row-guidelines {
+      top: 20px;
+      bottom: 20px;
+    }
+
+    > .column-guidelines {
+      left: 20px;
+      right: 20px;
+    }
+
+    @include media-breakpoint-down(sm) {
+      .filter2-box {
+        .row > div {
+          margin-top: 40px;
+        }
+      }
+    }
+
+    @include media-breakpoint-up(md) {
+      padding: 0;
+
+      .filter2-box {
+        margin-top: 5px;
+      }
+
+      > .row-guidelines {
+        top: -20px;
+        bottom: 0;
+        left: -15px;
+        right: -15px;
+      }
+
+      > .column-guidelines {
+        display: none;
+      }
+    }
+  }
+
+  .legend {
+    text-align: center;
+
+    .legend-item {
+      display: inline-block;
+      overflow: hidden;
+      margin-left: 10px;
+
+      svg {
+        margin-top: -10px;
+        width: 100px;
+      }
+    }
+
+    .legend-occupied {
+      width: 75px;
+      fill: $occupied-classroom-color;
+    }
+    .legend-free {
+      width: 60px;
+      fill: $free-classroom-color;
+    }
+    .legend-almost-free {
+      width: 80px;
+      fill: $almost-free-classroom-color;
+    }
+    .legend-lesson {
+      width: 65px;
+      fill: $lesson-classroom-color;
+    }
+  }
+}

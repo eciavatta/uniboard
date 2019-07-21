@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 function isValidTime(v) {
-  return v.isInteger && v >= 0 && v <= 48;
+  return Number.isInteger(v) && v >= 0 && v <= 48;
 }
 const ActivitySchema = new Schema({
   classroom: {

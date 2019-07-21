@@ -22,6 +22,7 @@ build/Release
 typings/
 *.tsbuildinfo
 *.tgz
+dist/
 
 # Others
 .npm
@@ -35,3 +36,6 @@ typings/
 out/
 .idea
 *.iml
+
+# npm
+package-lock.json

@@ -1,0 +1,58 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+// Palette URL: http://paletton.com/#uid=35y100klsFfbsZvhwS5nEsEmCgi
+
+$color-primary-0: #F75168;	// Main Primary color */
+$color-primary-1: #FEA3B0;
+$color-primary-2: #FC7285;
+$color-primary-3: #D9394F;
+$color-primary-4: #7C2430;
+
+$color-secondary-0: #4E78C5;	// Main Secondary color */
+$color-secondary-1: #AAC7FB;
+$color-secondary-2: #759DE7;
+$color-secondary-3: #335698;
+$color-secondary-4: #1F3356;
+
+$color-text-0: #241c1c;
+$color-text-1: #483737;
+$color-text-2: #6c5353;
+$color-text-3: #916f6f;
+$color-text-4: #ac9393;
+$color-text-5: #c8b7b7;
+$color-text-6: #e3dbdb;
+
+
+$guidelines-opacity: 0.4;
+$guidelines-width: 2px;
+
+$free-classroom-color : #87deaa;
+$lesson-classroom-color: #87aade;
+$almost-free-classroom-color: #ffe680;
+$occupied-classroom-color: #ff8080;
+
+@mixin squared-background {
+  background-image: url(/static/vectors/squared1-bg.svg);
+  background-size: 150px;
+}
+
+@mixin pencil-solid-border {
+  border-image: url(/static/vectors/pencis-solid-border.svg) 4 round;
+}
+
+@mixin pencil-dashed-border {
+  border-image: url(/static/vectors/pencil-dashed-border.svg) 3 round;
+}
+
+@mixin guidelines {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  @include pencil-solid-border;
+  opacity: $guidelines-opacity;
+  z-index: -1;
+}

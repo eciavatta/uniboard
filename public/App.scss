@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700&display=swap');
+
+@import 'styles/scrollbars.scss';
+@import 'globals.scss';
+
+body {
+  font-family: 'Merriweather Sans', sans-serif !important;
+  height: 100vh;
+
+  @include squared-background;
+  color: $color-text-0;
+  overflow: hidden;
+
+}
+
+.page-loader {
+  .campus-image {
+    margin-top: -40px;
+    margin-bottom: 40px;
+  }
+
+  .campus-image img {
+    max-width: 90%;
+    width: 600px;
+  }
+
+  .logo img {
+    max-width: 75%;
+  }
+
+}
+
+.fade-exit {
+  display: none;
+}
+
+.fade-enter .page-container {
+  display: none;
+}
+
+.fade-enter .page-header-loader {
+  display: block;
+  width: 0;
+}
+
+.fade-enter.fade-enter-active .page-header-loader {
+  width: 100%;
+  transition: width 350ms ease-in;
+}
+
+.row-guidelines {
+  @include guidelines;
+  border-top: $guidelines-width solid;
+  border-bottom: $guidelines-width solid;
+}
+
+.column-guidelines {
+  @include guidelines;
+  border-left: $guidelines-width solid;
+  border-right: $guidelines-width solid;
+}
+
+input:focus, button:focus, select:focus {
+  outline: none;
+}
+
+@include media-breakpoint-down(sm) {
+  .mobile-fixed {
+    position: fixed !important;
+    top: 75px;
+    left: 0;
+    right: 0;
+    height: 100%;
+    padding: 10px 20px;
+    z-index: 10 !important;
+    background: #fff;
+    @include squared-background;
+  }
+}

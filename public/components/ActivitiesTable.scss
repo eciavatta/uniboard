@@ -1,0 +1,40 @@
+@import "../globals.scss";
+
+.activities-table {
+  table {
+    table-layout: fixed;
+  }
+
+  thead th, tr, td {
+    border: 2px solid #BDBABA;
+  }
+
+  thead th, tr:first-child {
+    border-top: none;
+  }
+
+  thead th:last-child, td:last-child, tr {
+    border-right: none;
+  }
+
+  thead th, td:first-child, tr {
+    border-left: none;
+  }
+
+  tr:last-child {
+    border-bottom: none;
+
+    td {
+      border-bottom: none;
+    }
+  }
+
+  &.timetables {
+    border: 2px solid;
+    @include pencil-solid-border;
+
+    table {
+      margin-bottom: 0;
+    }
+  }
+}
